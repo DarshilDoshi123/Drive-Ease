@@ -55,26 +55,6 @@ router.post("/register", async (req, res) => {
 });
 
 // ================= FIX ADMIN =================
-router.get("/fixadmin", async (req, res) => {
-  try {
-    const user = await User.findOne({
-      username: "parthpatel79_",
-    });
 
-    if (!user) {
-      return res.status(404).send("Admin user not found");
-    }
-
-    user.password = "Parth0!81#";
-    user.isAdmin = true;
-
-    await user.save();
-
-    res.send("✅ Admin password fixed successfully");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Error fixing admin");
-  }
-});
 
 module.exports = router;
