@@ -10,13 +10,15 @@ import {
   EditOutlined,
   PlusCircleOutlined,
   CarOutlined,
+  CheckCircleOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
 function AdminHome() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Only Owner
-  if (user.username !== "parthpatel79_") {
+  // Only Owner / Admin
+  if (!user?.isAdmin && user?.username !== "parthpatel79_") {
     window.location.href = "/";
   }
 
@@ -104,61 +106,114 @@ const loading = alertsReducer?.loading || false;
 
       {/* Stats */}
 
-      <Row gutter={20} style={{ marginBottom: "25px" }}>
+      <Row gutter={[20, 20]} style={{ marginBottom: "30px" }}>
 
-        <Col lg={8} xs={24}>
+        <Col lg={8} xs={24} style={{ display: "flex" }}>
 
           <div
             className="bs1"
             style={{
               padding: "25px",
               textAlign: "center",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
             <CarOutlined
               style={{
-                fontSize: "45px",
+                fontSize: "38px",
                 color: "#2563eb",
+                marginBottom: "8px"
               }}
             />
 
-            <h2 style={{ marginTop: "15px" }}>{totalCars.length}</h2>
+            <h2 style={{ fontSize: "28px", fontWeight: "700", margin: "2px 0", color: "#0f172a" }}>
+              {totalCars.length}
+            </h2>
 
-            <p>Total Cars</p>
+            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Total Cars</p>
 
           </div>
 
         </Col>
 
-        <Col lg={8} xs={24}>
+        <Col lg={8} xs={24} style={{ display: "flex" }}>
 
           <div
             className="bs1"
             style={{
               padding: "25px",
               textAlign: "center",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <h2 style={{ color: "#16a34a" }}>Available</h2>
+            <CheckCircleOutlined
+              style={{
+                fontSize: "38px",
+                color: "#16a34a",
+                marginBottom: "8px"
+              }}
+            />
 
-            <h1>{totalCars.length}</h1>
+            <h2 style={{ fontSize: "28px", fontWeight: "700", margin: "2px 0", color: "#16a34a" }}>
+              {totalCars.length}
+            </h2>
+
+            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Available Cars</p>
 
           </div>
 
         </Col>
 
-        <Col lg={8} xs={24}>
+        <Col lg={8} xs={24} style={{ display: "flex" }}>
 
           <div
             className="bs1"
             style={{
               padding: "25px",
               textAlign: "center",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <h2 style={{ color: "#f97316" }}>Owner</h2>
+            <UserOutlined
+              style={{
+                fontSize: "38px",
+                color: "#f97316",
+                marginBottom: "8px"
+              }}
+            />
 
-            <h4>{user.username}</h4>
+            <h2
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                margin: "6px 0",
+                color: "#f97316",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "100%"
+              }}
+              title={user?.username}
+            >
+              {user?.username || "Admin"}
+            </h2>
+
+            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Owner</p>
 
           </div>
 
@@ -173,7 +228,7 @@ const loading = alertsReducer?.loading || false;
         {Array.isArray(totalCars) &&
 totalCars.map((car) => (
 
-          <Col lg={6} md={8} sm={12} xs={24} key={car._id}>
+          <Col lg={6} md={8} sm={12} xs={24} key={car._id} style={{ display: "flex" }}>
 
             <div
               className="bs1"
@@ -181,6 +236,10 @@ totalCars.map((car) => (
                 borderRadius: "18px",
                 overflow: "hidden",
                 transition: ".35s",
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                height: "100%"
               }}
             >
 
@@ -189,26 +248,37 @@ totalCars.map((car) => (
                 alt={car.name}
                 style={{
                   width: "100%",
-                  height: "220px",
+                  height: "200px",
                   objectFit: "cover",
                 }}
               />
 
-              <div style={{ padding: "18px" }}>
+              <div style={{ padding: "18px", display: "flex", flexDirection: "column", flex: 1, justifyContent: "space-between" }}>
 
-                <h3>{car.name}</h3>
+                <div>
+                  <h3
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }}
+                    title={car.name}
+                  >
+                    {car.name}
+                  </h3>
 
-                <p>
-                  💰 ₹{car.rentPerHour} / Hour
-                </p>
+                  <p>
+                    💰 ₹{car.rentPerHour} / Hour
+                  </p>
 
-                <p>
-                  ⛽ {car.fuelType || "-"}
-                </p>
+                  <p>
+                    ⛽ {car.fuelType || "-"}
+                  </p>
 
-                <p>
-                  👥 {car.capacity || "-"} Seats
-                </p>
+                  <p>
+                    👥 {car.capacity || "-"} Seats
+                  </p>
+                </div>
 
                 <div
                   style={{

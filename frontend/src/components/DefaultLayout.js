@@ -96,7 +96,7 @@ function DefaultLayout({ children }) {
                   </Button>
                 </Link>
 
-                {user?.username === "parthpatel79_" && (
+                {(user?.isAdmin || user?.username === "parthpatel79_") && (
                   <Link to="/admin">
                     <Button
                       className={`header-nav-btn ${isAdminActive ? "active-nav" : ""}`}

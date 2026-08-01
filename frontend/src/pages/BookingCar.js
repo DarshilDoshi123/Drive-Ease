@@ -16,7 +16,6 @@ import {
   SafetyCertificateOutlined,
   ClockCircleOutlined,
   ThunderboltOutlined,
-  DollarCircleOutlined,
 } from "@ant-design/icons";
 
 AOS.init();
@@ -67,12 +66,14 @@ function BookingCar() {
       return;
     }
 
-    const startMom = moment(values[0]);
-    const endMom = moment(values[1]);
+    const startMom = moment(values[0].toDate ? values[0].toDate() : values[0]);
+    const endMom = moment(values[1].toDate ? values[1].toDate() : values[1]);
 
     const formattedFrom = startMom.format("MMM DD YYYY, hh:mm A");
     const formattedTo = endMom.format("MMM DD YYYY, hh:mm A");
-    const hours = Math.max(1, endMom.diff(startMom, "hours"));
+
+    const diffInMinutes = endMom.diff(startMom, "minutes");
+    const hours = Math.max(1, Math.ceil(diffInMinutes / 60));
 
     setFrom(formattedFrom);
     setTo(formattedTo);
@@ -239,6 +240,7 @@ function BookingCar() {
               format="MMM DD YYYY hh:mm A"
               style={{ width: "100%", height: "46px" }}
               onChange={selectTimeSlots}
+              disabledDate={(current) => current && current < moment().startOf("day")}
               placeholder={["Start Date & Time", "End Date & Time"]}
             />
 
@@ -255,7 +257,7 @@ function BookingCar() {
               View Booked Slots
             </button>
 
-            {from && to && (
+            {from && to ? (
               <>
                 <Divider />
 
@@ -292,6 +294,7 @@ function BookingCar() {
                 <Divider />
 
                 <Checkbox
+                  checked={driver}
                   onChange={(e) => setdriver(e.target.checked)}
                   style={{ fontSize: "15px", fontWeight: "600" }}
                 >
@@ -310,7 +313,7 @@ function BookingCar() {
                       marginTop: "5px"
                     }}
                   >
-                    <DollarCircleOutlined /> ₹ {totalAmount}
+                    ₹ {totalAmount}
                   </h2>
                 </div>
 
@@ -329,10 +332,14 @@ function BookingCar() {
                       padding: "14px"
                     }}
                   >
-                    💳 Proceed To Payment
+                    💳 Proceed To Payment (₹{totalAmount})
                   </button>
                 </StripeCheckout>
               </>
+            ) : (
+              <div style={{ textAlign: "center", padding: "25px 0", color: "#64748b" }}>
+                <i>Select pickup and return dates above to calculate rental summary and total payable.</i>
+              </div>
             )}
           </div>
         </Col>

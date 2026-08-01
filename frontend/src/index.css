@@ -494,3 +494,20 @@ h1, h2, h3, h4, h5, h6 {
     gap: 4px;
   }
 }
+
+/* ==========================================================================
+   ANT DESIGN TIME PICKER 12-HOUR SEQUENTIAL ORDER (01 to 12)
+   ========================================================================== */
+.ant-picker-time-panel-column {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ant-picker-time-panel-column > .ant-picker-time-panel-cell {
+  order: 1;
+}
+
+/* Reorder 12-hour column so hours display sequentially from 01 to 12 */
+.ant-picker-time-panel-column:first-child > .ant-picker-time-panel-cell:first-child {
+  order: 12 !important;
+}
