@@ -18,7 +18,7 @@ function AdminHome() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   // Only Owner / Admin
-  if (!user?.isAdmin && user?.username !== "parthpatel79_") {
+  if (!user?.isAdmin && user?.username !== "Darshil Doshi" && user?.username !== "darshildoshi" && user?.username !== "parthpatel79_") {
     window.location.href = "/";
   }
 
