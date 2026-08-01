@@ -1,47 +1,46 @@
-# Car Rental Project
+# Drive Ease - Car Rental Platform
 
-The Car Rental project is a comprehensive MERN stack web application tailored for small rental companies. It encompasses end-to-end functionality, including user authentication, booking management, and admin features. This application is built using Node.js, Express.js, React.js, Redux, MongoDB, and Mongoose.
+**Drive Ease** is a comprehensive MERN stack web application tailored for car rental companies. It encompasses end-to-end functionality, including user authentication, booking management, responsive modern UI, and an admin dashboard. Built using Node.js, Express.js, React.js, Redux, MongoDB, and Mongoose.
 
 ## Project Features
 
-- User authentication for secure access to the platform.
-- Booking management system for efficient rental services.
-- Admin dashboard with specialized features for company management.
-
-## Live Link
-
-[Click here to visit Car Rental](<https://car-rental-p1wz.vercel.app/>)
+- User authentication (login/register) for secure access to the platform.
+- Booking management system for efficient car rental services.
+- Admin dashboard with specialized management features.
+- Clean, responsive UI with interactive navigation and stats.
 
 ## How to Use
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/pjyotianwar/CarRental.git
+git clone https://github.com/DarshilDoshi123/Drive-Ease.git
 ```
 
-2. Install dependencies for both the server and client:
+2. Navigate into project directory:
 
 ```bash
-cd CarRental
-npm install
-cd client
-npm install
+cd "Drive Ease"
 ```
 
-3. Start the server and client:
+3. Install dependencies for all packages:
 
 ```bash
-# In the main project directory
+npm run install:all
+```
+
+4. Start the application (Backend & Frontend concurrently):
+
+```bash
 npm run dev
 ```
 
-4. Open your browser and visit `http://localhost:3000` to start using Car Rental.
+5. Open your browser and visit `http://localhost:3000` to start using Drive Ease.
 
 ## Project Structure
 
-- `client`: Contains the React.js frontend of the project.
-- `server`: Contains the Node.js and Express.js backend of the project.
+- `frontend`: Contains the React.js frontend of the project.
+- `backend`: Contains the Node.js and Express.js backend of the project.
 
 ## Screenshots
 

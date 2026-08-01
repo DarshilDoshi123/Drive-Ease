@@ -1,8 +1,8 @@
 {
-  "name": "drive-ease-root",
+  "name": "drive-ease",
   "version": "1.0.0",
   "private": true,
-  "description": "DriveEase Car Rental Platform - Enterprise Full-Stack Application",
+  "description": "Drive Ease Car Rental Platform - Enterprise Full-Stack Application",
   "scripts": {
     "dev:backend": "npm --prefix backend start",
     "dev:frontend": "npm --prefix frontend start",

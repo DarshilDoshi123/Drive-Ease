@@ -64,10 +64,10 @@ function Register() {
               <div className="auth-image-box">
                 <img
                   src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"
-                  alt="DriveEase Registration"
+                  alt="Drive Ease Registration"
                 />
                 <div className="auth-image-overlay">
-                  <h2><CarOutlined style={{ marginRight: 10 }} /> DriveEase</h2>
+                  <h2><CarOutlined style={{ marginRight: 10 }} /> Drive Ease</h2>
                   <p>Join thousands of satisfied drivers. Rent your dream vehicle in seconds.</p>
                 </div>
               </div>

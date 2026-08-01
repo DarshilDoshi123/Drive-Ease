@@ -64,7 +64,7 @@ function DefaultLayout({ children }) {
                       margin: 0,
                     }}
                   >
-                    DriveEase
+                    Drive Ease
                   </h2>
                   <small
                     style={{
@@ -153,8 +153,9 @@ function DefaultLayout({ children }) {
 
       {/* Footer */}
       <div className="footer">
-        <h3>DriveEase Car Rental</h3>
-        <p>© 2026 DriveEase Enterprise. All rights reserved.</p>
+        <h3>Drive Ease - Premium Car Rental</h3>
+        <p>Developed with ❤️ by <strong>Darshil Doshi</strong></p>
+        <p>© 2026 Drive Ease Enterprise. All rights reserved.</p>
       </div>
     </div>
   );

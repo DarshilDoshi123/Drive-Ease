@@ -34,10 +34,10 @@ function Login() {
             <div className="auth-image-box">
               <img
                 src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200"
-                alt="DriveEase Luxury Fleet"
+                alt="Drive Ease Luxury Fleet"
               />
               <div className="auth-image-overlay">
-                <h2><CarOutlined style={{ marginRight: 10 }} /> DriveEase</h2>
+                <h2><CarOutlined style={{ marginRight: 10 }} /> Drive Ease</h2>
                 <p>Experience unmatched luxury, comfort, and performance with our premium fleet.</p>
               </div>
             </div>
@@ -56,7 +56,7 @@ function Login() {
                   letterSpacing: "-0.5px"
                 }}
               >
-                DriveEase
+                Drive Ease
               </h1>
 
               <p

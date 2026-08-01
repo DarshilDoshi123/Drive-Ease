@@ -96,7 +96,7 @@ function Home() {
             marginBottom: "10px"
           }}
         >
-          Premium Car Rental
+          Drive Ease
         </h1>
         <p
           style={{
