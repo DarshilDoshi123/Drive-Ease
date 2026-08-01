@@ -13,7 +13,7 @@ function Register() {
       setLoading(true);
 
       const response = await axios.post(
-        "https://car-rental-system-dkt6.onrender.com/api/users/register",
+        `${process.env.REACT_APP_API_URL || "https://drive-ease-fq7z.onrender.com"}/api/users/register`,
         {
           username: values.username,
           password: values.password,

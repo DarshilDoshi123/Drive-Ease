@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 
-const API = "https://car-rental-system-dkt6.onrender.com";
+const API = process.env.REACT_APP_API_URL || "https://drive-ease-fq7z.onrender.com";
 
 // ================= BOOK CAR =================
 

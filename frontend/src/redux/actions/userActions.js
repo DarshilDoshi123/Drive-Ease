@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 
-const API_URL = "https://car-rental-system-dkt6.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL || "https://drive-ease-fq7z.onrender.com";
 
 export const userLogin = (reqObj) => async (dispatch) => {
   dispatch({
