@@ -1,432 +1,668 @@
-import { Col, Row, Divider, DatePicker, Checkbox, Modal, Tag } from "antd";
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  DatePicker,
+  Divider,
+  Empty,
+  Modal,
+  Radio,
+  Row,
+  Space,
+  Tag,
+  Typography,
+} from "antd";
+import {
+  CalendarOutlined,
+  CarOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CreditCardOutlined,
+  DollarCircleOutlined,
+  SafetyCertificateOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+  WalletOutlined,
+} from "@ant-design/icons";
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+import { useLoaderData } from "react-router-dom";
+import StripeCheckout from "react-stripe-checkout";
+
 import DefaultLayout from "../components/DefaultLayout";
 import Spinner from "../components/Spinner";
 import { getAllCars } from "../redux/actions/carsActions";
-import moment from "moment";
 import { bookCar } from "../redux/actions/bookingActions";
-import StripeCheckout from "react-stripe-checkout";
-import { useLoaderData } from "react-router-dom";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-import {
-  CarOutlined,
-  SafetyCertificateOutlined,
-  ClockCircleOutlined,
-  ThunderboltOutlined,
-  DollarCircleOutlined,
-} from "@ant-design/icons";
-
-AOS.init();
 
 const { RangePicker } = DatePicker;
+const { Title, Text, Paragraph } = Typography;
+
+const DRIVER_RATE = 30;
+const SERVICE_FEE_PERCENTAGE = 3;
 
 function BookingCar() {
-
-  const match = useLoaderData();
-
-  const carsReducer = useSelector((state) => state.carsReducer);
-
-const cars = carsReducer?.cars || [];
-
-  const alertsReducer = useSelector((state) => state.alertsReducer);
-
-const loading = alertsReducer?.loading || false;
-
+  const carId = useLoaderData();
   const dispatch = useDispatch();
 
-  const [car, setcar] = useState({});
-
-  const [from, setFrom] = useState();
-
-  const [to, setTo] = useState();
-
-  const [totalHours, setTotalHours] = useState(0);
-
-  const [driver, setdriver] = useState(false);
-
-  const [totalAmount, setTotalAmount] = useState(0);
-
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-
-    if (cars.length === 0) {
-
-      dispatch(getAllCars());
-
-    } else {
-
-      setcar(cars.find((o) => o._id === match));
-
-    }
-
-  }, [cars]);
-
-  const rentPerHour = car.rentPerHour || 500;
-
-  const fuelType = car.fuelType || "Petrol";
-
-  const capacity = car.capacity || 5;
-
-  useEffect(() => {
-
-    let amount = totalHours * rentPerHour;
-
-    if (driver) {
-
-      amount += totalHours * 30;
-
-    }
-
-    setTotalAmount(amount);
-
-  }, [driver, totalHours, rentPerHour]);
-
-  function selectTimeSlots(values) {
-
-    if (!values) return;
-
-    setFrom(moment(values[0]).format("MMM DD YYYY HH:mm"));
-
-    setTo(moment(values[1]).format("MMM DD YYYY HH:mm"));
-
-    setTotalHours(values[1].diff(values[0], "hours"));
-
-  }
-
-  function onToken(token) {
-
-    const reqObj = {
-
-      token,
-
-      user: JSON.parse(localStorage.getItem("user"))._id,
-
-      car: car._id,
-
-      totalHours,
-
-      totalAmount,
-
-      driverRequired: driver,
-
-      bookedTimeSlots: {
-
-        from,
-
-        to,
-
-      },
-
-    };
-
-    dispatch(bookCar(reqObj));
-
-  }
-    return (
-    <DefaultLayout>
-
-      {loading && <Spinner />}
-
-      <Row
-        gutter={[35, 35]}
-        justify="center"
-        style={{
-          padding: "30px 0",
-          alignItems: "center",
-        }}
-      >
-
-        {/* LEFT SIDE */}
-
-        <Col lg={11} md={24} sm={24} xs={24}>
-
-          <img
-            src={car.image || "https://via.placeholder.com/400x250"}
-            alt={car.name}
-            className="carimg2"
-            data-aos="zoom-in"
-          />
-
-          <div
-            className="bs1"
-            style={{
-              marginTop: 20,
-              padding: 25,
-            }}
-          >
-
-            <h2
-              style={{
-                color: "#2563eb",
-                marginBottom: 15,
-              }}
-            >
-              {car.name}
-            </h2>
-
-            <Divider />
-
-            <Row gutter={[15, 15]}>
-
-              <Col span={12}>
-                <Tag color="blue" style={{padding:8}}>
-                  🚗 {capacity} Seats
-                </Tag>
-              </Col>
-
-              <Col span={12}>
-                <Tag color="green" style={{padding:8}}>
-                  ⛽ {fuelType}
-                </Tag>
-              </Col>
-
-              <Col span={12}>
-                <Tag color="gold" style={{padding:8}}>
-                  💰 ₹ {rentPerHour}/Hour
-                </Tag>
-              </Col>
-
-              <Col span={12}>
-                <Tag color="purple" style={{padding:8}}>
-                  ⭐ Premium
-                </Tag>
-              </Col>
-
-            </Row>
-
-            <Divider />
-
-            <Row gutter={[15,15]}>
-
-              <Col span={8} style={{textAlign:"center"}}>
-
-                <SafetyCertificateOutlined
-                  style={{
-                    fontSize:35,
-                    color:"#16a34a"
-                  }}
-                />
-
-                <p>Safe Ride</p>
-
-              </Col>
-
-              <Col span={8} style={{textAlign:"center"}}>
-
-                <ClockCircleOutlined
-                  style={{
-                    fontSize:35,
-                    color:"#2563eb"
-                  }}
-                />
-
-                <p>24/7 Support</p>
-
-              </Col>
-
-              <Col span={8} style={{textAlign:"center"}}>
-
-                <ThunderboltOutlined
-                  style={{
-                    fontSize:35,
-                    color:"#f97316"
-                  }}
-                />
-
-                <p>Instant Booking</p>
-
-              </Col>
-
-            </Row>
-
-          </div>
-
-        </Col>
-
-        {/* RIGHT SIDE */}
-
-        <Col lg={11} md={24} sm={24} xs={24}>
-
-          <div
-            className="bs1"
-            style={{
-              padding:30,
-            }}
-          >
-
-            <h2
-              style={{
-                color:"#2563eb"
-              }}
-            >
-              <CarOutlined /> Book Your Ride
-            </h2>
-
-            <Divider />
-
-            <p
-              style={{
-                fontWeight:600
-              }}
-            >
-              Select Pickup & Return Time
-            </p>
-
-            <RangePicker
-              showTime={{ format: "HH:mm" }}
-              format="MMM DD YYYY HH:mm"
-              style={{ width: "100%" }}
-              onChange={selectTimeSlots}
-            />
-
-            <button
-              className="btn1"
-              style={{
-                width:"100%",
-                marginTop:20
-              }}
-              onClick={()=>setShowModal(true)}
-            >
-              View Booked Slots
-            </button>
-
-            {from && to && (
-
-              <>
-
-              <Divider />
-
-              <h3
-                style={{
-                  color:"#2563eb"
-                }}
-              >
-                Booking Summary
-              </h3>
-
-              <div className="booking-info">
-
-                <span>Total Hours</span>
-
-                <b>{totalHours}</b>
-
-              </div>
-
-              <div className="booking-info">
-
-                <span>Rent / Hour</span>
-
-                <b>₹ {rentPerHour}</b>
-
-              </div>
-
-              <div className="booking-info">
-
-                <span>Pickup</span>
-
-                <b>{from}</b>
-
-              </div>
-
-              <div className="booking-info">
-
-                <span>Return</span>
-
-                <b>{to}</b>
-
-              </div>
-
-              <Divider />
-
-              <Checkbox
-                onChange={(e)=>setdriver(e.target.checked)}
-              >
-                Need Driver (+₹30/hour)
-              </Checkbox>
-
-              <Divider />
-
-              <h2
-                style={{
-                  color:"#16a34a"
-                }}
-              >
-                <DollarCircleOutlined />
-
-                {" "}₹ {totalAmount}
-
-              </h2>
-
-              <StripeCheckout
-                shippingAddress
-                token={onToken}
-                currency="inr"
-                amount={totalAmount*100}
-                stripeKey="pk_test_51NFtVGSAZAXtdYSkpJntFLfuU3dQNlk1BVqldJWCWQUyDqAtoE1wHVhRCB2GEnGurggdZOd1L08afXnaMN0H7qcO00yUPQevQp"
-              >
-
-                <button
-                  className="btn1"
-                  style={{
-                    width:"100%",
-                    marginTop:20,
-                    fontSize:18,
-                    padding:15
-                  }}
-                >
-                  💳 Proceed To Payment
-                </button>
-
-              </StripeCheckout>
-
-              </>
-
-            )}
-
-          </div>
-
-        </Col>
-
-      </Row>
-
-      <Modal
-        title="Booked Time Slots"
-        open={showModal}
-        footer={null}
-        onCancel={()=>setShowModal(false)}
-      >
-
-        {car.bookedTimeSlots?.length > 0 ? (
-
-          car.bookedTimeSlots.map((slot,index)=>(
-            <Tag
-              key={index}
-              color="red"
-              style={{
-                marginBottom:10,
-                padding:10,
-                width:"100%"
-              }}
-            >
-              {slot.from} → {slot.to}
-            </Tag>
-          ))
-
-        ) : (
-
-          <p>No Bookings Yet</p>
-
-        )}
-
-      </Modal>
-
-    </DefaultLayout>
+  const carsState = useSelector(
+    (state) => state.carsReducer
   );
 
+  const loading = useSelector(
+    (state) => state.alertsReducer?.loading || false
+  );
+
+  const cars = useMemo(
+    () =>
+      Array.isArray(carsState?.cars)
+        ? carsState.cars
+        : [],
+    [carsState?.cars]
+  );
+
+  const [selectedRange, setSelectedRange] =
+    useState(null);
+
+  const [driverRequired, setDriverRequired] =
+    useState(false);
+
+  const [paymentMethod, setPaymentMethod] =
+    useState("pay_at_pickup");
+
+  const [showSlotsModal, setShowSlotsModal] =
+    useState(false);
+
+  useEffect(() => {
+    if (cars.length === 0) {
+      dispatch(getAllCars());
+    }
+  }, [cars.length, dispatch]);
+
+  const car = useMemo(
+    () => cars.find((item) => item._id === carId),
+    [cars, carId]
+  );
+
+  const rentPerHour = Number(
+    car?.rentPerHour || 0
+  );
+
+  const bookingSummary = useMemo(() => {
+    if (!selectedRange) {
+      return {
+        from: null,
+        to: null,
+        totalHours: 0,
+        baseAmount: 0,
+        driverCharge: 0,
+        serviceFee: 0,
+        totalAmount: 0,
+      };
+    }
+
+    const [fromValue, toValue] = selectedRange;
+
+    const milliseconds =
+      toValue.valueOf() - fromValue.valueOf();
+
+    const totalHours = Math.ceil(
+      milliseconds / (1000 * 60 * 60)
+    );
+
+    const baseAmount = totalHours * rentPerHour;
+
+    const driverCharge = driverRequired
+      ? totalHours * DRIVER_RATE
+      : 0;
+
+    const subtotal =
+      baseAmount + driverCharge;
+
+    const serviceFee = Math.round(
+      subtotal *
+        (SERVICE_FEE_PERCENTAGE / 100)
+    );
+
+    return {
+      from: fromValue,
+      to: toValue,
+      totalHours,
+      baseAmount,
+      driverCharge,
+      serviceFee,
+      totalAmount: subtotal + serviceFee,
+    };
+  }, [
+    selectedRange,
+    rentPerHour,
+    driverRequired,
+  ]);
+
+  const hasBookingConflict = useMemo(() => {
+    if (!selectedRange || !car) {
+      return false;
+    }
+
+    const selectedFrom =
+      selectedRange[0].valueOf();
+
+    const selectedTo =
+      selectedRange[1].valueOf();
+
+    return (car.bookedTimeSlots || []).some(
+      (slot) => {
+        const existingFrom = new Date(
+          slot.from
+        ).getTime();
+
+        const existingTo = new Date(
+          slot.to
+        ).getTime();
+
+        if (
+          Number.isNaN(existingFrom) ||
+          Number.isNaN(existingTo)
+        ) {
+          return false;
+        }
+
+        return (
+          selectedFrom < existingTo &&
+          selectedTo > existingFrom
+        );
+      }
+    );
+  }, [selectedRange, car]);
+
+  const disablePastDates = (current) =>
+    current &&
+    current.endOf("day").valueOf() <
+      Date.now();
+
+  const handleRangeChange = (values) => {
+    if (!values || values.length !== 2) {
+      setSelectedRange(null);
+      return;
+    }
+
+    if (
+      values[1].valueOf() <=
+      values[0].valueOf()
+    ) {
+      setSelectedRange(null);
+      return;
+    }
+
+    setSelectedRange(values);
+  };
+
+  const createRequestObject = (token = null) => ({
+    token,
+    car: car._id,
+    driverRequired,
+    paymentMethod,
+
+    bookedTimeSlots: {
+      from:
+        bookingSummary.from.toISOString(),
+
+      to:
+        bookingSummary.to.toISOString(),
+    },
+  });
+
+  const handlePayAtPickup = () => {
+    dispatch(
+      bookCar(createRequestObject())
+    );
+  };
+
+  const handleStripeToken = (token) => {
+    dispatch(
+      bookCar(createRequestObject(token))
+    );
+  };
+
+  const canBook =
+    Boolean(car) &&
+    Boolean(selectedRange) &&
+    bookingSummary.totalHours >= 1 &&
+    !hasBookingConflict;
+
+  if (!car && !loading) {
+    return (
+      <DefaultLayout>
+        <Card className="booking-empty-card">
+          <Empty description="Car not found">
+            <Button
+              type="primary"
+              href="/"
+            >
+              Return to Cars
+            </Button>
+          </Empty>
+        </Card>
+      </DefaultLayout>
+    );
+  }
+
+  return (
+    <DefaultLayout>
+      {loading && <Spinner />}
+
+      <section className="booking-page">
+        <div className="booking-page-heading">
+          <Text className="section-label">
+            COMPLETE YOUR RESERVATION
+          </Text>
+
+          <Title level={1}>
+            Book {car?.name || "your car"}
+          </Title>
+
+          <Paragraph>
+            Select your booking period, review the
+            price breakdown and choose a payment
+            method.
+          </Paragraph>
+        </div>
+
+        <Row gutter={[30, 30]}>
+          <Col xl={13} lg={12} xs={24}>
+            <Card
+              className="booking-car-card"
+              bordered={false}
+            >
+              <div className="booking-car-image-wrapper">
+                <img
+                  src={
+                    car?.image ||
+                    "https://placehold.co/900x600?text=DriveEase"
+                  }
+                  alt={`${car?.name || "Car"} rental`}
+                />
+
+                <Tag
+                  color="green"
+                  className="booking-availability-tag"
+                >
+                  Available for booking
+                </Tag>
+              </div>
+
+              <div className="booking-car-details">
+                <Title level={2}>
+                  {car?.name}
+                </Title>
+
+                <Row gutter={[14, 14]}>
+                  <Col sm={8} xs={24}>
+                    <div className="booking-spec-box">
+                      <TeamOutlined />
+                      <div>
+                        <small>Capacity</small>
+                        <strong>
+                          {car?.capacity || "-"} Seats
+                        </strong>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col sm={8} xs={24}>
+                    <div className="booking-spec-box">
+                      <ThunderboltOutlined />
+                      <div>
+                        <small>Fuel Type</small>
+                        <strong>
+                          {car?.fuelType || "-"}
+                        </strong>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col sm={8} xs={24}>
+                    <div className="booking-spec-box">
+                      <DollarCircleOutlined />
+                      <div>
+                        <small>Rental Rate</small>
+                        <strong>
+                          ₹{rentPerHour}/hour
+                        </strong>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Divider />
+
+                <Row gutter={[20, 20]}>
+                  <Col span={8}>
+                    <div className="booking-benefit">
+                      <SafetyCertificateOutlined />
+                      <span>Safe Ride</span>
+                    </div>
+                  </Col>
+
+                  <Col span={8}>
+                    <div className="booking-benefit">
+                      <ClockCircleOutlined />
+                      <span>24/7 Support</span>
+                    </div>
+                  </Col>
+
+                  <Col span={8}>
+                    <div className="booking-benefit">
+                      <CheckCircleOutlined />
+                      <span>Verified Car</span>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </Card>
+          </Col>
+
+          <Col xl={11} lg={12} xs={24}>
+            <Card
+              className="booking-form-card"
+              bordered={false}
+            >
+              <div className="booking-form-title">
+                <div className="booking-form-icon">
+                  <CalendarOutlined />
+                </div>
+
+                <div>
+                  <Title level={3}>
+                    Select Pickup & Return Time
+                  </Title>
+
+                  <Text type="secondary">
+                    Minimum booking duration is one hour
+                  </Text>
+                </div>
+              </div>
+
+              <RangePicker
+                className="booking-range-picker"
+                showTime={{
+                  format: "HH:mm",
+                  minuteStep: 15,
+                }}
+                format="DD MMM YYYY, HH:mm"
+                disabledDate={disablePastDates}
+                onChange={handleRangeChange}
+                placeholder={[
+                  "Pickup date and time",
+                  "Return date and time",
+                ]}
+              />
+
+              <Button
+                block
+                icon={<ClockCircleOutlined />}
+                onClick={() =>
+                  setShowSlotsModal(true)
+                }
+                className="booked-slots-button"
+              >
+                View Existing Booked Slots
+              </Button>
+
+              {hasBookingConflict && (
+                <Alert
+                  type="error"
+                  showIcon
+                  message="Selected slot is unavailable"
+                  description="This car already has a booking that overlaps with the selected pickup and return time."
+                />
+              )}
+
+              {selectedRange && (
+                <>
+                  <Divider />
+
+                  <Title level={3}>
+                    Booking Summary
+                  </Title>
+
+                  <div className="booking-summary-list">
+                    <div className="booking-summary-row">
+                      <span>Pickup</span>
+                      <strong>
+                        {bookingSummary.from.format(
+                          "DD MMM YYYY, HH:mm"
+                        )}
+                      </strong>
+                    </div>
+
+                    <div className="booking-summary-row">
+                      <span>Return</span>
+                      <strong>
+                        {bookingSummary.to.format(
+                          "DD MMM YYYY, HH:mm"
+                        )}
+                      </strong>
+                    </div>
+
+                    <div className="booking-summary-row">
+                      <span>Total Duration</span>
+                      <strong>
+                        {bookingSummary.totalHours} hours
+                      </strong>
+                    </div>
+
+                    <div className="booking-summary-row">
+                      <span>Rent per Hour</span>
+                      <strong>
+                        ₹{rentPerHour}
+                      </strong>
+                    </div>
+
+                    <div className="booking-summary-row">
+                      <span>Base Rent</span>
+                      <strong>
+                        ₹
+                        {bookingSummary.baseAmount.toLocaleString(
+                          "en-IN"
+                        )}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="driver-option-box">
+                    <Checkbox
+                      checked={driverRequired}
+                      onChange={(event) =>
+                        setDriverRequired(
+                          event.target.checked
+                        )
+                      }
+                    >
+                      <strong>
+                        Add professional driver
+                      </strong>
+
+                      <div className="driver-option-description">
+                        ₹{DRIVER_RATE} per booking hour
+                      </div>
+                    </Checkbox>
+                  </div>
+
+                  <div className="booking-summary-list">
+                    <div className="booking-summary-row">
+                      <span>Driver Charge</span>
+                      <strong>
+                        ₹
+                        {bookingSummary.driverCharge.toLocaleString(
+                          "en-IN"
+                        )}
+                      </strong>
+                    </div>
+
+                    <div className="booking-summary-row">
+                      <span>
+                        Service Fee (
+                        {SERVICE_FEE_PERCENTAGE}%)
+                      </span>
+                      <strong>
+                        ₹
+                        {bookingSummary.serviceFee.toLocaleString(
+                          "en-IN"
+                        )}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="booking-total-box">
+                    <span>Total Payable</span>
+                    <strong>
+                      ₹
+                      {bookingSummary.totalAmount.toLocaleString(
+                        "en-IN"
+                      )}
+                    </strong>
+                  </div>
+
+                  <Divider />
+
+                  <Title level={4}>
+                    Payment Method
+                  </Title>
+
+                  <Radio.Group
+                    className="payment-method-group"
+                    value={paymentMethod}
+                    onChange={(event) =>
+                      setPaymentMethod(
+                        event.target.value
+                      )
+                    }
+                  >
+                    <Radio.Button value="pay_at_pickup">
+                      <WalletOutlined />
+                      Pay at Pickup
+                    </Radio.Button>
+
+                    <Radio.Button value="card">
+                      <CreditCardOutlined />
+                      Card Payment
+                    </Radio.Button>
+                  </Radio.Group>
+
+                  {paymentMethod === "pay_at_pickup" ? (
+                    <Button
+                      type="primary"
+                      block
+                      size="large"
+                      disabled={!canBook}
+                      onClick={handlePayAtPickup}
+                      className="booking-submit-button"
+                      icon={<CarOutlined />}
+                    >
+                      Confirm Booking
+                    </Button>
+                  ) : (
+                    <StripeCheckout
+                      shippingAddress
+                      billingAddress
+                      name="DriveEase Car Rental"
+                      description={`${car?.name} booking`}
+                      token={handleStripeToken}
+                      currency="INR"
+                      amount={
+                        bookingSummary.totalAmount *
+                        100
+                      }
+                      stripeKey={
+                        process.env
+                          .REACT_APP_STRIPE_PUBLIC_KEY ||
+                        "pk_test_51NFtVGSAZAXtdYSkpJntFLfuU3dQNlk1BVqldJWCWQUyDqAtoE1wHVhRCB2GEnGurggdZOd1L08afXnaMN0H7qcO00yUPQevQp"
+                      }
+                    >
+                      <Button
+                        type="primary"
+                        block
+                        size="large"
+                        disabled={!canBook}
+                        className="booking-submit-button"
+                        icon={<CreditCardOutlined />}
+                      >
+                        Pay ₹
+                        {bookingSummary.totalAmount.toLocaleString(
+                          "en-IN"
+                        )}
+                      </Button>
+                    </StripeCheckout>
+                  )}
+
+                  <Text className="payment-security-text">
+                    <SafetyCertificateOutlined /> Card
+                    details are handled securely by Stripe
+                    test checkout.
+                  </Text>
+                </>
+              )}
+            </Card>
+          </Col>
+        </Row>
+      </section>
+
+      <Modal
+        title="Existing Booked Time Slots"
+        open={showSlotsModal}
+        footer={null}
+        onCancel={() =>
+          setShowSlotsModal(false)
+        }
+      >
+        {car?.bookedTimeSlots?.length > 0 ? (
+          <Space
+            direction="vertical"
+            size="middle"
+            style={{ width: "100%" }}
+          >
+            {car.bookedTimeSlots.map(
+              (slot, index) => (
+                <div
+                  className="existing-slot"
+                  key={slot._id || index}
+                >
+                  <ClockCircleOutlined />
+
+                  <div>
+                    <strong>
+                      {new Date(
+                        slot.from
+                      ).toLocaleString("en-IN")}
+                    </strong>
+
+                    <span>to</span>
+
+                    <strong>
+                      {new Date(
+                        slot.to
+                      ).toLocaleString("en-IN")}
+                    </strong>
+                  </div>
+                </div>
+              )
+            )}
+          </Space>
+        ) : (
+          <Empty description="No bookings yet" />
+        )}
+      </Modal>
+    </DefaultLayout>
+  );
 }
 
 export default BookingCar;

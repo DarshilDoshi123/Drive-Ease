@@ -1,7 +1,5 @@
-import axios from "axios";
 import { message } from "antd";
-
-const API_URL = "https://car-rental-system-dkt6.onrender.com";
+import api from "../../services/api";
 
 export const userLogin = (reqObj) => async (dispatch) => {
   dispatch({
@@ -10,24 +8,27 @@ export const userLogin = (reqObj) => async (dispatch) => {
   });
 
   try {
-    const response = await axios.post(
-      `${API_URL}/api/users/login`,
-      reqObj
-    );
+    const response = await api.post("/api/users/login", {
+      username: reqObj.username?.trim(),
+      password: reqObj.password,
+    });
 
-    localStorage.setItem("user", JSON.stringify(response.data));
+    const { user, token } = response.data.data;
 
-    message.success("Login successful");
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+
+    message.success(response.data.message || "Login successful");
 
     setTimeout(() => {
       window.location.href = "/";
-    }, 1000);
+    }, 500);
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Login error:", error.response?.data || error.message);
 
     message.error(
       error.response?.data?.message ||
-      "Invalid username or password"
+        "Unable to login. Please try again."
     );
   } finally {
     dispatch({
@@ -44,22 +45,28 @@ export const userRegister = (reqObj) => async (dispatch) => {
   });
 
   try {
-    await axios.post(
-      `${API_URL}/api/users/register`,
-      reqObj
-    );
+    const response = await api.post("/api/users/register", {
+      username: reqObj.username?.trim(),
+      password: reqObj.password,
+    });
 
-    message.success("Registration successful");
+    message.success(
+      response.data.message ||
+        "Registration successful. Please log in."
+    );
 
     setTimeout(() => {
       window.location.href = "/login";
-    }, 1000);
+    }, 500);
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error(
+      "Registration error:",
+      error.response?.data || error.message
+    );
 
     message.error(
       error.response?.data?.message ||
-      "Registration failed. Please try again."
+        "Registration failed. Please try again."
     );
   } finally {
     dispatch({

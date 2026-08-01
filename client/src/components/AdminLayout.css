@@ -1,0 +1,536 @@
+/* ==========================================
+   DRIVEEASE PROFESSIONAL ADMIN LAYOUT
+========================================== */
+
+.admin-application-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f6f8fc;
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1200;
+
+  width: 270px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.24),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      #111827 0%,
+      #0f172a 55%,
+      #020617 100%
+    );
+
+  box-shadow:
+    14px 0 45px
+    rgba(15, 23, 42, 0.15);
+
+  transition:
+    width 0.3s ease;
+}
+
+.admin-sidebar.collapsed {
+  width: 88px;
+}
+
+.admin-sidebar-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 15px;
+}
+
+/* ==========================================
+   BRAND
+========================================== */
+
+.admin-sidebar-brand {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 9px;
+}
+
+.admin-sidebar-logo {
+  width: 47px;
+  height: 47px;
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 15px;
+
+  color: #ffffff;
+  font-size: 23px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #7c3aed
+    );
+
+  box-shadow:
+    0 12px 28px
+    rgba(37, 99, 235, 0.35);
+}
+
+.admin-sidebar-brand-text {
+  min-width: 0;
+}
+
+.admin-sidebar-brand-text h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.admin-sidebar-brand-text span {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* ==========================================
+   ADMIN PROFILE
+========================================== */
+
+.admin-sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  margin: 27px 0 24px;
+  padding: 17px 11px;
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.14);
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 255, 255, 0.055);
+}
+
+.admin-sidebar.collapsed
+.admin-sidebar-profile {
+  justify-content: center;
+  padding: 14px 5px;
+}
+
+.admin-sidebar-profile-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar-profile-info strong {
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-sidebar-profile-info span {
+  margin-top: 2px;
+  color: #93c5fd;
+  font-size: 10px;
+}
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.admin-sidebar-section-label {
+  min-height: 25px;
+  padding: 0 13px;
+
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-sidebar-link {
+  width: 100%;
+  min-height: 48px;
+
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 0 14px;
+
+  border: none;
+  border-radius: 13px;
+
+  color: #cbd5e1;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+
+  background: transparent;
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-sidebar-link .anticon {
+  min-width: 20px;
+  font-size: 18px;
+}
+
+.admin-sidebar-link:hover {
+  color: #ffffff;
+
+  background:
+    rgba(59, 130, 246, 0.14);
+
+  transform: translateX(3px);
+}
+
+.admin-sidebar-link.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  box-shadow:
+    0 12px 26px
+    rgba(37, 99, 235, 0.28);
+}
+
+.admin-sidebar.collapsed
+.admin-sidebar-link {
+  justify-content: center;
+  padding: 0;
+}
+
+/* ==========================================
+   SIDEBAR BOTTOM
+========================================== */
+
+.admin-sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  margin-top: auto;
+  padding-top: 20px;
+
+  border-top:
+    1px solid
+    rgba(148, 163, 184, 0.13);
+}
+
+.admin-sidebar-logout {
+  color: #fca5a5;
+}
+
+.admin-sidebar-logout:hover {
+  color: #ffffff;
+  background: rgba(220, 38, 38, 0.24);
+}
+
+/* ==========================================
+   MAIN AREA
+========================================== */
+
+.admin-main-area {
+  width: calc(100% - 270px);
+  min-height: 100vh;
+  margin-left: 270px;
+
+  transition:
+    width 0.3s ease,
+    margin-left 0.3s ease;
+}
+
+.admin-application-layout.sidebar-collapsed
+.admin-main-area {
+  width: calc(100% - 88px);
+  margin-left: 88px;
+}
+
+/* ==========================================
+   TOP HEADER
+========================================== */
+
+.admin-top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  min-height: 80px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+
+  padding: 14px 31px;
+
+  border-bottom:
+    1px solid #e2e8f0;
+
+  background:
+    rgba(255, 255, 255, 0.95);
+
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 5px 20px
+    rgba(15, 23, 42, 0.035);
+}
+
+.admin-top-header-left {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.admin-collapse-button,
+.admin-mobile-sidebar-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+}
+
+.admin-mobile-sidebar-button {
+  display: none;
+}
+
+.admin-header-title h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.admin-header-title span {
+  color: #64748b;
+  font-size: 10px;
+}
+
+.admin-header-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 6px 10px;
+
+  border: none;
+  border-radius: 14px;
+
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+
+  transition: background 0.25s ease;
+}
+
+.admin-header-profile:hover {
+  background: #eff6ff;
+}
+
+.admin-header-profile > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header-profile strong {
+  color: #0f172a;
+  font-size: 12px;
+}
+
+.admin-header-profile span {
+  color: #64748b;
+  font-size: 9px;
+}
+
+/* ==========================================
+   CONTENT AREA
+========================================== */
+
+.admin-page-content {
+  min-height: calc(100vh - 80px);
+  padding: 30px;
+}
+
+/* Remove normal site layout spacing inside admin */
+
+.admin-page-content
+.admin-dashboard-page,
+.admin-page-content
+.admin-requests-page,
+.admin-page-content
+.earnings-page {
+  width: 100%;
+  max-width: none;
+  padding-top: 0;
+}
+
+/* ==========================================
+   MOBILE DRAWER
+========================================== */
+
+.admin-mobile-drawer
+.ant-drawer-content,
+.admin-mobile-drawer
+.ant-drawer-body {
+  color: #ffffff;
+  background: #020617;
+}
+
+.admin-mobile-drawer
+.admin-sidebar-content {
+  min-height: 100%;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    display: none;
+  }
+
+  .admin-main-area,
+  .admin-application-layout.sidebar-collapsed
+  .admin-main-area {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .admin-collapse-button {
+    display: none;
+  }
+
+  .admin-mobile-sidebar-button {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-top-header {
+    padding: 12px 15px;
+  }
+
+  .admin-header-title {
+    display: none;
+  }
+
+  .admin-header-profile
+  > div:last-child {
+    display: none;
+  }
+
+  .admin-page-content {
+    padding: 18px 13px;
+  }
+}
+
+/* Prevent layout resize loops */
+
+.admin-application-layout,
+.admin-main-area,
+.admin-page-content {
+  min-width: 0;
+}
+
+.admin-page-content {
+  overflow-x: hidden;
+}
+
+.admin-cars-table,
+.ant-table-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+img {
+  max-width: 100%;
+}/* Prevent layout resize loops */
+
+.admin-application-layout,
+.admin-main-area,
+.admin-page-content {
+  min-width: 0;
+}
+
+.admin-page-content {
+  overflow-x: hidden;
+}
+
+.admin-cars-table,
+.ant-table-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+.admin-application-layout,
+.admin-sidebar,
+.admin-main-area,
+.admin-page-content,
+.admin-table-container,
+.ant-table-wrapper {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.admin-main-area,
+.admin-page-content {
+  overflow-x: hidden;
+}
+
+.admin-cars-table {
+  width: 100%;
+  max-width: 100%;
+}
+
+.admin-cars-table .ant-table-container {
+  overflow-x: auto;
+}

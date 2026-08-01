@@ -1,6 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+  // Ignore harmless ResizeObserver warnings before React loads
+  window.addEventListener(
+    "error",
+    function (event) {
+      const message = event.message || "";
+
+      if (
+        message.includes(
+          "ResizeObserver loop completed with undelivered notifications"
+        ) ||
+        message.includes(
+          "ResizeObserver loop limit exceeded"
+        )
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return false;
+      }
+    },
+    true
+  );
+
+  window.addEventListener(
+    "unhandledrejection",
+    function (event) {
+      const message =
+        event.reason?.message ||
+        String(event.reason || "");
+
+      if (
+        message.includes(
+          "ResizeObserver loop completed with undelivered notifications"
+        ) ||
+        message.includes(
+          "ResizeObserver loop limit exceeded"
+        )
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    },
+    true
+  );
+</script>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

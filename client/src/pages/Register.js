@@ -1,182 +1,267 @@
-import React, { useState } from "react";
-import { Form, Input, message, Spin } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React from "react";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Typography,
+} from "antd";
+import { Link, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  CarOutlined,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+
+import { userRegister } from "../redux/actions/userActions";
+import Spinner from "../components/Spinner";
+
+const { Title, Text } = Typography;
 
 function Register() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.alertsReducer);
 
-  const onFinish = async (values) => {
-    try {
-      setLoading(true);
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
 
-      const response = await axios.post(
-        "https://car-rental-system-dkt6.onrender.com/api/users/register",
-        {
-          username: values.username,
-          password: values.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  if (token && user) {
+    return <Navigate to="/" replace />;
+  }
 
-      console.log("Register response:", response.data);
-
-      message.success("Registration successful");
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
-    } catch (error) {
-      console.error("Registration error:", error);
-      console.error("Server response:", error.response?.data);
-
-      message.error(
-        error.response?.data?.message ||
-          "Registration failed. Check server connection."
-      );
-    } finally {
-      setLoading(false);
-    }
+  const onFinish = (values) => {
+    dispatch(
+      userRegister({
+        username: values.username,
+        password: values.password,
+      })
+    );
   };
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0f172a, #1e40af)",
+        padding: "24px",
+        background:
+          "linear-gradient(135deg, #020617 0%, #172554 50%, #1d4ed8 100%)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "20px",
       }}
     >
-      <Spin spinning={loading} size="large">
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "1100px",
-            background: "#fff",
-            borderRadius: "20px",
-            overflow: "hidden",
-            boxShadow: "0 15px 40px rgba(0,0,0,.3)",
-          }}
-        >
-          <div className="row g-0">
-            <div className="col-lg-6 d-none d-lg-block">
+      {loading && <Spinner />}
+
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "1100px",
+          background: "rgba(255,255,255,0.98)",
+          borderRadius: "24px",
+          overflow: "hidden",
+          boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
+        }}
+      >
+        <Row>
+          <Col lg={12} xs={0}>
+            <div
+              style={{
+                height: "690px",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
               <img
                 src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"
-                alt="Car"
+                alt="Sports car available for rental"
                 style={{
                   width: "100%",
-                  height: "650px",
+                  height: "100%",
                   objectFit: "cover",
                 }}
               />
-            </div>
 
-            <div className="col-lg-6">
-              <div style={{ padding: "50px" }}>
-                <h1
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to top, rgba(2,6,23,.90), rgba(2,6,23,.08))",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  padding: "48px",
+                }}
+              >
+                <Title level={2} style={{ color: "white", marginBottom: 8 }}>
+                  Start your next journey
+                </Title>
+
+                <Text style={{ color: "#e2e8f0", fontSize: 16 }}>
+                  Create your account and book premium rental vehicles with a
+                  fast and convenient process.
+                </Text>
+              </div>
+            </div>
+          </Col>
+
+          <Col lg={12} xs={24}>
+            <div
+              style={{
+                minHeight: "690px",
+                padding: "50px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{ textAlign: "center", marginBottom: 28 }}>
+                <CarOutlined
                   style={{
-                    textAlign: "center",
-                    color: "#1e40af",
-                    marginBottom: "30px",
+                    fontSize: 48,
+                    color: "#2563eb",
+                    marginBottom: 12,
+                  }}
+                />
+
+                <Title
+                  style={{
+                    margin: 0,
+                    color: "#0f172a",
                   }}
                 >
                   Create Account
-                </h1>
+                </Title>
 
-                <Form layout="vertical" onFinish={onFinish}>
-                  <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter username",
-                      },
-                    ]}
-                  >
-                    <Input size="large" />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter password",
-                      },
-                      {
-                        min: 4,
-                        message: "Password must contain at least 4 characters",
-                      },
-                    ]}
-                  >
-                    <Input.Password size="large" />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Confirm Password"
-                    name="cpassword"
-                    dependencies={["password"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please confirm password",
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (
-                            !value ||
-                            getFieldValue("password") === value
-                          ) {
-                            return Promise.resolve();
-                          }
-
-                          return Promise.reject(
-                            new Error("Passwords do not match")
-                          );
-                        },
-                      }),
-                    ]}
-                  >
-                    <Input.Password size="large" />
-                  </Form.Item>
-
-                  <button
-                    type="submit"
-                    className="btn1"
-                    disabled={loading}
-                    style={{
-                      width: "100%",
-                      height: "45px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    {loading ? "REGISTERING..." : "REGISTER"}
-                  </button>
-
-                  <br />
-                  <br />
-
-                  <div style={{ textAlign: "center" }}>
-                    Already have an account?
-                    <br />
-                    <Link to="/login">Login Here</Link>
-                  </div>
-                </Form>
+                <Text type="secondary">
+                  Join DriveEase and start booking your preferred vehicle
+                </Text>
               </div>
+
+              <Form
+                layout="vertical"
+                onFinish={onFinish}
+                requiredMark={false}
+                size="large"
+              >
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a username",
+                    },
+                    {
+                      min: 3,
+                      message: "Username must contain at least 3 characters",
+                    },
+                    {
+                      max: 30,
+                      message: "Username cannot exceed 30 characters",
+                    },
+                    {
+                      pattern: /^[a-zA-Z0-9_]+$/,
+                      message:
+                        "Use only letters, numbers and underscores",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined />}
+                    placeholder="Choose a username"
+                    autoComplete="username"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a password",
+                    },
+                    {
+                      min: 8,
+                      message: "Password must contain at least 8 characters",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined />}
+                    placeholder="Create a secure password"
+                    autoComplete="new-password"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  dependencies={["password"]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please confirm your password",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (
+                          !value ||
+                          getFieldValue("password") === value
+                        ) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(
+                          new Error("Passwords do not match")
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined />}
+                    placeholder="Re-enter your password"
+                    autoComplete="new-password"
+                  />
+                </Form.Item>
+
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  block
+                  style={{
+                    height: 48,
+                    marginTop: 8,
+                    fontWeight: 600,
+                  }}
+                >
+                  CREATE ACCOUNT
+                </Button>
+
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginTop: 24,
+                  }}
+                >
+                  <Text type="secondary">
+                    Already have an account?{" "}
+                  </Text>
+
+                  <Link to="/login">
+                    <strong>Login here</strong>
+                  </Link>
+                </div>
+              </Form>
             </div>
-          </div>
-        </div>
-      </Spin>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 }

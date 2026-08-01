@@ -4,14 +4,17 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: [true, "Username is required"],
       unique: true,
       trim: true,
+      minlength: [3, "Username must contain at least 3 characters"],
+      maxlength: [30, "Username cannot exceed 30 characters"],
     },
 
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
+      select: false,
     },
 
     isAdmin: {
@@ -23,6 +26,18 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+/*
+  Whenever a user object is converted to JSON,
+  the password field will be removed.
+*/
+userSchema.set("toJSON", {
+  transform: function (document, returnedObject) {
+    delete returnedObject.password;
+    delete returnedObject.__v;
+    return returnedObject;
+  },
+});
 
 const User = mongoose.model("users", userSchema);
 
