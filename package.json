@@ -1,21 +1,19 @@
 {
-  "name": "car-rental",
+  "name": "drive-ease-root",
   "version": "1.0.0",
-  "description": "MERN Car Rental System",
-  "main": "server.js",
+  "private": true,
+  "description": "DriveEase Car Rental Platform - Enterprise Full-Stack Application",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev:backend": "npm --prefix backend start",
+    "dev:frontend": "npm --prefix frontend start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "start:backend": "npm --prefix backend start",
+    "start:frontend": "npm --prefix frontend start",
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "install:all": "npm run install:backend && npm run install:frontend"
   },
-  "author": "Parth Patel",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "mongoose": "^7.2.2",
-    "nodemon": "^3.1.14",
-    "stripe": "^12.8.0",
-    "uuid": "^14.0.1"
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
