@@ -27,10 +27,12 @@ function Home() {
 
   const [totalCars, setTotalCars] = useState([]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     dispatch(getAllCars());
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setTotalCars(cars);
   }, [cars]);

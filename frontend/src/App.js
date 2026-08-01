@@ -1,5 +1,5 @@
 import './App.css';
-import {Route , BrowserRouter , Navigate} from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
 import {
   createBrowserRouter,
   RouterProvider,

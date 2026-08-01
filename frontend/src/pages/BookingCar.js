@@ -38,6 +38,7 @@ function BookingCar() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (cars.length === 0) {
       dispatch(getAllCars());
@@ -50,6 +51,7 @@ function BookingCar() {
   const fuelType = car.fuelType || "Petrol";
   const capacity = car.capacity || 5;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let amount = totalHours * rentPerHour;
     if (driver) {

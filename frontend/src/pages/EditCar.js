@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../components/DefaultLayout";
 import Spinner from "../components/Spinner";
-import { addCar, editCar, getAllCars } from "../redux/actions/carsActions";
+import { editCar, getAllCars } from "../redux/actions/carsActions";
 import {
   useLoaderData,
 } from "react-router-dom";
@@ -19,12 +19,14 @@ const cars = carsReducer?.cars || [];
 const loading = alertsReducer?.loading || false;
   const [car, setcar] = useState();
   const [totalcars, settotalcars] = useState([]);
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (cars.length == 0) {
+    if (cars.length === 0) {
       dispatch(getAllCars());
     } else {
       settotalcars(cars);
-      setcar(cars.find((o) => o._id == match));
+      setcar(cars.find((o) => o._id === match));
       console.log(car);
     }
   }, [cars]);
