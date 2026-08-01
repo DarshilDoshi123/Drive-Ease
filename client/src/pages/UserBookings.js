@@ -2,49 +2,48 @@ import React, { useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBookings } from "../redux/actions/bookingActions";
-import { Col, Row } from "antd";
+import { Col, Row, Tag } from "antd";
 import Spinner from "../components/Spinner";
 import moment from "moment";
 
 function UserBookings() {
   const dispatch = useDispatch();
 
-  const { bookings = [] } = useSelector(
-    (state) => state.bookingsReducer
-  );
-
-  const { loading } = useSelector(
-    (state) => state.alertsReducer
-  );
+  const { bookings = [] } = useSelector((state) => state.bookingsReducer);
+  const { loading } = useSelector((state) => state.alertsReducer);
 
   const user = JSON.parse(localStorage.getItem("user"));
-console.log("Current User:", user);
+
   useEffect(() => {
     dispatch(getAllBookings());
   }, [dispatch]);
 
-  // Debug (remove later)
-  console.log("Logged In User:", user);
-  console.log("Bookings:", bookings);
-
   const userBookings = bookings.filter(
-    (booking) =>
-      booking.user === user?._id ||
-      booking.user?._id === user?._id
+    (booking) => booking.user === user?._id || booking.user?._id === user?._id
   );
+
+  function formatDisplayDate(dateVal) {
+    if (!dateVal) return "-";
+    const m = moment(dateVal, ["MMM DD YYYY, hh:mm A", "MMM DD YYYY HH:mm", "YYYY-MM-DD HH:mm", moment.ISO_8601]);
+    if (m.isValid()) {
+      return m.format("MMM DD YYYY, hh:mm A");
+    }
+    return dateVal;
+  }
 
   return (
     <DefaultLayout>
       {loading && <Spinner />}
 
-      <h3 className="text-center mt-2">My Bookings</h3>
+      <h3 className="text-center mt-2" style={{ fontSize: "26px", fontWeight: "800", color: "#0f172a", marginBottom: "25px" }}>
+        My Bookings
+      </h3>
 
       <Row justify="center">
         <Col lg={18} sm={24}>
-
           {userBookings.length === 0 ? (
-            <div className="text-center mt-5">
-              <h4>No Bookings Found</h4>
+            <div className="text-center mt-5" style={{ padding: "40px", background: "white", borderRadius: "20px" }}>
+              <h4 style={{ color: "#64748b" }}>No Bookings Found</h4>
             </div>
           ) : (
             userBookings.map((booking) => (
@@ -52,77 +51,80 @@ console.log("Current User:", user);
                 gutter={16}
                 className="bs1 mt-3"
                 key={booking._id}
+                style={{
+                  padding: "20px",
+                  marginBottom: "20px",
+                  borderRadius: "20px",
+                  background: "#ffffff",
+                  alignItems: "center"
+                }}
               >
-                <Col lg={6} sm={24}>
-                  <p>
-                    <b>{booking.car?.name || "Car Name"}</b>
+                <Col lg={7} sm={24}>
+                  <h3 style={{ color: "#2563eb", marginBottom: "10px", fontSize: "20px", fontWeight: "700" }}>
+                    {booking.car?.name || "Car Name"}
+                  </h3>
+
+                  <p style={{ margin: "6px 0", color: "#334155" }}>
+                    Total Hours: <b>{booking.totalHours} hrs</b>
                   </p>
 
-                  <p>
-                    Total Hours :
-                    <b> {booking.totalHours}</b>
+                  <p style={{ margin: "6px 0", color: "#334155" }}>
+                    Rent Per Hour: <b>₹{booking.car?.rentPerHour}</b>
                   </p>
 
-                  <p>
-                    Rent Per Hour :
-                    <b> ₹{booking.car?.rentPerHour}</b>
-                  </p>
-
-                  <p>
-                    Total Amount :
-                    <b> ₹{booking.totalAmount}</b>
+                  <p style={{ margin: "6px 0", color: "#16a34a", fontSize: "16px" }}>
+                    Total Amount: <b>₹{booking.totalAmount}</b>
                   </p>
                 </Col>
 
-                <Col lg={12} sm={24}>
-                  <p>
-                    Transaction ID :
-                    <b> {booking.transactionId}</b>
+                <Col lg={11} sm={24}>
+                  <p style={{ margin: "6px 0", color: "#64748b", fontSize: "13px" }}>
+                    Transaction ID: <b style={{ color: "#0f172a" }}>{booking.transactionId}</b>
                   </p>
 
-                  <p>
-                    From :
-                    <b> {booking.bookedTimeSlots?.from}</b>
-                  </p>
+                  <div
+                    style={{
+                      background: "#f8fafc",
+                      padding: "12px 16px",
+                      borderRadius: "14px",
+                      border: "1px solid #e2e8f0",
+                      marginTop: "10px"
+                    }}
+                  >
+                    <p style={{ margin: "4px 0", color: "#334155" }}>
+                      📅 <b>Pickup (From):</b> {formatDisplayDate(booking.bookedTimeSlots?.from)}
+                    </p>
 
-                  <p>
-                    To :
-                    <b> {booking.bookedTimeSlots?.to}</b>
-                  </p>
+                    <p style={{ margin: "4px 0", color: "#334155" }}>
+                      🏁 <b>Return (To):</b> {formatDisplayDate(booking.bookedTimeSlots?.to)}
+                    </p>
 
-                  <p>
-                    Date :
-                    <b>
-                      {" "}
-                      {booking.createdAt
-                        ? moment(booking.createdAt).format(
-                            "MMM DD YYYY"
-                          )
-                        : "-"}
-                    </b>
-                  </p>
+                    <p style={{ margin: "4px 0", color: "#64748b", fontSize: "13px" }}>
+                      💳 <b>Reserved On:</b> {formatDisplayDate(booking.createdAt)}
+                    </p>
+                  </div>
                 </Col>
 
-                <Col lg={6} sm={24} className="text-right">
+                <Col lg={6} sm={24} style={{ textAlign: "center" }}>
                   {booking.car?.image ? (
                     <img
                       src={booking.car.image}
                       alt={booking.car.name}
-                      height="140"
-                      width="200"
                       style={{
-                        borderRadius: "8px",
+                        width: "100%",
+                        height: "130px",
+                        borderRadius: "14px",
                         objectFit: "cover",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
                       }}
                     />
                   ) : (
-                    <p>No Image</p>
+                    <Tag color="default">No Image</Tag>
                   )}
                 </Col>
               </Row>
             ))
           )}
-
         </Col>
       </Row>
     </DefaultLayout>
