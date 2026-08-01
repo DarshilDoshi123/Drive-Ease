@@ -21,10 +21,13 @@ function DefaultLayout({ children }) {
     navigate("/login");
   };
 
+  const isHomeActive = location.pathname === "/" || location.pathname.startsWith("/booking");
+  const isBookingsActive = location.pathname === "/userbookings";
+  const isAdminActive = location.pathname === "/admin";
+
   return (
     <div>
-      {/* Header */}
-
+      {/* Sticky Glassmorphic Header */}
       <div className="header">
         <Row justify="center">
           <Col xs={23} lg={22}>
@@ -38,7 +41,6 @@ function DefaultLayout({ children }) {
               }}
             >
               {/* Logo */}
-
               <Link
                 to="/"
                 style={{
@@ -50,12 +52,11 @@ function DefaultLayout({ children }) {
               >
                 <CarOutlined
                   style={{
-                    fontSize: 34,
+                    fontSize: 32,
                     color: "#60a5fa",
                     marginRight: 10,
                   }}
                 />
-
                 <div>
                   <h2
                     style={{
@@ -65,7 +66,6 @@ function DefaultLayout({ children }) {
                   >
                     DriveEase
                   </h2>
-
                   <small
                     style={{
                       color: "#cbd5e1",
@@ -76,16 +76,11 @@ function DefaultLayout({ children }) {
                 </div>
               </Link>
 
-              {/* Menu */}
-
-              <Space wrap size="middle">
+              {/* Navigation Menu */}
+              <Space wrap size="middle" style={{ alignItems: "center" }}>
                 <Link to="/">
                   <Button
-                    type={
-                      location.pathname === "/"
-                        ? "primary"
-                        : "default"
-                    }
+                    className={`header-nav-btn ${isHomeActive ? "active-nav" : ""}`}
                     icon={<HomeOutlined />}
                   >
                     Home
@@ -94,11 +89,7 @@ function DefaultLayout({ children }) {
 
                 <Link to="/userbookings">
                   <Button
-                    type={
-                      location.pathname === "/userbookings"
-                        ? "primary"
-                        : "default"
-                    }
+                    className={`header-nav-btn ${isBookingsActive ? "active-nav" : ""}`}
                     icon={<CalendarOutlined />}
                   >
                     My Bookings
@@ -108,11 +99,7 @@ function DefaultLayout({ children }) {
                 {user?.username === "parthpatel79_" && (
                   <Link to="/admin">
                     <Button
-                      type={
-                        location.pathname === "/admin"
-                          ? "primary"
-                          : "default"
-                      }
+                      className={`header-nav-btn ${isAdminActive ? "active-nav" : ""}`}
                       icon={<DashboardOutlined />}
                     >
                       Admin
@@ -120,24 +107,38 @@ function DefaultLayout({ children }) {
                   </Link>
                 )}
 
-                <Avatar
-                  icon={<UserOutlined />}
-                  size={40}
-                />
-
-                <span
+                <div
                   style={{
-                    color: "white",
-                    fontWeight: "600",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: "rgba(255, 255, 255, 0.08)",
+                    padding: "4px 12px 4px 6px",
+                    borderRadius: "20px",
+                    border: "1px solid rgba(255, 255, 255, 0.12)"
                   }}
                 >
-                  {user?.username}
-                </span>
+                  <Avatar icon={<UserOutlined />} size={32} style={{ backgroundColor: "#2563eb" }} />
+                  <span
+                    style={{
+                      color: "white",
+                      fontWeight: "600",
+                      fontSize: "14px"
+                    }}
+                  >
+                    {user?.username}
+                  </span>
+                </div>
 
                 <Button
                   danger
                   icon={<LogoutOutlined />}
                   onClick={logout}
+                  style={{
+                    borderRadius: "12px",
+                    height: "40px",
+                    fontWeight: "600"
+                  }}
                 >
                   Logout
                 </Button>
@@ -147,31 +148,13 @@ function DefaultLayout({ children }) {
         </Row>
       </div>
 
-      {/* Main */}
-
-      <div className="content">
-        {children}
-      </div>
+      {/* Main Content */}
+      <div className="content">{children}</div>
 
       {/* Footer */}
-
       <div className="footer">
-        <h3>🚗 DriveEase Car Rental</h3>
-
-        <p>Premium Car Rental Management System</p>
-
-        <hr
-          style={{
-            margin: "20px 0",
-            opacity: 0.2,
-          }}
-        />
-
-        <p>© 2026 All Rights Reserved</p>
-
-        <p>
-          Developed by <b>Parth Patel & Darshil Doshi</b>
-        </p>
+        <h3>DriveEase Car Rental</h3>
+        <p>© 2026 DriveEase Enterprise. All rights reserved.</p>
       </div>
     </div>
   );
