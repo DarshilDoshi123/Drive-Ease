@@ -431,9 +431,11 @@ function MyCarListings() {
 
               return (
                 <Col
+  xxl={8}
   xl={8}
-  lg={12}
+  lg={8}
   md={12}
+  sm={24}
   xs={24}
   key={listing._id}
   className="owner-listing-column"

@@ -5694,3 +5694,53 @@ textarea {
     padding: 16px;
   }
 }
+
+/* FORCE 3-COLUMN MY LISTINGS GRID */
+
+.owner-listings-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+}
+
+.owner-listing-column {
+  display: flex !important;
+}
+
+.owner-listing-card {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.owner-listing-image {
+  width: 100% !important;
+  height: 210px !important;
+  aspect-ratio: auto !important;
+}
+
+.owner-listing-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+@media (min-width: 992px) {
+  .owner-listing-column {
+    flex: 0 0 33.333333% !important;
+    max-width: 33.333333% !important;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  .owner-listing-column {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .owner-listing-column {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
