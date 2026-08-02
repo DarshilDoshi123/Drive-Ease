@@ -5756,3 +5756,53 @@ textarea {
     max-width: 100% !important;
   }
 }
+
+/* ==========================================
+   FINAL MY LISTINGS GRID FIX
+========================================== */
+
+.owner-listings-grid {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 22px !important;
+  align-items: stretch;
+}
+
+.owner-listing-column {
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  display: flex !important;
+  flex: none !important;
+}
+
+.owner-listing-card {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.owner-listing-image {
+  width: 100% !important;
+  height: 205px !important;
+  max-height: 205px !important;
+}
+
+.owner-listing-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+@media (max-width: 1100px) {
+  .owner-listings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .owner-listings-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

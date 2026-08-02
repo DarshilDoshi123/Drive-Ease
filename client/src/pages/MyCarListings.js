@@ -411,10 +411,7 @@ function MyCarListings() {
             </Empty>
           </Card>
         ) : (
-          <Row
-            gutter={[22, 22]}
-            className="owner-listings-grid"
-          >
+          <div className="owner-listings-grid">
             {listings.map((listing) => {
               const status =
                 getStatusDetails(
@@ -430,13 +427,7 @@ function MyCarListings() {
                 getDisplayName(listing);
 
               return (
-                <Col
-  xxl={8}
-  xl={8}
-  lg={8}
-  md={12}
-  sm={24}
-  xs={24}
+                <div
   key={listing._id}
   className="owner-listing-column"
 >
@@ -617,10 +608,10 @@ function MyCarListings() {
                       </div>
                     </div>
                   </Card>
-                </Col>
+                </div>
               );
             })}
-          </Row>
+          </div>
         )}
       </section>
     </DefaultLayout>
