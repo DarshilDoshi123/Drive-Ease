@@ -182,122 +182,84 @@ function MyCarListings() {
     [listings]
   );
 
-  const heroCarImage = useMemo(() => {
-    const approvedListing =
-      listings.find(
-        (item) =>
-          item.status === "approved" &&
-          item.carImages?.[0]
-      );
-
-    const listingWithImage =
-      approvedListing ||
-      listings.find(
-        (item) =>
-          item.carImages?.[0]
-      );
-
-    return (
-      listingWithImage
-        ?.carImages?.[0] ||
-      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1100"
-    );
-  }, [listings]);
-
   return (
     <DefaultLayout>
       {loading && <Spinner />}
 
       <section className="my-listings-page">
         <div className="my-listings-hero">
-          <div className="my-listings-hero-content">
-            <Text className="my-listings-hero-label">
-              <CarOutlined />
-              HOST DASHBOARD
-            </Text>
+  <div className="my-listings-hero-content">
+    <Text className="my-listings-hero-label">
+      <CarOutlined />
+      HOST DASHBOARD
+    </Text>
 
-            <Title level={1}>
-              My Car Listings
-            </Title>
+    <Title level={1}>
+      My Car Listings
+    </Title>
 
-            <Paragraph>
-              Track verification status,
-              admin feedback and approved
-              vehicles from one convenient
-              dashboard.
-            </Paragraph>
+    <Paragraph className="my-listings-hero-description">
+      Track verification status, admin feedback and approved
+      vehicles from one convenient dashboard.
+    </Paragraph>
 
-            <div className="my-listings-benefits">
-              <div>
-                <span className="listing-benefit-icon blue">
-                  <SafetyCertificateOutlined />
-                </span>
-
-                <div>
-                  <strong>
-                    Secure & Verified
-                  </strong>
-
-                  <small>
-                    Every listing is reviewed
-                    for quality and safety.
-                  </small>
-                </div>
-              </div>
-
-              <div>
-                <span className="listing-benefit-icon purple">
-                  <RiseOutlined />
-                </span>
-
-                <div>
-                  <strong>
-                    More Visibility
-                  </strong>
-
-                  <small>
-                    Approved cars reach more
-                    DriveEase customers.
-                  </small>
-                </div>
-              </div>
-
-              <div>
-                <span className="listing-benefit-icon green">
-                  <BarChartOutlined />
-                </span>
-
-                <div>
-                  <strong>
-                    Better Earnings
-                  </strong>
-
-                  <small>
-                    Receive more bookings and
-                    maximize returns.
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="my-listings-hero-visual">
-  <div className="hero-visual-glow" />
-
-  <div className="hero-shield">
-    <SafetyCertificateOutlined />
+    <div className="my-listings-benefits">
+      {/* your existing 3 benefit blocks stay here */}
+    </div>
   </div>
 
-  <div className="hero-car-frame">
-    <img
-      src={heroCarImage}
-      alt="DriveEase listed vehicle"
-    />
+  {/* PASTE DECORATIVE PANEL HERE */}
+  <div className="my-listings-hero-decoration">
+    <div className="listing-decoration-card">
+      <SafetyCertificateOutlined />
 
-    <div className="hero-car-gradient" />
+      <div>
+        <strong>Verified Marketplace</strong>
+        <span>
+          Secure listing review process
+        </span>
+      </div>
+    </div>
+
+    <div className="listing-decoration-card">
+      <CheckCircleOutlined />
+
+      <div>
+        <strong>
+          {statistics.approved} Cars Live
+        </strong>
+        <span>
+          Published on DriveEase
+        </span>
+      </div>
+    </div>
+
+    <div className="listing-decoration-card">
+      <RiseOutlined />
+
+      <div>
+        <strong>Grow Your Earnings</strong>
+        <span>
+          Reach more rental customers
+        </span>
+      </div>
+    </div>
   </div>
+
+  <Link
+    to="/list-your-car"
+    className="my-listings-add-link"
+  >
+    <Button
+      type="primary"
+      size="large"
+      icon={<PlusCircleOutlined />}
+      className="my-listings-add-button"
+    >
+      List Another Car
+    </Button>
+  </Link>
 </div>
-
           <Link
             to="/list-your-car"
             className="my-listings-add-link"
@@ -311,8 +273,6 @@ function MyCarListings() {
               List Another Car
             </Button>
           </Link>
-        </div>
-
         <Row
           gutter={[18, 18]}
           className="listing-stats"
