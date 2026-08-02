@@ -443,11 +443,13 @@ function MyCarListings() {
 
               return (
                 <Col
-                  xl={12}
-                  xs={24}
-                  key={listing._id}
-                  className="owner-listing-column"
-                >
+  xl={8}
+  lg={12}
+  md={12}
+  xs={24}
+  key={listing._id}
+  className="owner-listing-column"
+>
                   <Card
                     bordered={false}
                     className="owner-listing-card"
