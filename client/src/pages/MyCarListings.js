@@ -30,7 +30,7 @@ import {
   SafetyCertificateOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-
+import "./MyCarListings.css";
 import {
   useDispatch,
   useSelector,
