@@ -5392,3 +5392,42 @@ textarea {
   }
 }
 
+/* ===== Fix My Listings Hero Text ===== */
+
+.my-listings-hero,
+.my-listings-hero * {
+  color: #ffffff;
+}
+
+.my-listings-hero .ant-typography,
+.my-listings-hero .ant-typography-secondary,
+.my-listings-hero p,
+.my-listings-hero span,
+.my-listings-hero strong {
+  color: #ffffff !important;
+}
+
+.my-listings-hero-description {
+  color: #dbeafe !important;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.listing-decoration-card strong {
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.listing-decoration-card span {
+  color: #dbeafe !important;
+  font-size: 13px;
+}
+
+.my-listings-benefits strong {
+  color: #ffffff !important;
+}
+
+.my-listings-benefits small {
+  color: #dbeafe !important;
+}
