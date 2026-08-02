@@ -21,48 +21,59 @@ function FileUploader({
     form.getFieldValue(fieldName);
 
   const uploadFile = async ({
-    file,
-    onSuccess,
-    onError,
-  }) => {
-    try {
-      setUploading(true);
+  file,
+  onSuccess,
+  onError,
+}) => {
+  try {
+    setUploading(true);
 
-      const formData = new FormData();
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-      const response = await api.post(
-        "/api/uploads/single",
-        formData,
-        {
-          headers: {
-            "Content-Type":
-              "multipart/form-data",
-          },
-        }
+    const response = await api.post(
+      "/api/uploads/single",
+      formData
+    );
+
+    const uploadedUrl =
+      response.data?.data?.url;
+
+    if (!uploadedUrl) {
+      throw new Error(
+        "Upload URL was not returned"
       );
-
-      form.setFieldsValue({
-        [fieldName]:
-          response.data.data.url,
-      });
-
-      message.success(
-        "Uploaded Successfully"
-      );
-
-      onSuccess("ok");
-    } catch (error) {
-      console.log(error);
-
-      message.error("Upload Failed");
-
-      onError(error);
-    } finally {
-      setUploading(false);
     }
-  };
 
+    form.setFieldsValue({
+      [fieldName]: uploadedUrl,
+    });
+
+    message.success(
+      "File uploaded successfully"
+    );
+
+    onSuccess?.(response.data);
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Upload failed";
+
+    console.error(
+      "UPLOAD ERROR:",
+      error.response?.status,
+      error.response?.data ||
+        error.message
+    );
+
+    message.error(errorMessage);
+
+    onError?.(error);
+  } finally {
+    setUploading(false);
+  }
+};
   return (
     <div style={{ marginBottom: 20 }}>
       <label
