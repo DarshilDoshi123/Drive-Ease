@@ -5695,6 +5695,18 @@ textarea {
   }
 }
 
+.owner-listing-image-overlay{
+    position:absolute;
+    inset:0;
+
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.35),
+        transparent 45%
+    );
+}
+
+
 /* FORCE 3-COLUMN MY LISTINGS GRID */
 
 .owner-listings-grid {
