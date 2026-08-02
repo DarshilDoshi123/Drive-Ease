@@ -445,11 +445,19 @@ function ListYourCar() {
                 : "Turn your car into an earning asset"}
             </Title>
 
-            <Paragraph>
-              {isEditMode
-                ? "Review the admin feedback, update the required details and send your vehicle for verification again."
-                : "Submit your vehicle for verification. After admin approval, your car will be published on DriveEase and customers will be able to book it."}
-            </Paragraph>
+            <Paragraph
+  style={{
+    color: "#dbeafe",
+    opacity: 1,
+    fontSize: "15px",
+    lineHeight: 1.7,
+    marginBottom: 0,
+  }}
+>
+  Submit your vehicle for verification. After admin approval,
+  your car will be published on DriveEase and customers will
+  be able to book it.
+</Paragraph>
 
             <div className="list-car-benefits">
               <span>
