@@ -1,4 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, {
+  useEffect,
+  useMemo,
+} from "react";
+
 import {
   Alert,
   Button,
@@ -6,11 +10,12 @@ import {
   Col,
   Empty,
   Row,
-  Space,
   Tag,
   Typography,
 } from "antd";
+
 import {
+  BarChartOutlined,
   CalendarOutlined,
   CarOutlined,
   CheckCircleOutlined,
@@ -19,32 +24,60 @@ import {
   DollarCircleOutlined,
   EditOutlined,
   EnvironmentOutlined,
+  EyeOutlined,
   FileSearchOutlined,
   PlusCircleOutlined,
+  RiseOutlined,
+  SafetyCertificateOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+
+import {
+  Link,
+} from "react-router-dom";
 
 import DefaultLayout from "../components/DefaultLayout";
 import Spinner from "../components/Spinner";
-import { getMyCarListings } from "../redux/actions/listingActions";
 
-const { Title, Text, Paragraph } = Typography;
+import {
+  getMyCarListings,
+} from "../redux/actions/listingActions";
+
+const {
+  Title,
+  Text,
+  Paragraph,
+} = Typography;
 
 const formatMoney = (amount) =>
-  Number(amount || 0).toLocaleString("en-IN");
+  Number(amount || 0).toLocaleString(
+    "en-IN"
+  );
 
 const formatDate = (value) => {
   if (!value) {
     return "-";
   }
 
-  return new Date(value).toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return date.toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }
+  );
 };
 
 const getStatusDetails = (status) => {
@@ -66,8 +99,8 @@ const getStatusDetails = (status) => {
     case "changes_requested":
       return {
         color: "orange",
-        label: "Changes Requested",
-        icon: <EditOutlined />,
+        label: "Changes Required",
+        icon: <SyncOutlined />,
       };
 
     default:
@@ -79,17 +112,45 @@ const getStatusDetails = (status) => {
   }
 };
 
+const getDisplayName = (listing) => {
+  const rawName =
+    listing.carDetails?.name?.trim();
+
+  const fallbackName = [
+    listing.carDetails?.brand,
+    listing.carDetails?.model,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  if (
+    !rawName ||
+    rawName.startsWith("http://") ||
+    rawName.startsWith("https://")
+  ) {
+    return (
+      fallbackName ||
+      "DriveEase Rental Car"
+    );
+  }
+
+  return rawName;
+};
+
 function MyCarListings() {
   const dispatch = useDispatch();
 
   const listings = useSelector(
     (state) =>
-      state.listingReducer?.myListings || []
+      state.listingReducer
+        ?.myListings || []
   );
 
   const loading = useSelector(
     (state) =>
-      state.alertsReducer?.loading || false
+      state.alertsReducer?.loading ||
+      false
   );
 
   useEffect(() => {
@@ -101,110 +162,265 @@ function MyCarListings() {
       total: listings.length,
 
       pending: listings.filter(
-        (item) => item.status === "pending"
+        (item) =>
+          item.status === "pending"
       ).length,
 
       approved: listings.filter(
-        (item) => item.status === "approved"
+        (item) =>
+          item.status === "approved"
       ).length,
 
-      actionRequired: listings.filter((item) =>
-        [
-          "rejected",
-          "changes_requested",
-        ].includes(item.status)
-      ).length,
+      actionRequired:
+        listings.filter((item) =>
+          [
+            "rejected",
+            "changes_requested",
+          ].includes(item.status)
+        ).length,
     }),
     [listings]
   );
+
+  const heroCarImage = useMemo(() => {
+    const approvedListing =
+      listings.find(
+        (item) =>
+          item.status === "approved" &&
+          item.carImages?.[0]
+      );
+
+    const listingWithImage =
+      approvedListing ||
+      listings.find(
+        (item) =>
+          item.carImages?.[0]
+      );
+
+    return (
+      listingWithImage
+        ?.carImages?.[0] ||
+      "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1100"
+    );
+  }, [listings]);
 
   return (
     <DefaultLayout>
       {loading && <Spinner />}
 
       <section className="my-listings-page">
-        <div className="my-listings-header">
-          <div>
-            <Text className="section-label">
+        <div className="my-listings-hero">
+          <div className="my-listings-hero-content">
+            <Text className="my-listings-hero-label">
+              <CarOutlined />
               HOST DASHBOARD
             </Text>
 
-            <Title
-  level={1}
-  style={{
-    color: "#ffffff",
-    marginBottom: 8,
-  }}
->
+            <Title level={1}>
               My Car Listings
             </Title>
 
             <Paragraph>
-              Track verification status, admin feedback
-              and approved vehicles.
+              Track verification status,
+              admin feedback and approved
+              vehicles from one convenient
+              dashboard.
             </Paragraph>
+
+            <div className="my-listings-benefits">
+              <div>
+                <span className="listing-benefit-icon blue">
+                  <SafetyCertificateOutlined />
+                </span>
+
+                <div>
+                  <strong>
+                    Secure & Verified
+                  </strong>
+
+                  <small>
+                    Every listing is reviewed
+                    for quality and safety.
+                  </small>
+                </div>
+              </div>
+
+              <div>
+                <span className="listing-benefit-icon purple">
+                  <RiseOutlined />
+                </span>
+
+                <div>
+                  <strong>
+                    More Visibility
+                  </strong>
+
+                  <small>
+                    Approved cars reach more
+                    DriveEase customers.
+                  </small>
+                </div>
+              </div>
+
+              <div>
+                <span className="listing-benefit-icon green">
+                  <BarChartOutlined />
+                </span>
+
+                <div>
+                  <strong>
+                    Better Earnings
+                  </strong>
+
+                  <small>
+                    Receive more bookings and
+                    maximize returns.
+                  </small>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <Link to="/list-your-car">
+          <div className="my-listings-hero-visual">
+            <div className="hero-shield">
+              <SafetyCertificateOutlined />
+            </div>
+
+            <img
+              src={heroCarImage}
+              alt="DriveEase listed vehicle"
+            />
+          </div>
+
+          <Link
+            to="/list-your-car"
+            className="my-listings-add-link"
+          >
             <Button
               type="primary"
               size="large"
               icon={<PlusCircleOutlined />}
+              className="my-listings-add-button"
             >
               List Another Car
             </Button>
           </Link>
         </div>
 
-        <Row gutter={[18, 18]} className="listing-stats">
-          <Col lg={6} sm={12} xs={24}>
-            <Card bordered={false}>
-              <FileSearchOutlined />
+        <Row
+          gutter={[18, 18]}
+          className="listing-stats"
+        >
+          <Col
+            xl={6}
+            md={12}
+            xs={24}
+          >
+            <Card
+              bordered={false}
+              className="listing-stat-card"
+            >
+              <span className="listing-stat-icon total">
+                <FileSearchOutlined />
+              </span>
 
               <div>
-                <Text>Total Requests</Text>
+                <Text>
+                  Total Requests
+                </Text>
+
                 <Title level={2}>
                   {statistics.total}
                 </Title>
+
+                <small className="stat-description blue">
+                  All-time requests
+                </small>
               </div>
             </Card>
           </Col>
 
-          <Col lg={6} sm={12} xs={24}>
-            <Card bordered={false}>
-              <ClockCircleOutlined />
+          <Col
+            xl={6}
+            md={12}
+            xs={24}
+          >
+            <Card
+              bordered={false}
+              className="listing-stat-card"
+            >
+              <span className="listing-stat-icon pending">
+                <ClockCircleOutlined />
+              </span>
 
               <div>
                 <Text>Pending</Text>
+
                 <Title level={2}>
                   {statistics.pending}
                 </Title>
+
+                <small className="stat-description purple">
+                  Awaiting review
+                </small>
               </div>
             </Card>
           </Col>
 
-          <Col lg={6} sm={12} xs={24}>
-            <Card bordered={false}>
-              <CheckCircleOutlined />
+          <Col
+            xl={6}
+            md={12}
+            xs={24}
+          >
+            <Card
+              bordered={false}
+              className="listing-stat-card"
+            >
+              <span className="listing-stat-icon approved">
+                <CheckCircleOutlined />
+              </span>
 
               <div>
                 <Text>Approved</Text>
+
                 <Title level={2}>
                   {statistics.approved}
                 </Title>
+
+                <small className="stat-description green">
+                  Live on platform
+                </small>
               </div>
             </Card>
           </Col>
 
-          <Col lg={6} sm={12} xs={24}>
-            <Card bordered={false}>
-              <SyncOutlined />
+          <Col
+            xl={6}
+            md={12}
+            xs={24}
+          >
+            <Card
+              bordered={false}
+              className="listing-stat-card"
+            >
+              <span className="listing-stat-icon action">
+                <SyncOutlined />
+              </span>
 
               <div>
-                <Text>Action Required</Text>
+                <Text>
+                  Action Required
+                </Text>
+
                 <Title level={2}>
-                  {statistics.actionRequired}
+                  {
+                    statistics.actionRequired
+                  }
                 </Title>
+
+                <small className="stat-description orange">
+                  Needs attention
+                </small>
               </div>
             </Card>
           </Col>
@@ -223,8 +439,9 @@ function MyCarListings() {
                   </Title>
 
                   <Text type="secondary">
-                    Submit your first vehicle to begin
-                    earning through DriveEase.
+                    Submit your first vehicle
+                    to begin earning through
+                    DriveEase.
                   </Text>
                 </div>
               }
@@ -240,21 +457,27 @@ function MyCarListings() {
             </Empty>
           </Card>
         ) : (
-          <Row gutter={[24, 24]}>
+          <Row
+            gutter={[22, 22]}
+            className="owner-listings-grid"
+          >
             {listings.map((listing) => {
-              const status = getStatusDetails(
-                listing.status
-              );
+              const status =
+                getStatusDetails(
+                  listing.status
+                );
 
               const canResubmit = [
                 "rejected",
                 "changes_requested",
               ].includes(listing.status);
 
+              const displayName =
+                getDisplayName(listing);
+
               return (
                 <Col
-                  xl={8}
-                  lg={12}
+                  xl={12}
                   xs={24}
                   key={listing._id}
                   className="owner-listing-column"
@@ -266,18 +489,19 @@ function MyCarListings() {
                       <div className="owner-listing-image">
                         <img
                           src={
-                            listing.carImages?.[0] ||
-                            "https://placehold.co/700x450?text=DriveEase"
+                            listing
+                              .carImages?.[0] ||
+                            "https://placehold.co/900x500?text=DriveEase"
                           }
-                          alt={
-                            listing.carDetails?.name ||
-                            "Owner car"
-                          }
+                          alt={displayName}
                         />
+
+                        <div className="owner-listing-image-overlay" />
 
                         <Tag
                           color={status.color}
                           icon={status.icon}
+                          className="owner-listing-status"
                         >
                           {status.label}
                         </Tag>
@@ -288,18 +512,18 @@ function MyCarListings() {
                       <div className="owner-listing-top">
                         <Title
                           level={3}
-                          title={
-                            listing.carDetails?.name
-                          }
+                          title={displayName}
                         >
-                          {listing.carDetails?.name}
+                          {displayName}
                         </Title>
 
-                        <Text type="secondary">
-                          {
-                            listing.carDetails
-                              ?.registrationNumber
-                          }
+                        <Text
+                          type="secondary"
+                          className="listing-registration"
+                        >
+                          {listing.carDetails
+                            ?.registrationNumber ||
+                            "Registration pending"}
                         </Text>
 
                         <div className="owner-listing-details">
@@ -311,7 +535,8 @@ function MyCarListings() {
                             <strong>
                               ₹
                               {formatMoney(
-                                listing.carDetails
+                                listing
+                                  .carDetails
                                   ?.rentPerHour
                               )}
                               /hour
@@ -321,33 +546,46 @@ function MyCarListings() {
                           <div>
                             <EnvironmentOutlined />
 
-                            <span>Location</span>
+                            <span>
+                              Location
+                            </span>
 
                             <strong>
-                              {listing.carDetails
-                                ?.location || "-"}
+                              {listing
+                                .carDetails
+                                ?.location ||
+                                "-"}
                             </strong>
                           </div>
 
                           <div>
                             <CarOutlined />
 
-                            <span>Vehicle</span>
+                            <span>
+                              Vehicle
+                            </span>
 
                             <strong>
-                              {listing.carDetails
-                                ?.brand}{" "}
-                              {
-                                listing.carDetails
-                                  ?.model
-                              }
+                              {[
+                                listing
+                                  .carDetails
+                                  ?.brand,
+                                listing
+                                  .carDetails
+                                  ?.model,
+                              ]
+                                .filter(Boolean)
+                                .join(" ") ||
+                                "-"}
                             </strong>
                           </div>
 
                           <div>
                             <CalendarOutlined />
 
-                            <span>Submitted</span>
+                            <span>
+                              Submitted
+                            </span>
 
                             <strong>
                               {formatDate(
@@ -362,8 +600,8 @@ function MyCarListings() {
                           <Alert
                             type="success"
                             showIcon
-                            className="listing-feedback"
-                            message="Your car is live"
+                            className="listing-feedback listing-live-alert"
+                            message="Your car is live and visible to customers"
                             description={`Platform commission: ${
                               listing.commissionRate ||
                               10
@@ -390,29 +628,34 @@ function MyCarListings() {
                       </div>
 
                       <div className="owner-listing-actions">
-                        {listing.approvedCar?._id && (
+                        {listing
+                          .approvedCar
+                          ?._id && (
                           <Link
                             to={`/booking/${listing.approvedCar._id}`}
                           >
-                            <Button block>
+                            <Button
+                              block
+                              icon={<EyeOutlined />}
+                            >
                               View Public Listing
                             </Button>
                           </Link>
                         )}
 
                         {canResubmit && (
-  <Link
-    to={`/edit-car-listing/${listing._id}`}
-  >
-    <Button
-      type="primary"
-      block
-      icon={<EditOutlined />}
-    >
-      Edit & Resubmit
-    </Button>
-  </Link>
-)}
+                          <Link
+                            to={`/edit-car-listing/${listing._id}`}
+                          >
+                            <Button
+                              type="primary"
+                              block
+                              icon={<EditOutlined />}
+                            >
+                              Edit & Resubmit
+                            </Button>
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </Card>
