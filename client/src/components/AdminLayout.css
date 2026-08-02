@@ -534,3 +534,46 @@ img {
 .admin-cars-table .ant-table-container {
   overflow-x: auto;
 }
+
+/* Responsive admin layout sizing */
+
+.admin-main-area {
+  min-width: 0;
+}
+
+.admin-page-content {
+  width: 100%;
+  min-width: 0;
+  padding:
+    clamp(16px, 2.4vw, 30px);
+}
+
+@media (max-width: 1180px) {
+  .admin-sidebar {
+    width: 230px;
+  }
+
+  .admin-main-area {
+    width: calc(100% - 230px);
+    margin-left: 230px;
+  }
+
+  .admin-application-layout.sidebar-collapsed
+    .admin-main-area {
+    width: calc(100% - 88px);
+    margin-left: 88px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    display: none;
+  }
+
+  .admin-main-area,
+  .admin-application-layout.sidebar-collapsed
+    .admin-main-area {
+    width: 100%;
+    margin-left: 0;
+  }
+}

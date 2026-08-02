@@ -586,4 +586,58 @@ router.patch(
   }
 );
 
+// ============================================
+// ADMIN: DELETE OWNER LISTING
+// ============================================
+
+router.delete(
+  "/admin/:requestId",
+  protect,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const request =
+        await CarListingRequest.findById(
+          req.params.requestId
+        );
+
+      if (!request) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Car listing request not found",
+        });
+      }
+
+      // Remove approved/public car if one exists
+      if (request.approvedCar) {
+        await Car.findByIdAndDelete(
+          request.approvedCar
+        );
+      }
+
+      await CarListingRequest.findByIdAndDelete(
+        request._id
+      );
+
+      return res.status(200).json({
+        success: true,
+        message:
+          "Owner listing and public car deleted successfully",
+      });
+    } catch (error) {
+      console.error(
+        "DELETE OWNER LISTING ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          "Unable to delete owner listing",
+      });
+    }
+  }
+);
+
 module.exports = router;

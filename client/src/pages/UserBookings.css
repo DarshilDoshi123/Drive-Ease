@@ -1,0 +1,117 @@
+.my-bookings-page{
+    max-width:1400px;
+    margin:auto;
+    padding:30px;
+}
+
+.my-bookings-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.my-bookings-header h1{
+    margin:0;
+    font-size:38px;
+    font-weight:700;
+}
+
+.my-bookings-header p{
+    color:#666;
+    font-size:16px;
+}
+
+.booking-filters{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.booking-card{
+    border-radius:18px;
+    overflow:hidden;
+    border:none;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.booking-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,.12);
+}
+
+.booking-image{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.booking-content{
+    padding:16px;
+}
+
+.booking-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.booking-top h4{
+    margin:0!important;
+    font-size:24px!important;
+}
+
+.booking-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.booking-buttons .ant-btn{
+    flex:1;
+    height:42px;
+    border-radius:10px;
+}
+
+.booking-card .ant-card-body{
+    padding:18px;
+}
+
+.ant-tag{
+    border-radius:30px;
+    padding:4px 14px;
+    font-weight:600;
+    font-size:13px;
+}
+
+@media(max-width:768px){
+
+.my-bookings-page{
+padding:15px;
+}
+
+.my-bookings-header{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.booking-top{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.booking-image{
+height:170px;
+}
+
+.booking-buttons{
+flex-direction:column;
+}
+
+}

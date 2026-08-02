@@ -3,7 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-
+import FileUploader from "../components/FileUploader";
 import {
   Alert,
   Button,
@@ -17,6 +17,7 @@ import {
   Row,
   Select,
   Space,
+  Upload,
   Spin,
   Steps,
   Typography,
@@ -32,6 +33,7 @@ import {
   MailOutlined,
   PhoneOutlined,
   PictureOutlined,
+  PlusOutlined,
   SafetyCertificateOutlined,
   SendOutlined,
   UserOutlined,
@@ -923,181 +925,145 @@ function ListYourCar() {
 
                 <div>
                   <Title level={3}>
-                    Images and Documents
-                  </Title>
+  Images and Documents
+</Title>
 
-                  <Text type="secondary">
-                    Update any incorrect image or
-                    document URL.
-                  </Text>
-                </div>
-              </div>
+<Text type="secondary">
+  Upload images and documents directly from your device.
+</Text>
 
-              <Alert
-                type="info"
-                showIcon
-                className="listing-document-alert"
-                message="Document privacy"
-                description="Use demo documents or safe public URLs. Do not use real sensitive identity documents."
-              />
+</div>
+</div>
 
-              <Row gutter={[20, 4]}>
-                <Col xs={24}>
-                  <Form.Item
-                    label="Primary Car Image URL"
-                    name="primaryImage"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Primary car image is required",
-                      },
-                      {
-                        type: "url",
-                        message:
-                          "Enter a valid image URL",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<PictureOutlined />}
-                    />
-                  </Form.Item>
-                </Col>
+<Alert
+  type="info"
+  showIcon
+  className="listing-document-alert"
+  message="Document Privacy"
+  description="Upload your car images and required documents. URLs are not required anymore."
+/>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="Second Car Image URL"
-                    name="secondImage"
-                    rules={[
-                      {
-                        type: "url",
-                        warningOnly: true,
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<PictureOutlined />}
-                      placeholder="Optional"
-                    />
-                  </Form.Item>
-                </Col>
+<Row gutter={[20, 20]}>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="Third Car Image URL"
-                    name="thirdImage"
-                    rules={[
-                      {
-                        type: "url",
-                        warningOnly: true,
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<PictureOutlined />}
-                      placeholder="Optional"
-                    />
-                  </Form.Item>
-                </Col>
+  <Col md={12} xs={24}>
+    <Form.Item
+      name="primaryImage"
+      rules={[
+        {
+          required: true,
+          message: "Upload Primary Image",
+        },
+      ]}
+    >
+      <FileUploader
+        form={form}
+        fieldName="primaryImage"
+        label="Primary Car Image"
+      />
+    </Form.Item>
+  </Col>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="RC Document URL"
-                    name="rcDocument"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "RC document is required",
-                      },
-                      {
-                        type: "url",
-                        message:
-                          "Enter a valid URL",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<IdcardOutlined />}
-                    />
-                  </Form.Item>
-                </Col>
+  <Col md={12} xs={24}>
+    <Form.Item name="secondImage">
+      <FileUploader
+        form={form}
+        fieldName="secondImage"
+        label="Second Car Image"
+      />
+    </Form.Item>
+  </Col>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="Insurance Document URL"
-                    name="insuranceDocument"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Insurance document is required",
-                      },
-                      {
-                        type: "url",
-                        message:
-                          "Enter a valid URL",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={
-                        <SafetyCertificateOutlined />
-                      }
-                    />
-                  </Form.Item>
-                </Col>
+  <Col md={12} xs={24}>
+    <Form.Item name="thirdImage">
+      <FileUploader
+        form={form}
+        fieldName="thirdImage"
+        label="Third Car Image"
+      />
+    </Form.Item>
+  </Col>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="PUC Document URL"
-                    name="pucDocument"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "PUC document is required",
-                      },
-                      {
-                        type: "url",
-                        message:
-                          "Enter a valid URL",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<FileProtectOutlined />}
-                    />
-                  </Form.Item>
-                </Col>
+  <Col md={12} xs={24}>
+    <Form.Item
+      name="rcDocument"
+      rules={[
+        {
+          required: true,
+          message: "Upload RC Document",
+        },
+      ]}
+    >
+      <FileUploader
+        form={form}
+        fieldName="rcDocument"
+        label="RC Document"
+        isDocument={true}
+      />
+    </Form.Item>
+  </Col>
 
-                <Col md={12} xs={24}>
-                  <Form.Item
-                    label="Owner ID Document URL"
-                    name="ownerIdDocument"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Owner ID document is required",
-                      },
-                      {
-                        type: "url",
-                        message:
-                          "Enter a valid URL",
-                      },
-                    ]}
-                  >
-                    <Input
-                      prefix={<BankOutlined />}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </div>
+  <Col md={12} xs={24}>
+    <Form.Item
+      name="insuranceDocument"
+      rules={[
+        {
+          required: true,
+          message: "Upload Insurance Document",
+        },
+      ]}
+    >
+      <FileUploader
+        form={form}
+        fieldName="insuranceDocument"
+        label="Insurance Document"
+        isDocument={true}
+      />
+    </Form.Item>
+  </Col>
 
-            <Divider />
+  <Col md={12} xs={24}>
+    <Form.Item
+      name="pucDocument"
+      rules={[
+        {
+          required: true,
+          message: "Upload PUC Document",
+        },
+      ]}
+    >
+      <FileUploader
+        form={form}
+        fieldName="pucDocument"
+        label="PUC Document"
+        isDocument={true}
+      />
+    </Form.Item>
+  </Col>
+
+  <Col md={12} xs={24}>
+    <Form.Item
+      name="ownerIdDocument"
+      rules={[
+        {
+          required: true,
+          message: "Upload Owner ID",
+        },
+      ]}
+    >
+      <FileUploader
+        form={form}
+        fieldName="ownerIdDocument"
+        label="Owner ID"
+        isDocument={true}
+      />
+    </Form.Item>
+  </Col>
+
+</Row>
+
+</div>
+
+<Divider />
 
             <div className="listing-form-actions">
               <div>

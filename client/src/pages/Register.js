@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Button,
   Col,
@@ -7,22 +8,46 @@ import {
   Row,
   Typography,
 } from "antd";
-import { Link, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+
 import {
+  ArrowRightOutlined,
   CarOutlined,
+  CheckCircleOutlined,
   LockOutlined,
+  SafetyCertificateOutlined,
+  ThunderboltOutlined,
+  UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+
+import {
+  Link,
+  Navigate,
+} from "react-router-dom";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
 import { userRegister } from "../redux/actions/userActions";
 import Spinner from "../components/Spinner";
 
-const { Title, Text } = Typography;
+import "./Auth.css";
+
+const {
+  Title,
+  Text,
+  Paragraph,
+} = Typography;
 
 function Register() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.alertsReducer);
+
+  const loading = useSelector(
+    (state) =>
+      state.alertsReducer?.loading || false
+  );
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
@@ -34,110 +59,116 @@ function Register() {
   const onFinish = (values) => {
     dispatch(
       userRegister({
-        username: values.username,
+        username: values.username.trim(),
         password: values.password,
       })
     );
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "24px",
-        background:
-          "linear-gradient(135deg, #020617 0%, #172554 50%, #1d4ed8 100%)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <main className="auth-page auth-register-page">
       {loading && <Spinner />}
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "1100px",
-          background: "rgba(255,255,255,0.98)",
-          borderRadius: "24px",
-          overflow: "hidden",
-          boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
-        }}
-      >
-        <Row>
-          <Col lg={12} xs={0}>
-            <div
-              style={{
-                height: "690px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
+      <div className="auth-background-shape auth-shape-one" />
+      <div className="auth-background-shape auth-shape-two" />
+
+      <section className="auth-container">
+        <Row className="auth-row">
+          <Col
+            lg={13}
+            xs={0}
+            className="auth-visual-column"
+          >
+            <div className="auth-visual">
               <img
-                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"
-                alt="Sports car available for rental"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600"
+                alt="Premium rental vehicle"
               />
 
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(to top, rgba(2,6,23,.90), rgba(2,6,23,.08))",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  padding: "48px",
-                }}
-              >
-                <Title level={2} style={{ color: "white", marginBottom: 8 }}>
-                  Start your next journey
+              <div className="auth-visual-overlay" />
+
+              <div className="auth-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
+
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
+                </div>
+              </div>
+
+              <div className="auth-visual-content">
+                <div className="auth-eyebrow">
+                  <UserAddOutlined />
+                  Join the DriveEase community
+                </div>
+
+                <Title>
+                  Create your account and start exploring.
                 </Title>
 
-                <Text style={{ color: "#e2e8f0", fontSize: 16 }}>
-                  Create your account and book premium rental vehicles with a
-                  fast and convenient process.
-                </Text>
+                <Paragraph>
+                  Book premium vehicles, manage every trip
+                  and even list your own car on the
+                  DriveEase marketplace.
+                </Paragraph>
+
+                <div className="auth-feature-list">
+                  <span>
+                    <CheckCircleOutlined />
+                    Book verified rental cars
+                  </span>
+
+                  <span>
+                    <SafetyCertificateOutlined />
+                    Secure account and booking flow
+                  </span>
+
+                  <span>
+                    <ThunderboltOutlined />
+                    Quick registration process
+                  </span>
+                </div>
+              </div>
+
+              <div className="auth-visual-footer">
+                <span>Premium mobility</span>
+                <span>Simple account setup</span>
               </div>
             </div>
           </Col>
 
-          <Col lg={12} xs={24}>
-            <div
-              style={{
-                minHeight: "690px",
-                padding: "50px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ textAlign: "center", marginBottom: 28 }}>
-                <CarOutlined
-                  style={{
-                    fontSize: 48,
-                    color: "#2563eb",
-                    marginBottom: 12,
-                  }}
-                />
+          <Col
+            lg={11}
+            xs={24}
+            className="auth-form-column"
+          >
+            <div className="auth-form-panel">
+              <div className="auth-mobile-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
 
-                <Title
-                  style={{
-                    margin: 0,
-                    color: "#0f172a",
-                  }}
-                >
-                  Create Account
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
+                </div>
+              </div>
+
+              <div className="auth-form-heading">
+                <Text className="auth-form-label">
+                  CREATE YOUR ACCOUNT
+                </Text>
+
+                <Title>
+                  Join DriveEase today
                 </Title>
 
-                <Text type="secondary">
-                  Join DriveEase and start booking your preferred vehicle
-                </Text>
+                <Paragraph>
+                  Create your account and access the
+                  complete premium rental experience.
+                </Paragraph>
               </div>
 
               <Form
@@ -145,6 +176,7 @@ function Register() {
                 onFinish={onFinish}
                 requiredMark={false}
                 size="large"
+                className="auth-form"
               >
                 <Form.Item
                   label="Username"
@@ -152,15 +184,18 @@ function Register() {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter a username",
+                      message:
+                        "Please enter a username",
                     },
                     {
                       min: 3,
-                      message: "Username must contain at least 3 characters",
+                      message:
+                        "Username must contain at least 3 characters",
                     },
                     {
                       max: 30,
-                      message: "Username cannot exceed 30 characters",
+                      message:
+                        "Username cannot exceed 30 characters",
                     },
                     {
                       pattern: /^[a-zA-Z0-9_]+$/,
@@ -182,11 +217,13 @@ function Register() {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter a password",
+                      message:
+                        "Please enter a password",
                     },
                     {
                       min: 8,
-                      message: "Password must contain at least 8 characters",
+                      message:
+                        "Password must contain at least 8 characters",
                     },
                   ]}
                 >
@@ -204,19 +241,23 @@ function Register() {
                   rules={[
                     {
                       required: true,
-                      message: "Please confirm your password",
+                      message:
+                        "Please confirm your password",
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (
                           !value ||
-                          getFieldValue("password") === value
+                          getFieldValue("password") ===
+                            value
                         ) {
                           return Promise.resolve();
                         }
 
                         return Promise.reject(
-                          new Error("Passwords do not match")
+                          new Error(
+                            "Passwords do not match"
+                          )
                         );
                       },
                     }),
@@ -229,40 +270,44 @@ function Register() {
                   />
                 </Form.Item>
 
+                <div className="auth-password-hint">
+                  <CheckCircleOutlined />
+                  Use at least 8 characters for better
+                  account security.
+                </div>
+
                 <Button
                   type="primary"
                   htmlType="submit"
                   loading={loading}
                   block
-                  style={{
-                    height: 48,
-                    marginTop: 8,
-                    fontWeight: 600,
-                  }}
+                  className="auth-submit-button"
                 >
-                  CREATE ACCOUNT
+                  <span>Create Account</span>
+                  <ArrowRightOutlined />
                 </Button>
 
-                <div
-                  style={{
-                    textAlign: "center",
-                    marginTop: 24,
-                  }}
-                >
-                  <Text type="secondary">
-                    Already have an account?{" "}
-                  </Text>
-
-                  <Link to="/login">
-                    <strong>Login here</strong>
-                  </Link>
+                <div className="auth-divider">
+                  <span>Already registered?</span>
                 </div>
+
+                <Link
+                  to="/login"
+                  className="auth-secondary-link"
+                >
+                  Login to your account
+                </Link>
               </Form>
+
+              <div className="auth-form-footer">
+                Your account information is protected and
+                used only for the DriveEase platform.
+              </div>
             </div>
           </Col>
         </Row>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

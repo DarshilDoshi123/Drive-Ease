@@ -16,9 +16,9 @@ import {
   Input,
   InputNumber,
   Modal,
+  Popconfirm,
   Row,
   Select,
-  Space,
   Tag,
   Typography,
 } from "antd";
@@ -28,19 +28,18 @@ import {
   CalendarOutlined,
   CarOutlined,
   CheckCircleOutlined,
+  ClockCircleOutlined,
   CloseCircleOutlined,
   DollarCircleOutlined,
+  DeleteOutlined,
   EnvironmentOutlined,
   EyeOutlined,
   FileProtectOutlined,
   FilterOutlined,
   IdcardOutlined,
-  MailOutlined,
-  PhoneOutlined,
   ReloadOutlined,
   SafetyCertificateOutlined,
   SyncOutlined,
-  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 
@@ -56,17 +55,19 @@ import {
 
 import AdminLayout from "../components/AdminLayout";
 import Spinner from "../components/Spinner";
+import AdminPageHero from "../components/AdminPageHero";
 
 import {
   approveCarListing,
+  deleteCarListing,
   getAdminCarListings,
   reviewCarListing,
 } from "../redux/actions/listingActions";
 
+
 const {
   Title,
   Text,
-  Paragraph,
 } = Typography;
 
 const { TextArea } = Input;
@@ -193,7 +194,8 @@ function AdminCarRequests() {
 
       actionRequired: requests.filter(
         (request) =>
-          request.status === "changes_requested"
+          request.status ===
+          "changes_requested"
       ).length,
 
       rejected: requests.filter(
@@ -205,11 +207,21 @@ function AdminCarRequests() {
   );
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   if (user.isAdmin !== true) {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   }
 
   const openDetails = (request) => {
@@ -308,118 +320,61 @@ function AdminCarRequests() {
       {loading && <Spinner />}
 
       <section className="admin-requests-page">
-        <div className="admin-requests-hero">
-          <div>
-            <Text className="admin-dashboard-label">
-              OWNER MARKETPLACE
-            </Text>
+        <AdminPageHero
+          eyebrow="OWNER MARKETPLACE"
+          title="Review & Approve Vehicle Listings"
+          description="Verify vehicle owners, review submitted documents, request corrections and publish trusted rental vehicles on the DriveEase marketplace."
+          icon={<FileProtectOutlined />}
+          theme="purple"
+          actions={
+            <>
+              <Link to="/admin">
+                <Button
+                  size="large"
+                  icon={<ArrowLeftOutlined />}
+                >
+                  Fleet Dashboard
+                </Button>
+              </Link>
 
-            <Title>
-              Car Listing Requests
-            </Title>
-
-            <Paragraph>
-              Verify car owners, review vehicle
-              documents, set platform commission and
-              publish approved vehicles.
-            </Paragraph>
-          </div>
-
-          <Space wrap>
-            <Link to="/admin">
               <Button
+                type="primary"
                 size="large"
-                icon={<ArrowLeftOutlined />}
+                icon={<ReloadOutlined />}
+                onClick={refreshRequests}
               >
-                Fleet Dashboard
+                Refresh
               </Button>
-            </Link>
-
-            <Button
-              type="primary"
-              size="large"
-              icon={<ReloadOutlined />}
-              onClick={refreshRequests}
-            >
-              Refresh
-            </Button>
-          </Space>
-        </div>
-
-        <Row
-          gutter={[18, 18]}
-          className="admin-request-stats"
-        >
-          <Col xl={5} lg={8} sm={12} xs={24}>
-            <Card bordered={false}>
-              <FileProtectOutlined />
-
-              <div>
-                <Text>Total Requests</Text>
-
-                <Title level={2}>
-                  {statistics.total}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={5} lg={8} sm={12} xs={24}>
-            <Card bordered={false}>
-              <CalendarOutlined />
-
-              <div>
-                <Text>Pending</Text>
-
-                <Title level={2}>
-                  {statistics.pending}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={5} lg={8} sm={12} xs={24}>
-            <Card bordered={false}>
-              <CheckCircleOutlined />
-
-              <div>
-                <Text>Approved</Text>
-
-                <Title level={2}>
-                  {statistics.approved}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={5} lg={8} sm={12} xs={24}>
-            <Card bordered={false}>
-              <SyncOutlined />
-
-              <div>
-                <Text>Changes Needed</Text>
-
-                <Title level={2}>
-                  {statistics.actionRequired}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={4} lg={8} sm={12} xs={24}>
-            <Card bordered={false}>
-              <CloseCircleOutlined />
-
-              <div>
-                <Text>Rejected</Text>
-
-                <Title level={2}>
-                  {statistics.rejected}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-        </Row>
+            </>
+          }
+          stats={[
+            {
+              label: "Total Requests",
+              value: statistics.total,
+              icon: <CarOutlined />,
+            },
+            {
+              label: "Pending Review",
+              value: statistics.pending,
+              icon: <ClockCircleOutlined />,
+            },
+            {
+              label: "Approved",
+              value: statistics.approved,
+              icon: <CheckCircleOutlined />,
+            },
+            {
+              label: "Changes Needed",
+              value: statistics.actionRequired,
+              icon: <SyncOutlined />,
+            },
+            {
+              label: "Rejected",
+              value: statistics.rejected,
+              icon: <CloseCircleOutlined />,
+            },
+          ]}
+        />
 
         <Card
           bordered={false}
@@ -540,14 +495,14 @@ function AdminCarRequests() {
                             request.carDetails?.name
                           }
                         >
-                          {request.carDetails?.name}
+                          {request.carDetails?.name ||
+                            "Unnamed Car"}
                         </Title>
 
                         <Text type="secondary">
-                          {
-                            request.carDetails
-                              ?.registrationNumber
-                          }
+                          {request.carDetails
+                            ?.registrationNumber ||
+                            "Registration unavailable"}
                         </Text>
 
                         <div className="admin-request-summary-grid">
@@ -623,67 +578,73 @@ function AdminCarRequests() {
                       </div>
 
                       <div className="admin-request-actions">
-                        <Button
-                          block
-                          icon={<EyeOutlined />}
-                          onClick={() =>
-                            openDetails(request)
-                          }
-                        >
-                          View Details
-                        </Button>
 
-                        {request.status !==
-                          "approved" && (
-                          <>
-                            <Button
-                              block
-                              type="primary"
-                              icon={
-                                <CheckCircleOutlined />
-                              }
-                              onClick={() =>
-                                openReviewModal(
-                                  request,
-                                  "approve"
-                                )
-                              }
-                            >
-                              Approve
-                            </Button>
+  <Button
+    block
+    icon={<EyeOutlined />}
+    onClick={() => openDetails(request)}
+  >
+    View Details
+  </Button>
 
-                            <Button
-                              block
-                              className="request-change-button"
-                              icon={<SyncOutlined />}
-                              onClick={() =>
-                                openReviewModal(
-                                  request,
-                                  "changes"
-                                )
-                              }
-                            >
-                              Request Changes
-                            </Button>
+  {request.status !== "approved" && (
+    <>
+      <Button
+        block
+        type="primary"
+        icon={<CheckCircleOutlined />}
+        onClick={() =>
+          openReviewModal(request, "approve")
+        }
+      >
+        Approve
+      </Button>
 
-                            <Button
-                              block
-                              danger
-                              icon={
-                                <CloseCircleOutlined />
-                              }
-                              onClick={() =>
-                                openReviewModal(
-                                  request,
-                                  "reject"
-                                )
-                              }
-                            >
-                              Reject
-                            </Button>
-                          </>
-                        )}
-                      </div>
+      <Button
+        block
+        className="request-change-button"
+        icon={<SyncOutlined />}
+        onClick={() =>
+          openReviewModal(request, "changes")
+        }
+      >
+        Request Changes
+      </Button>
+
+      <Button
+        block
+        danger
+        icon={<CloseCircleOutlined />}
+        onClick={() =>
+          openReviewModal(request, "reject")
+        }
+      >
+        Reject
+      </Button>
+    </>
+  )}
+
+  {/* DELETE BUTTON */}
+  <Popconfirm
+    title="Delete this listing?"
+    description="This action cannot be undone."
+    okText="Delete"
+    cancelText="Cancel"
+    okButtonProps={{ danger: true }}
+    onConfirm={() =>
+      dispatch(deleteCarListing(request._id))
+    }
+  >
+    <Button
+      block
+      danger
+      icon={<DeleteOutlined />}
+    >
+      Delete Listing
+    </Button>
+  </Popconfirm>
+
+</div>
                     </div>
                   </Card>
                 </Col>
@@ -709,17 +670,13 @@ function AdminCarRequests() {
             <div className="listing-details-title">
               <div>
                 <Title level={3}>
-                  {
-                    selectedRequest.carDetails
-                      ?.name
-                  }
+                  {selectedRequest.carDetails
+                    ?.name || "Submitted Car"}
                 </Title>
 
                 <Text type="secondary">
-                  {
-                    selectedRequest.carDetails
-                      ?.registrationNumber
-                  }
+                  {selectedRequest.carDetails
+                    ?.registrationNumber || "-"}
                 </Text>
               </div>
 
@@ -749,27 +706,37 @@ function AdminCarRequests() {
               Car Images
             </Title>
 
-            <Image.PreviewGroup>
-              <Row gutter={[14, 14]}>
-                {selectedRequest.carImages?.map(
-                  (imageUrl, index) => (
-                    <Col
-                      md={8}
-                      xs={24}
-                      key={`${imageUrl}-${index}`}
-                    >
-                      <Image
-                        src={imageUrl}
-                        alt={`Car view ${
-                          index + 1
-                        }`}
-                        className="request-preview-image"
-                      />
-                    </Col>
-                  )
-                )}
-              </Row>
-            </Image.PreviewGroup>
+            {selectedRequest.carImages?.length >
+            0 ? (
+              <Image.PreviewGroup>
+                <Row gutter={[14, 14]}>
+                  {selectedRequest.carImages.map(
+                    (imageUrl, index) => (
+                      <Col
+                        md={8}
+                        xs={24}
+                        key={`${imageUrl}-${index}`}
+                      >
+                        <Image
+                          src={imageUrl}
+                          alt={`Car view ${
+                            index + 1
+                          }`}
+                          className="request-preview-image"
+                        />
+                      </Col>
+                    )
+                  )}
+                </Row>
+              </Image.PreviewGroup>
+            ) : (
+              <Empty
+                description="No car images submitted"
+                image={
+                  Empty.PRESENTED_IMAGE_SIMPLE
+                }
+              />
+            )}
 
             <Divider />
 
@@ -788,10 +755,8 @@ function AdminCarRequests() {
               <Descriptions.Item
                 label="Full Name"
               >
-                {
-                  selectedRequest.ownerDetails
-                    ?.fullName
-                }
+                {selectedRequest.ownerDetails
+                  ?.fullName || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item
@@ -802,27 +767,21 @@ function AdminCarRequests() {
               </Descriptions.Item>
 
               <Descriptions.Item label="Email">
-                {
-                  selectedRequest.ownerDetails
-                    ?.email
-                }
+                {selectedRequest.ownerDetails
+                  ?.email || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Phone">
-                {
-                  selectedRequest.ownerDetails
-                    ?.phone
-                }
+                {selectedRequest.ownerDetails
+                  ?.phone || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item
                 label="Address"
                 span={2}
               >
-                {
-                  selectedRequest.ownerDetails
-                    ?.address
-                }
+                {selectedRequest.ownerDetails
+                  ?.address || "-"}
               </Descriptions.Item>
             </Descriptions>
 
@@ -841,53 +800,39 @@ function AdminCarRequests() {
               }}
             >
               <Descriptions.Item label="Brand">
-                {
-                  selectedRequest.carDetails
-                    ?.brand
-                }
+                {selectedRequest.carDetails
+                  ?.brand || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Model">
-                {
-                  selectedRequest.carDetails
-                    ?.model
-                }
+                {selectedRequest.carDetails
+                  ?.model || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Year">
-                {
-                  selectedRequest.carDetails
-                    ?.manufacturingYear
-                }
+                {selectedRequest.carDetails
+                  ?.manufacturingYear || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Fuel">
-                {
-                  selectedRequest.carDetails
-                    ?.fuelType
-                }
+                {selectedRequest.carDetails
+                  ?.fuelType || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Transmission">
-                {
-                  selectedRequest.carDetails
-                    ?.transmission
-                }
+                {selectedRequest.carDetails
+                  ?.transmission || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Capacity">
-                {
-                  selectedRequest.carDetails
-                    ?.capacity
-                }{" "}
+                {selectedRequest.carDetails
+                  ?.capacity || "-"}{" "}
                 Seats
               </Descriptions.Item>
 
               <Descriptions.Item label="Location">
-                {
-                  selectedRequest.carDetails
-                    ?.location
-                }
+                {selectedRequest.carDetails
+                  ?.location || "-"}
               </Descriptions.Item>
 
               <Descriptions.Item label="Rent">
@@ -917,94 +862,167 @@ function AdminCarRequests() {
 
             <Row gutter={[14, 14]}>
               <Col md={12} xs={24}>
-                <a
-                  href={
-                    selectedRequest.documents
-                      ?.rcDocument
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="document-open-card"
-                >
-                  <IdcardOutlined />
+                {selectedRequest.documents
+                  ?.rcDocument ? (
+                  <a
+                    href={
+                      selectedRequest.documents
+                        .rcDocument
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="document-open-card"
+                  >
+                    <IdcardOutlined />
 
-                  <div>
-                    <strong>RC Document</strong>
-                    <span>
-                      Open submitted document
-                    </span>
+                    <div>
+                      <strong>
+                        RC Document
+                      </strong>
+
+                      <span>
+                        Open submitted document
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="document-open-card document-missing-card">
+                    <IdcardOutlined />
+
+                    <div>
+                      <strong>
+                        RC Document
+                      </strong>
+
+                      <span>
+                        Not submitted
+                      </span>
+                    </div>
                   </div>
-                </a>
+                )}
               </Col>
 
               <Col md={12} xs={24}>
-                <a
-                  href={
-                    selectedRequest.documents
-                      ?.insuranceDocument
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="document-open-card"
-                >
-                  <SafetyCertificateOutlined />
+                {selectedRequest.documents
+                  ?.insuranceDocument ? (
+                  <a
+                    href={
+                      selectedRequest.documents
+                        .insuranceDocument
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="document-open-card"
+                  >
+                    <SafetyCertificateOutlined />
 
-                  <div>
-                    <strong>
-                      Insurance Document
-                    </strong>
+                    <div>
+                      <strong>
+                        Insurance Document
+                      </strong>
 
-                    <span>
-                      Open submitted document
-                    </span>
+                      <span>
+                        Open submitted document
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="document-open-card document-missing-card">
+                    <SafetyCertificateOutlined />
+
+                    <div>
+                      <strong>
+                        Insurance Document
+                      </strong>
+
+                      <span>
+                        Not submitted
+                      </span>
+                    </div>
                   </div>
-                </a>
+                )}
               </Col>
 
               <Col md={12} xs={24}>
-                <a
-                  href={
-                    selectedRequest.documents
-                      ?.pucDocument
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="document-open-card"
-                >
-                  <FileProtectOutlined />
+                {selectedRequest.documents
+                  ?.pucDocument ? (
+                  <a
+                    href={
+                      selectedRequest.documents
+                        .pucDocument
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="document-open-card"
+                  >
+                    <FileProtectOutlined />
 
-                  <div>
-                    <strong>PUC Document</strong>
+                    <div>
+                      <strong>
+                        PUC Document
+                      </strong>
 
-                    <span>
-                      Open submitted document
-                    </span>
+                      <span>
+                        Open submitted document
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="document-open-card document-missing-card">
+                    <FileProtectOutlined />
+
+                    <div>
+                      <strong>
+                        PUC Document
+                      </strong>
+
+                      <span>
+                        Not submitted
+                      </span>
+                    </div>
                   </div>
-                </a>
+                )}
               </Col>
 
               <Col md={12} xs={24}>
-                <a
-                  href={
-                    selectedRequest.documents
-                      ?.ownerIdDocument
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="document-open-card"
-                >
-                  <UserOutlined />
+                {selectedRequest.documents
+                  ?.ownerIdDocument ? (
+                  <a
+                    href={
+                      selectedRequest.documents
+                        .ownerIdDocument
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="document-open-card"
+                  >
+                    <UserOutlined />
 
-                  <div>
-                    <strong>
-                      Owner ID Document
-                    </strong>
+                    <div>
+                      <strong>
+                        Owner ID Document
+                      </strong>
 
-                    <span>
-                      Open submitted document
-                    </span>
+                      <span>
+                        Open submitted document
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="document-open-card document-missing-card">
+                    <UserOutlined />
+
+                    <div>
+                      <strong>
+                        Owner ID Document
+                      </strong>
+
+                      <span>
+                        Not submitted
+                      </span>
+                    </div>
                   </div>
-                </a>
+                )}
               </Col>
             </Row>
 
@@ -1100,9 +1118,10 @@ function AdminCarRequests() {
                 />
 
                 <Text type="secondary">
-                  Example: On ₹1,000 base rent with
-                  10% commission, DriveEase earns ₹100
-                  and the owner earns ₹900.
+                  Example: On ₹1,000 base rent
+                  with 10% commission, DriveEase
+                  earns ₹100 and the owner earns
+                  ₹900.
                 </Text>
               </div>
             )}

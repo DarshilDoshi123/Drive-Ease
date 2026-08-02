@@ -278,3 +278,50 @@ export const reviewCarListing =
       });
     }
   };
+
+  // ============================================
+// ADMIN: DELETE OWNER LISTING
+// ============================================
+
+export const deleteCarListing =
+  (requestId) => async (dispatch) => {
+    dispatch({
+      type: "LOADING",
+      payload: true,
+    });
+
+    try {
+      const response = await api.delete(
+        `/api/car-listings/admin/${requestId}`
+      );
+
+      message.success(
+        response.data?.message ||
+          "Car listing deleted successfully"
+      );
+
+      await dispatch(
+        getAdminCarListings()
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Delete listing error:",
+        error.response?.data ||
+          error.message
+      );
+
+      message.error(
+        error.response?.data?.message ||
+          "Unable to delete listing"
+      );
+
+      return null;
+    } finally {
+      dispatch({
+        type: "LOADING",
+        payload: false,
+      });
+    }
+  };

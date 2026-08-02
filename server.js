@@ -51,6 +51,14 @@ app.use(
   "/api/car-listings",
   require("./routes/carListingRoutes")
 );
+app.use(
+  "/api/uploads",
+  require("./routes/uploadRoute")
+);
+app.use(
+  "/api/reviews",
+  require("./routes/reviewRoutes")
+);
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,

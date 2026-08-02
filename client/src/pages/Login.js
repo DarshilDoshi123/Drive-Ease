@@ -1,21 +1,52 @@
 import React from "react";
-import { Form, Input, Row, Col, Button, Typography } from "antd";
-import { Link, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+
 import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Typography,
+} from "antd";
+
+import {
+  ArrowRightOutlined,
   CarOutlined,
+  CheckCircleOutlined,
   LockOutlined,
+  SafetyCertificateOutlined,
+  ThunderboltOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+
+import {
+  Link,
+  Navigate,
+} from "react-router-dom";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
 import { userLogin } from "../redux/actions/userActions";
 import Spinner from "../components/Spinner";
 
-const { Title, Text } = Typography;
+import "./Auth.css";
+
+const {
+  Title,
+  Text,
+  Paragraph,
+} = Typography;
 
 function Login() {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.alertsReducer);
+
+  const loading = useSelector(
+    (state) =>
+      state.alertsReducer?.loading || false
+  );
 
   const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
@@ -25,108 +56,118 @@ function Login() {
   }
 
   const onFinish = (values) => {
-    dispatch(userLogin(values));
+    dispatch(
+      userLogin({
+        username: values.username.trim(),
+        password: values.password,
+      })
+    );
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "24px",
-        background:
-          "linear-gradient(135deg, #020617 0%, #172554 50%, #1d4ed8 100%)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <main className="auth-page">
       {loading && <Spinner />}
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "1100px",
-          background: "rgba(255,255,255,0.98)",
-          borderRadius: "24px",
-          overflow: "hidden",
-          boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
-        }}
-      >
-        <Row>
-          <Col lg={12} xs={0}>
-            <div
-              style={{
-                height: "650px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
+      <div className="auth-background-shape auth-shape-one" />
+      <div className="auth-background-shape auth-shape-two" />
+
+      <section className="auth-container">
+        <Row className="auth-row">
+          <Col
+            lg={13}
+            xs={0}
+            className="auth-visual-column"
+          >
+            <div className="auth-visual">
               <img
-                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200"
-                alt="Premium rental car"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600"
+                alt="Premium sports car"
               />
 
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(to top, rgba(2,6,23,.90), rgba(2,6,23,.08))",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-end",
-                  padding: "48px",
-                  color: "white",
-                }}
-              >
-                <Title level={2} style={{ color: "white", marginBottom: 8 }}>
-                  Premium mobility made simple
+              <div className="auth-visual-overlay" />
+
+              <div className="auth-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
+
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
+                </div>
+              </div>
+
+              <div className="auth-visual-content">
+                <div className="auth-eyebrow">
+                  <ThunderboltOutlined />
+                  Fast. Secure. Premium.
+                </div>
+
+                <Title>
+                  Your perfect journey starts here.
                 </Title>
 
-                <Text style={{ color: "#e2e8f0", fontSize: 16 }}>
-                  Browse premium vehicles, select your preferred dates and
-                  manage bookings from one secure platform.
-                </Text>
+                <Paragraph>
+                  Discover verified vehicles, flexible
+                  booking periods and a smooth rental
+                  experience from one secure platform.
+                </Paragraph>
+
+                <div className="auth-feature-list">
+                  <span>
+                    <CheckCircleOutlined />
+                    Verified premium vehicles
+                  </span>
+
+                  <span>
+                    <SafetyCertificateOutlined />
+                    Secure booking experience
+                  </span>
+
+                  <span>
+                    <ThunderboltOutlined />
+                    Fast and simple reservations
+                  </span>
+                </div>
+              </div>
+
+              <div className="auth-visual-footer">
+                <span>Trusted rental experience</span>
+                <span>24/7 support</span>
               </div>
             </div>
           </Col>
 
-          <Col lg={12} xs={24}>
-            <div
-              style={{
-                minHeight: "650px",
-                padding: "55px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ textAlign: "center", marginBottom: 32 }}>
-                <CarOutlined
-                  style={{
-                    fontSize: 48,
-                    color: "#2563eb",
-                    marginBottom: 12,
-                  }}
-                />
+          <Col
+            lg={11}
+            xs={24}
+            className="auth-form-column"
+          >
+            <div className="auth-form-panel">
+              <div className="auth-mobile-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
 
-                <Title
-                  style={{
-                    margin: 0,
-                    color: "#0f172a",
-                  }}
-                >
-                  Welcome to DriveEase
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
+                </div>
+              </div>
+
+              <div className="auth-form-heading">
+                <Text className="auth-form-label">
+                  WELCOME BACK
+                </Text>
+
+                <Title>
+                  Login to your account
                 </Title>
 
-                <Text type="secondary">
-                  Login to continue to your car-rental account
-                </Text>
+                <Paragraph>
+                  Access your bookings, manage trips and
+                  explore premium rental vehicles.
+                </Paragraph>
               </div>
 
               <Form
@@ -134,6 +175,7 @@ function Login() {
                 onFinish={onFinish}
                 requiredMark={false}
                 size="large"
+                className="auth-form"
               >
                 <Form.Item
                   label="Username"
@@ -141,17 +183,19 @@ function Login() {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter your username",
+                      message:
+                        "Please enter your username",
                     },
                     {
                       min: 3,
-                      message: "Username must contain at least 3 characters",
+                      message:
+                        "Username must contain at least 3 characters",
                     },
                   ]}
                 >
                   <Input
                     prefix={<UserOutlined />}
-                    placeholder="Enter username"
+                    placeholder="Enter your username"
                     autoComplete="username"
                   />
                 </Form.Item>
@@ -162,49 +206,61 @@ function Login() {
                   rules={[
                     {
                       required: true,
-                      message: "Please enter your password",
+                      message:
+                        "Please enter your password",
                     },
                   ]}
                 >
                   <Input.Password
                     prefix={<LockOutlined />}
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
                     autoComplete="current-password"
                   />
                 </Form.Item>
+
+                <div className="auth-form-options">
+                  <Text type="secondary">
+                    Secure account access
+                  </Text>
+
+                  <span>
+                    <SafetyCertificateOutlined />
+                    Protected
+                  </span>
+                </div>
 
                 <Button
                   type="primary"
                   htmlType="submit"
                   loading={loading}
                   block
-                  style={{
-                    height: 48,
-                    marginTop: 8,
-                    fontWeight: 600,
-                  }}
+                  className="auth-submit-button"
                 >
-                  LOGIN
+                  <span>Login</span>
+                  <ArrowRightOutlined />
                 </Button>
 
-                <div
-                  style={{
-                    textAlign: "center",
-                    marginTop: 24,
-                  }}
-                >
-                  <Text type="secondary">New to DriveEase? </Text>
-
-                  <Link to="/register">
-                    <strong>Create an account</strong>
-                  </Link>
+                <div className="auth-divider">
+                  <span>New to DriveEase?</span>
                 </div>
+
+                <Link
+                  to="/register"
+                  className="auth-secondary-link"
+                >
+                  Create a new account
+                </Link>
               </Form>
+
+              <div className="auth-form-footer">
+                By continuing, you agree to use DriveEase
+                responsibly and securely.
+              </div>
             </div>
           </Col>
         </Row>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

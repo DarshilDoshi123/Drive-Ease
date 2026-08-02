@@ -129,7 +129,13 @@ function MyCarListings() {
               HOST DASHBOARD
             </Text>
 
-            <Title level={1}>
+            <Title
+  level={1}
+  style={{
+    color: "#ffffff",
+    marginBottom: 8,
+  }}
+>
               My Car Listings
             </Title>
 

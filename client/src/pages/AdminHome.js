@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -20,12 +21,14 @@ import {
 import {
   CarOutlined,
   CheckCircleOutlined,
+  ClockCircleOutlined,
   DeleteOutlined,
   EditOutlined,
+  FileProtectOutlined,
   FilterOutlined,
   PlusCircleOutlined,
+  ReloadOutlined,
   SearchOutlined,
-  ToolOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -39,6 +42,7 @@ import {
 } from "react-redux";
 
 import AdminLayout from "../components/AdminLayout";
+import AdminPageHero from "../components/AdminPageHero";
 import Spinner from "../components/Spinner";
 
 import {
@@ -49,8 +53,12 @@ import {
 const {
   Title,
   Text,
-  Paragraph,
 } = Typography;
+
+const formatMoney = (amount) =>
+  Number(amount || 0).toLocaleString(
+    "en-IN"
+  );
 
 function AdminHome() {
   const dispatch = useDispatch();
@@ -89,9 +97,13 @@ function AdminHome() {
     localStorage.removeItem("token");
   }
 
-  useEffect(() => {
+  const loadCars = useCallback(() => {
     dispatch(getAllCars());
   }, [dispatch]);
+
+  useEffect(() => {
+    loadCars();
+  }, [loadCars]);
 
   const fuelOptions = useMemo(() => {
     const fuelTypes = [
@@ -117,16 +129,23 @@ function AdminHome() {
         .toLowerCase();
 
       result = result.filter((car) => {
+        const name =
+          car.name?.toLowerCase() || "";
+
+        const brand =
+          car.brand?.toLowerCase() || "";
+
+        const model =
+          car.model?.toLowerCase() || "";
+
+        const fuelType =
+          car.fuelType?.toLowerCase() || "";
+
         return (
-          car.name
-            ?.toLowerCase()
-            .includes(query) ||
-          car.brand
-            ?.toLowerCase()
-            .includes(query) ||
-          car.model
-            ?.toLowerCase()
-            .includes(query)
+          name.includes(query) ||
+          brand.includes(query) ||
+          model.includes(query) ||
+          fuelType.includes(query)
         );
       });
     }
@@ -157,8 +176,29 @@ function AdminHome() {
     [cars]
   );
 
-  const availableCars =
-    cars.length - bookedCars;
+  const availableCars = useMemo(
+    () =>
+      Math.max(
+        cars.length - bookedCars,
+        0
+      ),
+    [cars.length, bookedCars]
+  );
+
+  const totalBookedSlots = useMemo(
+    () =>
+      cars.reduce(
+        (total, car) =>
+          total +
+          (Array.isArray(
+            car.bookedTimeSlots
+          )
+            ? car.bookedTimeSlots.length
+            : 0),
+        0
+      ),
+    [cars]
+  );
 
   if (!user) {
     return (
@@ -178,17 +218,22 @@ function AdminHome() {
     );
   }
 
-  const handleDelete = (carId) => {
-    dispatch(
+  const handleDelete = async (carId) => {
+    await dispatch(
       deleteCar({
         carid: carId,
       })
     );
   };
 
+  const resetFilters = () => {
+    setSearchText("");
+    setFuelFilter("all");
+  };
+
   const columns = [
     {
-      title: "Car",
+      title: "Vehicle",
       key: "car",
       width: 320,
 
@@ -199,18 +244,18 @@ function AdminHome() {
               car.image ||
               "https://placehold.co/150x100?text=DriveEase"
             }
-            alt={car.name}
+            alt={car.name || "Rental car"}
           />
 
           <div>
             <strong>
-              {car.name || "Car"}
+              {car.name || "Unnamed Car"}
             </strong>
 
             <span>
               {car.capacity || "-"} Seats
               {" • "}
-              {car.fuelType || "-"}
+              {car.fuelType || "Unknown Fuel"}
             </span>
           </div>
         </div>
@@ -221,6 +266,7 @@ function AdminHome() {
       title: "Fuel",
       dataIndex: "fuelType",
       key: "fuelType",
+      width: 120,
 
       render: (fuelType) => (
         <Tag color="blue">
@@ -230,35 +276,63 @@ function AdminHome() {
     },
 
     {
-      title: "Price",
+      title: "Capacity",
+      dataIndex: "capacity",
+      key: "capacity",
+      width: 120,
+
+      render: (capacity) => (
+        <span>
+          {capacity || "-"} Seats
+        </span>
+      ),
+    },
+
+    {
+      title: "Rental Price",
       dataIndex: "rentPerHour",
       key: "rentPerHour",
+      width: 150,
 
       render: (rentPerHour) => (
         <strong>
-          ₹
-          {Number(
-            rentPerHour || 0
-          ).toLocaleString("en-IN")}
+          ₹{formatMoney(rentPerHour)}
           /hour
         </strong>
       ),
     },
 
     {
-      title: "Bookings",
+      title: "Booked Slots",
       key: "bookings",
+      width: 120,
 
-      render: (_, car) => (
-        <span>
-          {car.bookedTimeSlots?.length || 0}
-        </span>
-      ),
+      render: (_, car) => {
+        const bookingCount =
+          Array.isArray(
+            car.bookedTimeSlots
+          )
+            ? car.bookedTimeSlots.length
+            : 0;
+
+        return (
+          <Tag
+            color={
+              bookingCount > 0
+                ? "orange"
+                : "default"
+            }
+          >
+            {bookingCount}
+          </Tag>
+        );
+      },
     },
 
     {
-      title: "Status",
+      title: "Availability",
       key: "status",
+      width: 145,
 
       render: (_, car) => {
         const hasBookings =
@@ -269,6 +343,13 @@ function AdminHome() {
 
         return (
           <Tag
+            icon={
+              hasBookings ? (
+                <ClockCircleOutlined />
+              ) : (
+                <CheckCircleOutlined />
+              )
+            }
             color={
               hasBookings
                 ? "orange"
@@ -287,6 +368,7 @@ function AdminHome() {
       title: "Actions",
       key: "actions",
       width: 190,
+      fixed: "right",
 
       render: (_, car) => (
         <Space>
@@ -303,7 +385,7 @@ function AdminHome() {
 
           <Popconfirm
             title="Delete this car?"
-            description="This action cannot be undone."
+            description="This vehicle will be permanently removed from DriveEase."
             okText="Delete"
             cancelText="Cancel"
             okButtonProps={{
@@ -328,87 +410,72 @@ function AdminHome() {
       {loading && <Spinner />}
 
       <section className="admin-dashboard-page">
-        <div className="admin-page-heading">
-          <div>
-            <Text className="admin-page-label">
-              FLEET MANAGEMENT
-            </Text>
+        <AdminPageHero
+          eyebrow="FLEET MANAGEMENT"
+          title="Manage Rental Vehicles"
+          description="View, add, update and remove DriveEase rental vehicles while monitoring availability and active booking slots."
+          icon={<CarOutlined />}
+          theme="blue"
+          actions={
+            <>
+              <Link to="/admin/car-requests">
+                <Button
+                  size="large"
+                  icon={
+                    <FileProtectOutlined />
+                  }
+                >
+                  Owner Requests
+                </Button>
+              </Link>
 
-            <Title level={1}>
-              Manage Cars
-            </Title>
+              <Button
+                size="large"
+                icon={<ReloadOutlined />}
+                onClick={loadCars}
+              >
+                Refresh
+              </Button>
 
-            <Paragraph>
-              View all listed cars, update their
-              details or remove them from the
-              booking platform.
-            </Paragraph>
-          </div>
-
-          <Link to="/addcar">
-            <Button
-              type="primary"
-              size="large"
-              icon={<PlusCircleOutlined />}
-              className="admin-primary-action"
-            >
-              Add New Car
-            </Button>
-          </Link>
-        </div>
-
-        <div className="admin-summary-grid">
-          <Card
-            bordered={false}
-            className="admin-summary-card"
-          >
-            <div className="admin-summary-icon blue">
-              <CarOutlined />
-            </div>
-
-            <div>
-              <Text>Total Cars</Text>
-
-              <Title level={2}>
-                {cars.length}
-              </Title>
-            </div>
-          </Card>
-
-          <Card
-            bordered={false}
-            className="admin-summary-card"
-          >
-            <div className="admin-summary-icon green">
-              <CheckCircleOutlined />
-            </div>
-
-            <div>
-              <Text>Available</Text>
-
-              <Title level={2}>
-                {availableCars}
-              </Title>
-            </div>
-          </Card>
-
-          <Card
-            bordered={false}
-            className="admin-summary-card"
-          >
-            <div className="admin-summary-icon orange">
-              <ToolOutlined />
-            </div>
-
-            <div>
-              <Text>Cars With Bookings</Text>
-
-              <Title level={2}>
-                {bookedCars}
-              </Title>
-            </div>
-          </Card>
-        </div>
+              <Link to="/addcar">
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={
+                    <PlusCircleOutlined />
+                  }
+                >
+                  Add New Car
+                </Button>
+              </Link>
+            </>
+          }
+          stats={[
+            {
+              label: "Total Cars",
+              value: cars.length,
+              icon: <CarOutlined />,
+            },
+            {
+              label: "Available Cars",
+              value: availableCars,
+              icon:
+                <CheckCircleOutlined />,
+            },
+            {
+              label: "Cars With Bookings",
+              value: bookedCars,
+              icon:
+                <ClockCircleOutlined />,
+            },
+            {
+              label: "Total Booked Slots",
+              value: totalBookedSlots,
+              icon:
+                <FileProtectOutlined />,
+            },
+          ]}
+        />
 
         <Card
           bordered={false}
@@ -417,20 +484,20 @@ function AdminHome() {
           <div className="admin-table-toolbar">
             <div>
               <Title level={3}>
-                All Vehicles
+                Vehicle Inventory
               </Title>
 
               <Text type="secondary">
                 Showing{" "}
                 {filteredCars.length} of{" "}
-                {cars.length} cars
+                {cars.length} vehicles
               </Text>
             </div>
 
             <Space wrap>
               <Input
                 prefix={<SearchOutlined />}
-                placeholder="Search car"
+                placeholder="Search by name, brand, model or fuel"
                 allowClear
                 value={searchText}
                 onChange={(event) =>
@@ -457,35 +524,64 @@ function AdminHome() {
                   ...fuelOptions,
                 ]}
               />
+
+              {(searchText ||
+                fuelFilter !== "all") && (
+                <Button
+                  onClick={resetFilters}
+                >
+                  Reset
+                </Button>
+              )}
             </Space>
           </div>
 
           {filteredCars.length === 0 ? (
             <Empty
-              description="No cars found"
+              description={
+                cars.length === 0
+                  ? "No vehicles have been added yet"
+                  : "No vehicles match the selected filters"
+              }
               className="admin-table-empty"
             >
-              <Button
-                type="primary"
-                onClick={() => {
-                  setSearchText("");
-                  setFuelFilter("all");
-                }}
-              >
-                Reset Filters
-              </Button>
+              {cars.length === 0 ? (
+                <Link to="/addcar">
+                  <Button
+                    type="primary"
+                    icon={
+                      <PlusCircleOutlined />
+                    }
+                  >
+                    Add First Car
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  type="primary"
+                  onClick={resetFilters}
+                >
+                  Reset Filters
+                </Button>
+              )}
             </Empty>
           ) : (
             <Table
               rowKey="_id"
               columns={columns}
               dataSource={filteredCars}
+              loading={loading}
               pagination={{
                 pageSize: 6,
                 showSizeChanger: false,
+                showTotal: (
+                  total,
+                  range
+                ) =>
+                  `${range[0]}-${range[1]} of ${total} vehicles`,
               }}
               scroll={{
-                x: 950,
+                x: 1150,
               }}
               className="admin-cars-table"
             />

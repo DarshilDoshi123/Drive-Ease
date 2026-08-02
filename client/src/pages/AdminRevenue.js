@@ -1,9 +1,12 @@
 import React, {
+  useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
 import {
+  Alert,
   Button,
   Card,
   Col,
@@ -16,10 +19,14 @@ import {
 
 import {
   BankOutlined,
+  CalendarOutlined,
   CarOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
   DollarCircleOutlined,
   PercentageOutlined,
   ReloadOutlined,
+  RiseOutlined,
   TeamOutlined,
   WalletOutlined,
 } from "@ant-design/icons";
@@ -28,7 +35,9 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
+
 import AdminLayout from "../components/AdminLayout";
+import AdminPageHero from "../components/AdminPageHero";
 import Spinner from "../components/Spinner";
 
 import {
@@ -39,13 +48,47 @@ import {
 const {
   Title,
   Text,
-  Paragraph,
 } = Typography;
 
 const formatMoney = (amount) =>
   Number(amount || 0).toLocaleString(
     "en-IN"
   );
+
+const getPayoutTagColor = (status) => {
+  switch (status) {
+    case "paid":
+      return "green";
+
+    case "processing":
+      return "orange";
+
+    case "pending":
+      return "blue";
+
+    default:
+      return "default";
+  }
+};
+
+const getBookingTagColor = (status) => {
+  switch (status) {
+    case "completed":
+      return "green";
+
+    case "cancelled":
+      return "red";
+
+    case "confirmed":
+      return "blue";
+
+    case "pending":
+      return "orange";
+
+    default:
+      return "default";
+  }
+};
 
 function AdminRevenue() {
   const dispatch = useDispatch();
@@ -62,23 +105,34 @@ function AdminRevenue() {
   const [bookings, setBookings] =
     useState([]);
 
-  const loadRevenue = async () => {
-    const result = await dispatch(
-      getAdminRevenue()
-    );
+  const loadRevenue = useCallback(
+    async () => {
+      const result = await dispatch(
+        getAdminRevenue()
+      );
 
-    setStatistics(
-      result.statistics || {}
-    );
+      if (!result) {
+        setStatistics({});
+        setBookings([]);
+        return;
+      }
 
-    setBookings(
-      result.bookings || []
-    );
-  };
+      setStatistics(
+        result.statistics || {}
+      );
+
+      setBookings(
+        Array.isArray(result.bookings)
+          ? result.bookings
+          : []
+      );
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     loadRevenue();
-  }, []);
+  }, [loadRevenue]);
 
   const changePayoutStatus = async (
     bookingId,
@@ -92,263 +146,404 @@ function AdminRevenue() {
     );
 
     if (result) {
-      loadRevenue();
+      await loadRevenue();
     }
   };
 
-  const ownerBookings =
-    bookings.filter(
-      (booking) => booking.carOwner
-    );
+  const ownerBookings = useMemo(
+    () =>
+      bookings.filter(
+        (booking) =>
+          Boolean(booking.carOwner)
+      ),
+    [bookings]
+  );
+
+  const paidPayoutCount = useMemo(
+    () =>
+      ownerBookings.filter(
+        (booking) =>
+          booking.payoutStatus === "paid"
+      ).length,
+    [ownerBookings]
+  );
+
+  const processingPayoutCount = useMemo(
+    () =>
+      ownerBookings.filter(
+        (booking) =>
+          booking.payoutStatus ===
+          "processing"
+      ).length,
+    [ownerBookings]
+  );
+
+  const pendingPayoutCount = useMemo(
+    () =>
+      ownerBookings.filter(
+        (booking) =>
+          booking.payoutStatus ===
+          "pending"
+      ).length,
+    [ownerBookings]
+  );
 
   return (
     <AdminLayout>
       {loading && <Spinner />}
 
       <section className="earnings-page">
-        <div className="admin-revenue-hero">
-          <div>
-            <Text className="admin-dashboard-label">
-              PLATFORM FINANCE
-            </Text>
+        <AdminPageHero
+          eyebrow="PLATFORM ANALYTICS"
+          title="Revenue & Owner Payouts"
+          description="Track booking revenue, marketplace commission, owner earnings and pending payouts from one professional finance dashboard."
+          icon={<DollarCircleOutlined />}
+          theme="blue"
+          actions={
+            <Button
+              size="large"
+              icon={<ReloadOutlined />}
+              onClick={loadRevenue}
+            >
+              Refresh Data
+            </Button>
+          }
+          stats={[
+            {
+              label: "Total Bookings",
+              value:
+                statistics.totalBookings ||
+                bookings.length ||
+                0,
+              icon: <CalendarOutlined />,
+            },
+            {
+              label: "Booking Revenue",
+              value: formatMoney(
+                statistics.totalBookingRevenue
+              ),
+              prefix: "₹",
+              icon: <RiseOutlined />,
+            },
+            {
+              label: "Platform Commission",
+              value: formatMoney(
+                statistics.platformCommission
+              ),
+              prefix: "₹",
+              icon: <PercentageOutlined />,
+            },
+            {
+              label: "Pending Payout",
+              value: formatMoney(
+                statistics.pendingPayout
+              ),
+              prefix: "₹",
+              icon: <WalletOutlined />,
+            },
+          ]}
+        />
 
-            <Title>
-              Revenue & Payouts
-            </Title>
-
-            <Paragraph>
-              Monitor booking revenue,
-              marketplace commission and owner
-              payouts.
-            </Paragraph>
-          </div>
-
-          <Button
-            size="large"
-            icon={<ReloadOutlined />}
-            onClick={loadRevenue}
-          >
-            Refresh Data
-          </Button>
-        </div>
-
-        <Row
-          gutter={[18, 18]}
-          className="earnings-stats"
+        <Card
+          bordered={false}
+          className="admin-request-filter-card"
+          style={{
+            marginBottom: 24,
+          }}
         >
-          <Col xl={6} md={12} xs={24}>
-            <Card>
-              <CarOutlined />
+          <div className="admin-request-filter">
+            <div>
+              <Title level={3}>
+                Owner Payout Management
+              </Title>
 
-              <div>
-                <Text>Total Bookings</Text>
-                <Title level={2}>
-                  {statistics.totalBookings ||
-                    0}
-                </Title>
-              </div>
-            </Card>
-          </Col>
+              <Text type="secondary">
+                Review marketplace bookings and
+                update owner payout progress.
+              </Text>
+            </div>
 
-          <Col xl={6} md={12} xs={24}>
-            <Card>
-              <DollarCircleOutlined />
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 10,
+              }}
+            >
+              <Tag
+                color="blue"
+                icon={<ClockCircleOutlined />}
+              >
+                Pending: {pendingPayoutCount}
+              </Tag>
 
-              <div>
-                <Text>
-                  Booking Revenue
-                </Text>
+              <Tag
+                color="orange"
+                icon={<ReloadOutlined />}
+              >
+                Processing:{" "}
+                {processingPayoutCount}
+              </Tag>
 
-                <Title level={2}>
-                  ₹
-                  {formatMoney(
-                    statistics.totalBookingRevenue
-                  )}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={6} md={12} xs={24}>
-            <Card>
-              <PercentageOutlined />
-
-              <div>
-                <Text>
-                  Platform Commission
-                </Text>
-
-                <Title level={2}>
-                  ₹
-                  {formatMoney(
-                    statistics.platformCommission
-                  )}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-
-          <Col xl={6} md={12} xs={24}>
-            <Card>
-              <WalletOutlined />
-
-              <div>
-                <Text>
-                  Pending Payout
-                </Text>
-
-                <Title level={2}>
-                  ₹
-                  {formatMoney(
-                    statistics.pendingPayout
-                  )}
-                </Title>
-              </div>
-            </Card>
-          </Col>
-        </Row>
-
-        <Title level={2}>
-          Owner Payout Management
-        </Title>
+              <Tag
+                color="green"
+                icon={<CheckCircleOutlined />}
+              >
+                Paid: {paidPayoutCount}
+              </Tag>
+            </div>
+          </div>
+        </Card>
 
         {ownerBookings.length === 0 ? (
-          <Card className="earnings-empty">
-            <Empty description="No marketplace bookings found" />
+          <Card
+            bordered={false}
+            className="earnings-empty"
+          >
+            <Empty
+              description="No marketplace bookings found"
+            >
+              <Button
+                type="primary"
+                icon={<ReloadOutlined />}
+                onClick={loadRevenue}
+              >
+                Refresh Data
+              </Button>
+            </Empty>
           </Card>
         ) : (
           <Row gutter={[22, 22]}>
             {ownerBookings.map(
-              (booking) => (
-                <Col
-                  xl={8}
-                  lg={12}
-                  xs={24}
-                  key={booking._id}
-                >
-                  <Card className="earning-booking-card">
-                    <div className="earning-car-header">
-                      <img
-                        src={
-                          booking.car?.image ||
-                          "https://placehold.co/500x300?text=DriveEase"
-                        }
-                        alt={
-                          booking.car?.name ||
-                          "Car"
-                        }
-                      />
+              (booking) => {
+                const bookingStatus =
+                  booking.bookingStatus ||
+                  "confirmed";
 
-                      <div>
-                        <Title level={4}>
-                          {booking.car?.name}
-                        </Title>
+                const payoutStatus =
+                  booking.payoutStatus ||
+                  "pending";
 
-                        <Text type="secondary">
-                          Owner:{" "}
-                          {booking.carOwner
-                            ?.username ||
-                            "Owner"}
-                        </Text>
-                      </div>
-                    </div>
-
-                    <div className="earning-detail-list">
-                      <div>
-                        <TeamOutlined />
-                        <span>Customer</span>
-                        <strong>
-                          {booking.user
-                            ?.username ||
-                            "Customer"}
-                        </strong>
-                      </div>
-
-                      <div>
-                        <DollarCircleOutlined />
-                        <span>Base Rent</span>
-                        <strong>
-                          ₹
-                          {formatMoney(
-                            booking.baseAmount
-                          )}
-                        </strong>
-                      </div>
-
-                      <div>
-                        <PercentageOutlined />
-                        <span>
-                          Commission
-                        </span>
-                        <strong>
-                          ₹
-                          {formatMoney(
-                            booking.platformCommission
-                          )}
-                        </strong>
-                      </div>
-
-                      <div>
-                        <BankOutlined />
-                        <span>
-                          Owner Earning
-                        </span>
-                        <strong>
-                          ₹
-                          {formatMoney(
-                            booking.ownerEarning
-                          )}
-                        </strong>
-                      </div>
-                    </div>
-
-                    <Tag
-                      color={
-                        booking.bookingStatus ===
-                        "cancelled"
-                          ? "red"
-                          : "blue"
-                      }
+                return (
+                  <Col
+                    xl={8}
+                    lg={12}
+                    xs={24}
+                    key={booking._id}
+                  >
+                    <Card
+                      bordered={false}
+                      className="earning-booking-card"
                     >
-                      {booking.bookingStatus}
-                    </Tag>
+                      <div className="earning-car-header">
+                        <img
+                          src={
+                            booking.car?.image ||
+                            "https://placehold.co/500x300?text=DriveEase"
+                          }
+                          alt={
+                            booking.car?.name ||
+                            "Car"
+                          }
+                        />
 
-                    <Select
-                      value={
-                        booking.payoutStatus
-                      }
-                      disabled={
-                        booking.bookingStatus ===
-                        "cancelled"
-                      }
-                      onChange={(value) =>
-                        changePayoutStatus(
-                          booking._id,
-                          value
-                        )
-                      }
-                      className="payout-status-select"
-                      options={[
-                        {
-                          label:
-                            "Pending Payout",
-                          value: "pending",
-                        },
-                        {
-                          label:
-                            "Processing",
-                          value:
-                            "processing",
-                        },
-                        {
-                          label: "Paid",
-                          value: "paid",
-                        },
-                      ]}
-                    />
-                  </Card>
-                </Col>
-              )
+                        <div>
+                          <Title level={4}>
+                            {booking.car?.name ||
+                              "Rental Car"}
+                          </Title>
+
+                          <Text type="secondary">
+                            Owner:{" "}
+                            {booking.carOwner
+                              ?.username ||
+                              "Owner"}
+                          </Text>
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 8,
+                          marginBottom: 16,
+                        }}
+                      >
+                        <Tag
+                          color={getBookingTagColor(
+                            bookingStatus
+                          )}
+                        >
+                          Booking:{" "}
+                          {bookingStatus}
+                        </Tag>
+
+                        <Tag
+                          color={getPayoutTagColor(
+                            payoutStatus
+                          )}
+                        >
+                          Payout:{" "}
+                          {payoutStatus}
+                        </Tag>
+                      </div>
+
+                      <div className="earning-detail-list">
+                        <div>
+                          <TeamOutlined />
+
+                          <span>Customer</span>
+
+                          <strong>
+                            {booking.user
+                              ?.username ||
+                              "Customer"}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <DollarCircleOutlined />
+
+                          <span>
+                            Base Rent
+                          </span>
+
+                          <strong>
+                            ₹
+                            {formatMoney(
+                              booking.baseAmount
+                            )}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <PercentageOutlined />
+
+                          <span>
+                            Commission
+                          </span>
+
+                          <strong>
+                            ₹
+                            {formatMoney(
+                              booking.platformCommission
+                            )}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <BankOutlined />
+
+                          <span>
+                            Owner Earning
+                          </span>
+
+                          <strong>
+                            ₹
+                            {formatMoney(
+                              booking.ownerEarning
+                            )}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <WalletOutlined />
+
+                          <span>
+                            Total Amount
+                          </span>
+
+                          <strong>
+                            ₹
+                            {formatMoney(
+                              booking.totalAmount
+                            )}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <CarOutlined />
+
+                          <span>
+                            Payment Status
+                          </span>
+
+                          <strong>
+                            {booking.paymentStatus ||
+                              "pending"}
+                          </strong>
+                        </div>
+                      </div>
+
+                      {booking.bookingStatus ===
+                      "cancelled" ? (
+                        <Alert
+                          type="error"
+                          showIcon
+                          message="Booking Cancelled"
+                          description="Payout status cannot be updated for a cancelled booking."
+                          style={{
+                            marginTop: 16,
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            marginTop: 18,
+                          }}
+                        >
+                          <Text
+                            strong
+                            style={{
+                              display: "block",
+                              marginBottom: 8,
+                            }}
+                          >
+                            Update Payout Status
+                          </Text>
+
+                          <Select
+                            value={
+                              payoutStatus
+                            }
+                            onChange={(value) =>
+                              changePayoutStatus(
+                                booking._id,
+                                value
+                              )
+                            }
+                            className="payout-status-select"
+                            style={{
+                              width: "100%",
+                            }}
+                            options={[
+                              {
+                                label:
+                                  "Pending Payout",
+                                value:
+                                  "pending",
+                              },
+                              {
+                                label:
+                                  "Processing",
+                                value:
+                                  "processing",
+                              },
+                              {
+                                label:
+                                  "Paid",
+                                value:
+                                  "paid",
+                              },
+                            ]}
+                          />
+                        </div>
+                      )}
+                    </Card>
+                  </Col>
+                );
+              }
             )}
           </Row>
         )}
