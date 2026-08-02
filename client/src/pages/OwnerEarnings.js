@@ -101,11 +101,18 @@ function OwnerEarnings() {
               Owner Earnings
             </Title>
 
-            <Paragraph>
-              Track bookings, commission,
-              pending payouts and completed
-              owner payments.
-            </Paragraph>
+            <Paragraph
+  style={{
+    color: "#dbeafe",
+    opacity: 1,
+    fontSize: "15px",
+    lineHeight: 1.7,
+    marginBottom: 0,
+  }}
+>
+  Track bookings, commission, pending payouts and completed
+  owner payments.
+</Paragraph>
           </div>
 
           <WalletOutlined />
