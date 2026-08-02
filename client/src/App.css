@@ -2317,92 +2317,67 @@ a {
 }
 
 /* ==========================================
-   PREMIUM MY CAR LISTINGS
+   MY LISTINGS PREMIUM HERO
 ========================================== */
-
-.my-listings-page {
-  padding: 10px 0 50px;
-}
 
 .my-listings-hero {
   position: relative;
-  min-height: 300px;
+  min-height: 360px;
   overflow: hidden;
 
   display: flex;
   align-items: center;
 
-  margin-bottom: 24px;
-  padding: 38px 44px;
+  margin-bottom: 28px;
+  padding: 48px 52px;
 
-  border-radius: 28px;
-
-  color: #ffffff;
+  border-radius: 30px;
 
   background:
     radial-gradient(
-      circle at 70% 20%,
-      rgba(37, 99, 235, 0.28),
-      transparent 28%
+      circle at 75% 20%,
+      rgba(59, 130, 246, 0.35),
+      transparent 30%
     ),
     radial-gradient(
-      circle at 20% 100%,
-      rgba(79, 70, 229, 0.24),
-      transparent 34%
+      circle at 15% 100%,
+      rgba(124, 58, 237, 0.28),
+      transparent 35%
     ),
     linear-gradient(
       120deg,
       #020617 0%,
-      #071b50 48%,
-      #0b2d78 100%
+      #071a47 45%,
+      #12358f 100%
     );
 
   box-shadow:
-    0 28px 70px
-    rgba(15, 23, 42, 0.24);
+    0 30px 75px rgba(15, 23, 42, 0.28);
 }
 
 .my-listings-hero::before {
   content: "";
-
   position: absolute;
   inset: 0;
-
-  pointer-events: none;
 
   background-image:
     radial-gradient(
       circle,
-      rgba(255, 255, 255, 0.15)
-      1px,
+      rgba(255, 255, 255, 0.16) 1px,
       transparent 1px
     );
 
-  background-size: 26px 26px;
-  opacity: 0.15;
-}
-
-.my-listings-hero::after {
-  content: "";
-
-  position: absolute;
-  right: 8%;
-  bottom: -140px;
-
-  width: 420px;
-  height: 420px;
-
-  border: 1px solid
-    rgba(96, 165, 250, 0.15);
-  border-radius: 50%;
+  background-size: 28px 28px;
+  opacity: 0.12;
+  pointer-events: none;
 }
 
 .my-listings-hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 5;
 
-  width: 58%;
-  max-width: 760px;
+  width: 57%;
+  max-width: 720px;
 }
 
 .my-listings-hero-label {
@@ -2410,59 +2385,51 @@ a {
   align-items: center;
   gap: 8px;
 
-  margin-bottom: 14px;
-  padding: 8px 14px;
+  margin-bottom: 18px;
+  padding: 8px 15px;
 
-  border: 1px solid
-    rgba(147, 197, 253, 0.25);
+  border: 1px solid rgba(147, 197, 253, 0.35);
   border-radius: 999px;
 
   color: #dbeafe !important;
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 1.1px;
 
-  background:
-    rgba(37, 99, 235, 0.28);
-
+  background: rgba(37, 99, 235, 0.27);
   backdrop-filter: blur(12px);
 }
 
-.my-listings-hero
-h1.ant-typography {
-  margin: 0 0 10px;
+.my-listings-hero h1.ant-typography {
+  margin: 0 0 13px !important;
 
-  color: #ffffff;
+  color: #ffffff !important;
 
-  font-family:
-    "Poppins",
-    sans-serif;
-
-  font-size:
-    clamp(38px, 4vw, 55px);
-
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(42px, 4vw, 58px);
+  font-weight: 800;
   line-height: 1.08;
-  letter-spacing: -1.8px;
+  letter-spacing: -2px;
 }
 
-.my-listings-hero
-p.ant-typography {
-  max-width: 620px;
+.my-listings-hero p.ant-typography {
+  max-width: 640px;
 
-  margin: 0;
+  margin: 0 !important;
 
-  color: #dbeafe;
+  color: #dbeafe !important;
+  opacity: 1 !important;
+
   font-size: 15px;
   line-height: 1.75;
 }
 
 .my-listings-benefits {
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 
-  margin-top: 27px;
+  margin-top: 32px;
 }
 
 .my-listings-benefits > div {
@@ -2470,22 +2437,25 @@ p.ant-typography {
 
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: 12px;
 }
 
 .listing-benefit-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 13px;
+  border-radius: 14px;
 
   color: #ffffff;
-  font-size: 19px;
+  font-size: 20px;
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
 .listing-benefit-icon.blue {
@@ -2515,86 +2485,240 @@ p.ant-typography {
     );
 }
 
-.my-listings-benefits
-strong {
+.my-listings-benefits strong {
   display: block;
 
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 
   color: #ffffff;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 750;
 }
 
-.my-listings-benefits
-small {
+.my-listings-benefits small {
   display: block;
 
   color: #bfdbfe;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.55;
 }
+
+/* Right-side vehicle visual */
 
 .my-listings-hero-visual {
   position: absolute;
   z-index: 2;
+
   right: 2%;
   bottom: 0;
 
   width: 43%;
-  height: 92%;
+  height: 100%;
 
   display: flex;
   align-items: flex-end;
   justify-content: center;
 }
 
-.my-listings-hero-visual img {
+.hero-visual-glow {
+  position: absolute;
+  right: 7%;
+  bottom: 5%;
+
+  width: 82%;
+  height: 65%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.45),
+      transparent 68%
+    );
+
+  filter: blur(16px);
+}
+
+.hero-car-frame {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 
+  width: 92%;
+  height: 76%;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 26px 26px 0 0;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.36);
+}
+
+.hero-car-frame img {
   width: 100%;
-  max-width: 600px;
-  height: 78%;
+  height: 100%;
 
-  object-fit: contain;
-  object-position: center bottom;
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  transform: scale(1.04);
 
   filter:
-    drop-shadow(
-      0 22px 25px
-      rgba(0, 0, 0, 0.5)
+    brightness(0.92)
+    saturate(1.08)
+    contrast(1.05);
+}
+
+.hero-car-gradient {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(5, 18, 55, 0.18),
+      transparent 50%
+    ),
+    linear-gradient(
+      to top,
+      rgba(5, 18, 55, 0.5),
+      transparent 40%
     );
 }
 
 .hero-shield {
   position: absolute;
-  z-index: 1;
-  top: 20px;
-  left: 38%;
+  z-index: 4;
 
-  color: rgba(
-    147,
-    197,
-    253,
-    0.32
-  );
+  top: 42px;
+  left: 10px;
 
-  font-size: 150px;
+  color: rgba(147, 197, 253, 0.3);
+  font-size: 120px;
 
   filter:
     drop-shadow(
-      0 0 30px
-      rgba(59, 130, 246, 0.35)
+      0 0 25px rgba(59, 130, 246, 0.45)
     );
 }
 
+/* Button */
+
 .my-listings-add-link {
   position: absolute;
-  z-index: 5;
-  top: 26px;
+  z-index: 8;
+
+  top: 28px;
   right: 28px;
 }
 
+.my-listings-add-button {
+  height: 48px !important;
+
+  padding: 0 20px !important;
+
+  border: none !important;
+  border-radius: 13px !important;
+
+  color: #ffffff !important;
+  font-weight: 750 !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5,
+      #7c3aed
+    ) !important;
+
+  box-shadow:
+    0 14px 30px rgba(37, 99, 235, 0.4);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease !important;
+}
+
+.my-listings-add-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 19px 40px rgba(37, 99, 235, 0.5);
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .my-listings-hero {
+    min-height: 410px;
+  }
+
+  .my-listings-hero-content {
+    width: 66%;
+  }
+
+  .my-listings-hero-visual {
+    width: 39%;
+    opacity: 0.72;
+  }
+
+  .my-listings-benefits {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-listings-hero {
+    min-height: auto;
+
+    padding:
+      94px 25px
+      34px;
+
+    border-radius: 22px;
+  }
+
+  .my-listings-hero-content {
+    width: 100%;
+  }
+
+  .my-listings-hero-visual {
+    display: none;
+  }
+
+  .my-listings-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .my-listings-add-link {
+    top: 20px;
+    left: 24px;
+    right: 24px;
+  }
+
+  .my-listings-add-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-listings-hero {
+    padding:
+      90px 20px
+      28px;
+  }
+
+  .my-listings-hero h1.ant-typography {
+    font-size: 34px;
+  }
+}
 .my-listings-add-button {
   height: 48px !important;
 

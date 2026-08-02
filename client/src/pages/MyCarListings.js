@@ -282,15 +282,21 @@ function MyCarListings() {
           </div>
 
           <div className="my-listings-hero-visual">
-            <div className="hero-shield">
-              <SafetyCertificateOutlined />
-            </div>
+  <div className="hero-visual-glow" />
 
-            <img
-              src={heroCarImage}
-              alt="DriveEase listed vehicle"
-            />
-          </div>
+  <div className="hero-shield">
+    <SafetyCertificateOutlined />
+  </div>
+
+  <div className="hero-car-frame">
+    <img
+      src={heroCarImage}
+      alt="DriveEase listed vehicle"
+    />
+
+    <div className="hero-car-gradient" />
+  </div>
+</div>
 
           <Link
             to="/list-your-car"
