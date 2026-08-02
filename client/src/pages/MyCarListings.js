@@ -260,19 +260,7 @@ function MyCarListings() {
     </Button>
   </Link>
 </div>
-          <Link
-            to="/list-your-car"
-            className="my-listings-add-link"
-          >
-            <Button
-              type="primary"
-              size="large"
-              icon={<PlusCircleOutlined />}
-              className="my-listings-add-button"
-            >
-              List Another Car
-            </Button>
-          </Link>
+          
         <Row
           gutter={[18, 18]}
           className="listing-stats"
