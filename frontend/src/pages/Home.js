@@ -1,6 +1,7 @@
 import CustomerReviews from "../components/CustomerReviews";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 import {
   Button,
   Card,
@@ -567,12 +568,10 @@ function Home() {
           cover={
             <div className="car-image-wrapper">
               <img
-                src={
-                  car.image ||
-                  "https://placehold.co/600x400?text=DriveEase"
-                }
+                src={getCarImageUrl(car)}
                 alt={`${car.name} rental car`}
                 className="car-card-image"
+                onError={handleImageError}
               />
 
               <div className="car-image-overlay" />

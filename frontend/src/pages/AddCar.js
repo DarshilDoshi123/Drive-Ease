@@ -1,4 +1,5 @@
 import React from "react";
+import { handleImageError } from "../utils/constants";
 
 import {
   Alert,
@@ -377,10 +378,7 @@ function AddCar() {
                   <img
                     src={imageUrl}
                     alt="Car preview"
-                    onError={(event) => {
-                      event.currentTarget.src =
-                        "https://placehold.co/700x450?text=Invalid+Image+URL";
-                    }}
+                    onError={handleImageError}
                   />
                 ) : (
                   <div className="admin-preview-placeholder">

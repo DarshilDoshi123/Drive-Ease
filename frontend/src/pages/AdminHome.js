@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Button,
@@ -240,11 +241,9 @@ function AdminHome() {
       render: (_, car) => (
         <div className="admin-table-car">
           <img
-            src={
-              car.image ||
-              "https://placehold.co/150x100?text=DriveEase"
-            }
+            src={getCarImageUrl(car)}
             alt={car.name || "Rental car"}
+            onError={handleImageError}
           />
 
           <div>

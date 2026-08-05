@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Card,
@@ -244,14 +245,12 @@ function OwnerEarnings() {
                   <Card className="earning-booking-card">
                     <div className="earning-car-header">
                       <img
-                        src={
-                          booking.car?.image ||
-                          "https://placehold.co/500x300?text=DriveEase"
-                        }
+                        src={getCarImageUrl(booking.car)}
                         alt={
                           booking.car?.name ||
                           "Car"
                         }
+                        onError={handleImageError}
                       />
 
                       <div>

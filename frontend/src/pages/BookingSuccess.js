@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 import {
   Button,
   Card,
@@ -174,14 +175,12 @@ function BookingSuccess() {
             <Col lg={9} xs={24}>
               <div className="receipt-car-image">
                 <img
-                  src={
-                    booking.car?.image ||
-                    "https://placehold.co/700x450?text=DriveEase"
-                  }
+                  src={getCarImageUrl(booking.car)}
                   alt={
                     booking.car?.name ||
                     "Rental car"
                   }
+                  onError={handleImageError}
                 />
               </div>
             </Col>

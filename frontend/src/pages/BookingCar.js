@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 import {
   Alert,
   Button,
@@ -284,11 +285,9 @@ function BookingCar() {
             >
               <div className="booking-car-image-wrapper">
                 <img
-                  src={
-                    car?.image ||
-                    "https://placehold.co/900x600?text=DriveEase"
-                  }
+                  src={getCarImageUrl(car)}
                   alt={`${car?.name || "Car"} rental`}
+                  onError={handleImageError}
                 />
 
                 <Tag

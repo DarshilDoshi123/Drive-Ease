@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Alert,
@@ -337,14 +338,12 @@ function AdminRevenue() {
                     >
                       <div className="earning-car-header">
                         <img
-                          src={
-                            booking.car?.image ||
-                            "https://placehold.co/500x300?text=DriveEase"
-                          }
+                          src={getCarImageUrl(booking.car)}
                           alt={
                             booking.car?.name ||
                             "Car"
                           }
+                          onError={handleImageError}
                         />
 
                         <div>

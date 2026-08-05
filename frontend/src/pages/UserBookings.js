@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Button,
@@ -242,12 +243,10 @@ function UserBookings() {
                   cover={
                     <div className="booking-card-image-wrapper">
                       <img
-                        src={
-                          booking.car?.image ||
-                          "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800"
-                        }
+                        src={getCarImageUrl(booking.car)}
                         alt={carName}
                         className="booking-card-img"
+                        onError={handleImageError}
                       />
                       <div className="image-overlay-gradient" />
                       {getStatusTag(status)}

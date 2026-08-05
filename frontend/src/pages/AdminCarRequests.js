@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Alert,
@@ -466,14 +467,12 @@ function AdminCarRequests() {
                     cover={
                       <div className="admin-request-image">
                         <img
-                          src={
-                            request.carImages?.[0] ||
-                            "https://placehold.co/700x450?text=DriveEase"
-                          }
+                          src={request.carImages?.[0] || getCarImageUrl(request.carDetails)}
                           alt={
                             request.carDetails?.name ||
                             "Submitted car"
                           }
+                          onError={handleImageError}
                         />
 
                         <div className="admin-request-image-overlay" />

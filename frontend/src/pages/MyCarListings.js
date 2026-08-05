@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useMemo,
 } from "react";
+import { getCarImageUrl, handleImageError } from "../utils/constants";
 
 import {
   Alert,
@@ -444,12 +445,9 @@ function MyCarListings() {
                 >
                   <div className="owner-car-image">
                     <img
-                      src={
-                        listing
-                          .carImages?.[0] ||
-                        "https://placehold.co/900x560?text=DriveEase"
-                      }
+                      src={listing.carImages?.[0] || getCarImageUrl(listing)}
                       alt={displayName}
+                      onError={handleImageError}
                     />
 
                     <div className="owner-car-image-overlay" />
