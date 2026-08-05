@@ -257,7 +257,7 @@ const ownerEarning =
     const populatedBooking =
       await Booking.findById(newBooking._id)
         .populate("car")
-        .populate("user", "username isAdmin");
+        .populate("user", "username email mobile phone isAdmin");
 
     return res.status(201).json({
       success: true,
@@ -297,7 +297,7 @@ router.get(
 
       const bookings = await Booking.find(query)
         .populate("car")
-        .populate("user", "username isAdmin")
+        .populate("user", "username email mobile phone isAdmin")
         .sort({ createdAt: -1 });
 
       return res.status(200).json({
@@ -346,7 +346,7 @@ router.get(
         bookingId
       )
         .populate("car")
-        .populate("user", "username isAdmin");
+        .populate("user", "username email mobile phone isAdmin");
 
       if (!booking) {
         return res.status(404).json({

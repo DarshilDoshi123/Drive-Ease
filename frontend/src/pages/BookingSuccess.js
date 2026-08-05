@@ -150,29 +150,63 @@ function BookingSuccess() {
           className="booking-receipt-card"
         >
           <div className="receipt-top">
-            <div>
+            <div className="receipt-brand">
               <Title level={2}>
                 DriveEase
               </Title>
 
-              <Text>
-                Premium Car Rental
+              <Text type="secondary">
+                Official Rental Invoice
               </Text>
             </div>
 
-            <div className="receipt-number">
-              <Text type="secondary">
-                Booking ID
-              </Text>
+            <div className="receipt-meta">
+              <div>
+                <Text type="secondary">Invoice Date: </Text>
+                <strong>
+                  {formatDateTime(booking.createdAt || booking.bookedTimeSlots?.from)}
+                </strong>
+              </div>
 
-              <strong>{booking._id}</strong>
+              <div>
+                <Text type="secondary">Booking ID: </Text>
+                <strong>{booking._id}</strong>
+              </div>
+
+              <div style={{ marginTop: 4 }}>
+                <Tag color={booking.paymentStatus === "Paid" ? "green" : "blue"}>
+                  {booking.paymentStatus === "Paid" ? "PAID" : booking.bookingStatus || "CONFIRMED"}
+                </Tag>
+              </div>
             </div>
           </div>
 
-          <Divider />
+          <Divider style={{ margin: "12px 0" }} />
 
-          <Row gutter={[25, 25]}>
-            <Col lg={9} xs={24}>
+          <Row gutter={[24, 16]} className="receipt-billing-section">
+            <Col sm={12} xs={24}>
+              <div className="billing-box">
+                <Title level={5}>Billed To</Title>
+                <p><strong>Customer:</strong> {booking.user?.username || booking.user?.name || "Customer"}</p>
+                <p><strong>Email:</strong> {booking.user?.email || "N/A"}</p>
+                <p><strong>Mobile:</strong> {booking.user?.phone || booking.user?.mobile || booking.user?.phoneNumber || "N/A"}</p>
+              </div>
+            </Col>
+
+            <Col sm={12} xs={24}>
+              <div className="billing-box company-box">
+                <Title level={5}>Issued By</Title>
+                <p><strong>DriveEase Rental Services</strong></p>
+                <p><strong>Support Email:</strong> support@driveease.com</p>
+                <p><strong>Contact Helpline:</strong> +91 98765 43210</p>
+              </div>
+            </Col>
+          </Row>
+
+          <Divider style={{ margin: "12px 0" }} />
+
+          <Row gutter={[24, 16]}>
+            <Col lg={8} xs={24}>
               <div className="receipt-car-image">
                 <img
                   src={getCarImageUrl(booking.car)}
@@ -185,8 +219,8 @@ function BookingSuccess() {
               </div>
             </Col>
 
-            <Col lg={15} xs={24}>
-              <Title level={3}>
+            <Col lg={16} xs={24}>
+              <Title level={4} style={{ marginTop: 0, marginBottom: 8 }}>
                 {booking.car?.name ||
                   "Rental Car"}
               </Title>
@@ -234,7 +268,7 @@ function BookingSuccess() {
 
                 <div>
                   <CreditCardOutlined />
-                  <span>Payment</span>
+                  <span>Payment Method</span>
                   <strong>
                     {booking.paymentMethod ===
                     "card"
@@ -254,9 +288,9 @@ function BookingSuccess() {
             </Col>
           </Row>
 
-          <Divider />
+          <Divider style={{ margin: "12px 0" }} />
 
-          <Title level={4}>
+          <Title level={5} style={{ marginTop: 0, marginBottom: 8 }}>
             Price Breakdown
           </Title>
 
@@ -316,9 +350,8 @@ function BookingSuccess() {
           {booking.transactionId && (
             <div className="receipt-transaction">
               <Text type="secondary">
-                Transaction ID
-              </Text>
-
+                Transaction ID:
+              </Text>{" "}
               <strong>
                 {booking.transactionId}
               </strong>
