@@ -26,10 +26,13 @@ export const userLogin = (reqObj) => async (dispatch) => {
   } catch (error) {
     console.error("Login error:", error.response?.data || error.message);
 
-    message.error(
+    const errorMessage =
       error.response?.data?.message ||
-        "Unable to login. Please try again."
-    );
+      (error.response
+        ? "Unable to login. Please check your credentials."
+        : "Server connection failed. Render free tier backend may be waking up—please wait 20 seconds and try again.");
+
+    message.error(errorMessage);
   } finally {
     dispatch({
       type: "LOADING",
@@ -64,10 +67,13 @@ export const userRegister = (reqObj) => async (dispatch) => {
       error.response?.data || error.message
     );
 
-    message.error(
+    const errorMessage =
       error.response?.data?.message ||
-        "Registration failed. Please try again."
-    );
+      (error.response
+        ? "Registration failed. Please check your details."
+        : "Server connection failed. Render free tier backend may be waking up—please wait 20 seconds and try again.");
+
+    message.error(errorMessage);
   } finally {
     dispatch({
       type: "LOADING",

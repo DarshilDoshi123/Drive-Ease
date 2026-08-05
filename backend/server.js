@@ -26,8 +26,13 @@ app.use(helmet());
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow Postman, server-to-server requests and same-origin requests.
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app") ||
+        origin.endsWith(".onrender.com") ||
+        origin.endsWith(".netlify.app")
+      ) {
         return callback(null, true);
       }
 
