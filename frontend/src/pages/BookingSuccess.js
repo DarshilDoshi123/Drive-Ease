@@ -19,7 +19,6 @@ import {
   CheckCircleFilled,
   ClockCircleOutlined,
   CreditCardOutlined,
-  DollarCircleOutlined,
   HomeOutlined,
   PrinterOutlined,
   SafetyCertificateOutlined,

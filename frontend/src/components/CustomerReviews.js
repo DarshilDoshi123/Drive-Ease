@@ -3,9 +3,7 @@ import React from "react";
 import {
   Avatar,
   Card,
-  Col,
   Rate,
-  Row,
   Typography,
 } from "antd";
 

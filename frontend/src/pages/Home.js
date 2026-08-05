@@ -1,5 +1,5 @@
 import CustomerReviews from "../components/CustomerReviews";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -102,34 +102,37 @@ function Home() {
     setMaximumRent(maximumAvailableRent);
   }, [maximumAvailableRent]);
 
-  const isCarAvailable = (car) => {
-    if (!selectedRange) {
-      return true;
-    }
-
-    const [selectedFrom, selectedTo] = selectedRange;
-
-    const bookedSlots = Array.isArray(car.bookedTimeSlots)
-      ? car.bookedTimeSlots
-      : [];
-
-    return !bookedSlots.some((slot) => {
-      const bookedFrom = new Date(slot.from).getTime();
-      const bookedTo = new Date(slot.to).getTime();
-
-      if (
-        Number.isNaN(bookedFrom) ||
-        Number.isNaN(bookedTo)
-      ) {
-        return false;
+  const isCarAvailable = useCallback(
+    (car) => {
+      if (!selectedRange) {
+        return true;
       }
 
-      // Two ranges overlap when:
-      // selected start is before booked end
-      // and selected end is after booked start.
-      return selectedFrom < bookedTo && selectedTo > bookedFrom;
-    });
-  };
+      const [selectedFrom, selectedTo] = selectedRange;
+
+      const bookedSlots = Array.isArray(car.bookedTimeSlots)
+        ? car.bookedTimeSlots
+        : [];
+
+      return !bookedSlots.some((slot) => {
+        const bookedFrom = new Date(slot.from).getTime();
+        const bookedTo = new Date(slot.to).getTime();
+
+        if (
+          Number.isNaN(bookedFrom) ||
+          Number.isNaN(bookedTo)
+        ) {
+          return false;
+        }
+
+        // Two ranges overlap when:
+        // selected start is before booked end
+        // and selected end is after booked start.
+        return selectedFrom < bookedTo && selectedTo > bookedFrom;
+      });
+    },
+    [selectedRange]
+  );
 
   const filteredCars = useMemo(() => {
     let result = [...cars];
@@ -194,6 +197,7 @@ function Home() {
     maximumRent,
     selectedRange,
     sortOrder,
+    isCarAvailable,
   ]);
 
   const handleDateChange = (values) => {
