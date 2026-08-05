@@ -107,15 +107,8 @@ function BookingCar() {
 
   const [customerEmail, setCustomerEmail] = useState(initialUser?.email || "");
   const [customerMobile, setCustomerMobile] = useState(initialUser?.mobile || initialUser?.phone || "");
-  const [pickupLocation, setPickupLocation] = useState(car?.location || "City Center Hub");
-  const [dropoffLocation, setDropoffLocation] = useState(car?.location || "City Center Hub");
-
-  useEffect(() => {
-    if (car?.location) {
-      setPickupLocation((prev) => (prev && prev !== "City Center Hub" ? prev : car.location));
-      setDropoffLocation((prev) => (prev && prev !== "City Center Hub" ? prev : car.location));
-    }
-  }, [car]);
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [dropoffLocation, setDropoffLocation] = useState("");
 
   const rentPerHour = Number(
     car?.rentPerHour || 0
@@ -602,7 +595,7 @@ function BookingCar() {
                       </Text>
                       <Input
                         prefix={<EnvironmentOutlined />}
-                        placeholder="e.g. Airport Terminal 1 / Doorstep Address / City Center"
+                        placeholder="Enter Pickup Location (e.g., Airport, Hotel, City Name)"
                         value={pickupLocation}
                         onChange={(e) => setPickupLocation(e.target.value)}
                         size="large"
@@ -615,7 +608,7 @@ function BookingCar() {
                       </Text>
                       <Input
                         prefix={<EnvironmentOutlined />}
-                        placeholder="e.g. Central Railway Station / Hotel / City Center"
+                        placeholder="Enter Drop-off Location (e.g., Railway Station, Home Address)"
                         value={dropoffLocation}
                         onChange={(e) => setDropoffLocation(e.target.value)}
                         size="large"
