@@ -19,6 +19,7 @@ import {
   CarOutlined,
   ClockCircleOutlined,
   DollarCircleOutlined,
+  EnvironmentOutlined,
   EyeOutlined,
   ReloadOutlined,
   StarOutlined,
@@ -293,6 +294,14 @@ function UserBookings() {
                         <span className="detail-label">Return:</span>
                         <strong className="detail-value">
                           {moment(booking.bookedTimeSlots?.to).format("DD MMM YYYY")}
+                        </strong>
+                      </div>
+
+                      <div className="detail-row">
+                        <EnvironmentOutlined className="detail-icon" />
+                        <span className="detail-label">Location:</span>
+                        <strong className="detail-value">
+                          {booking.pickupLocation || booking.car?.location || "City Center Hub"}
                         </strong>
                       </div>
                     </div>

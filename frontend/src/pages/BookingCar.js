@@ -13,9 +13,11 @@ import {
   DatePicker,
   Divider,
   Empty,
+  Input,
   Modal,
   Radio,
   Row,
+  Select,
   Space,
   Tag,
   Typography,
@@ -27,6 +29,9 @@ import {
   ClockCircleOutlined,
   CreditCardOutlined,
   DollarCircleOutlined,
+  EnvironmentOutlined,
+  MailOutlined,
+  PhoneOutlined,
   SafetyCertificateOutlined,
   TeamOutlined,
   ThunderboltOutlined,
@@ -82,6 +87,18 @@ function BookingCar() {
   const [showSlotsModal, setShowSlotsModal] =
     useState(false);
 
+  const initialUser = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user")) || {};
+    } catch {
+      return {};
+    }
+  }, []);
+
+  const [customerEmail, setCustomerEmail] = useState(initialUser?.email || "");
+  const [customerMobile, setCustomerMobile] = useState(initialUser?.mobile || initialUser?.phone || "");
+  const [pickupLocation, setPickupLocation] = useState("City Center Hub");
+
   useEffect(() => {
     if (cars.length === 0) {
       dispatch(getAllCars());
@@ -92,6 +109,12 @@ function BookingCar() {
     () => cars.find((item) => item._id === carId),
     [cars, carId]
   );
+
+  useEffect(() => {
+    if (car?.location && (!pickupLocation || pickupLocation === "City Center Hub")) {
+      setPickupLocation(car.location);
+    }
+  }, [car, pickupLocation]);
 
   const rentPerHour = Number(
     car?.rentPerHour || 0
@@ -211,6 +234,9 @@ function BookingCar() {
     car: car._id,
     driverRequired,
     paymentMethod,
+    customerEmail,
+    customerMobile,
+    pickupLocation,
 
     bookedTimeSlots: {
       from:
@@ -237,7 +263,10 @@ function BookingCar() {
     Boolean(car) &&
     Boolean(selectedRange) &&
     bookingSummary.totalHours >= 1 &&
-    !hasBookingConflict;
+    !hasBookingConflict &&
+    Boolean(customerEmail && customerEmail.trim()) &&
+    Boolean(customerMobile && customerMobile.trim()) &&
+    Boolean(pickupLocation && pickupLocation.trim());
 
   if (!car && !loading) {
     return (
@@ -529,6 +558,58 @@ function BookingCar() {
                         "en-IN"
                       )}
                     </strong>
+                  </div>
+
+                  <Divider />
+
+                  <Title level={4}>
+                    <EnvironmentOutlined /> Contact & Pickup Details
+                  </Title>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
+                    <div>
+                      <Text type="secondary" style={{ fontSize: 12, marginBottom: 4, display: "block" }}>
+                        Customer Email Address *
+                      </Text>
+                      <Input
+                        prefix={<MailOutlined />}
+                        placeholder="e.g. alex@example.com"
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        size="large"
+                      />
+                    </div>
+
+                    <div>
+                      <Text type="secondary" style={{ fontSize: 12, marginBottom: 4, display: "block" }}>
+                        Customer Mobile / Phone Number *
+                      </Text>
+                      <Input
+                        prefix={<PhoneOutlined />}
+                        placeholder="e.g. +91 98765 43210"
+                        value={customerMobile}
+                        onChange={(e) => setCustomerMobile(e.target.value)}
+                        size="large"
+                      />
+                    </div>
+
+                    <div>
+                      <Text type="secondary" style={{ fontSize: 12, marginBottom: 4, display: "block" }}>
+                        Pickup & Drop-off Location *
+                      </Text>
+                      <Select
+                        value={pickupLocation}
+                        onChange={(val) => setPickupLocation(val)}
+                        size="large"
+                        style={{ width: "100%" }}
+                        options={[
+                          { label: `📍 ${car?.location || 'City Center Hub'} (Default Hub)`, value: car?.location || 'City Center Hub' },
+                          { label: '📍 Airport Terminal 1 (Pickup Counter)', value: 'Airport Terminal 1' },
+                          { label: '📍 Central Railway Station Hub', value: 'Central Railway Station' },
+                          { label: '📍 Hotel / Home Doorstep Delivery', value: 'Doorstep Pickup & Delivery' },
+                        ]}
+                      />
+                    </div>
                   </div>
 
                   <Divider />

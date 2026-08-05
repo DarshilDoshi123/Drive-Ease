@@ -32,6 +32,21 @@ const bookingSchema = new mongoose.Schema(
       },
     },
 
+    customerEmail: {
+      type: String,
+      default: "",
+    },
+
+    customerMobile: {
+      type: String,
+      default: "",
+    },
+
+    pickupLocation: {
+      type: String,
+      default: "City Center Hub",
+    },
+
     totalHours: {
       type: Number,
       required: true,

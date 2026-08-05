@@ -26,6 +26,9 @@ router.post("/bookcar", protect, async (req, res) => {
       driverRequired = false,
       paymentMethod = "pay_at_pickup",
       token = null,
+      customerEmail,
+      customerMobile,
+      pickupLocation,
     } = req.body;
 
     if (
@@ -219,6 +222,10 @@ const ownerEarning =
         from,
         to,
       },
+
+      customerEmail: (customerEmail && customerEmail.trim()) || req.user.email || "",
+      customerMobile: (customerMobile && customerMobile.trim()) || req.user.mobile || req.user.phone || "",
+      pickupLocation: (pickupLocation && pickupLocation.trim()) || selectedCar.location || "City Center Hub",
 
       totalHours,
       rentPerHour,

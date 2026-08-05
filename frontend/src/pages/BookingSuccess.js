@@ -20,6 +20,7 @@ import {
   CheckCircleFilled,
   ClockCircleOutlined,
   CreditCardOutlined,
+  EnvironmentOutlined,
   HomeOutlined,
   PrinterOutlined,
   SafetyCertificateOutlined,
@@ -188,8 +189,8 @@ function BookingSuccess() {
               <div className="billing-box">
                 <Title level={5}>Billed To</Title>
                 <p><strong>Customer:</strong> {booking.user?.username || booking.user?.name || "Customer"}</p>
-                <p><strong>Email:</strong> {booking.user?.email || "N/A"}</p>
-                <p><strong>Mobile:</strong> {booking.user?.phone || booking.user?.mobile || booking.user?.phoneNumber || "N/A"}</p>
+                <p><strong>Email:</strong> {booking.customerEmail || booking.user?.email || "N/A"}</p>
+                <p><strong>Mobile:</strong> {booking.customerMobile || booking.user?.phone || booking.user?.mobile || booking.user?.phoneNumber || "N/A"}</p>
               </div>
             </Col>
 
@@ -253,6 +254,14 @@ function BookingSuccess() {
                   <span>Duration</span>
                   <strong>
                     {booking.totalHours} hours
+                  </strong>
+                </div>
+
+                <div>
+                  <EnvironmentOutlined />
+                  <span>Pickup Location</span>
+                  <strong>
+                    {booking.pickupLocation || booking.car?.location || "City Center Hub"}
                   </strong>
                 </div>
 
