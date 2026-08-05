@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+
 const path = require("path");
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 async function connectDB() {
   try {
-    const mongoUrl = process.env.MONGO_URL;
-
-console.log("Mongo URL starts with:", mongoUrl?.substring(0, 20));
+    const mongoUrl = process.env.MONGO_URL || process.env.MONGODB_URL;
 
     if (!mongoUrl) {
-      throw new Error("MONGO_URL is missing in environment variables");
+      throw new Error("MONGO_URL or MONGODB_URL is missing in environment variables");
     }
 
     await mongoose.connect(mongoUrl);

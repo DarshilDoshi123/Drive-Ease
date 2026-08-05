@@ -1,339 +1,594 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import DefaultLayout from "../components/DefaultLayout";
-import { deleteCar, getAllCars } from "../redux/actions/carsActions";
-import { Row, Col, Popconfirm } from "antd";
-import Spinner from "../components/Spinner";
-import { Link } from "react-router-dom";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusCircleOutlined,
+  Button,
+  Card,
+  Empty,
+  Input,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
+
+import {
   CarOutlined,
   CheckCircleOutlined,
-  UserOutlined,
+  ClockCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  FileProtectOutlined,
+  FilterOutlined,
+  PlusCircleOutlined,
+  ReloadOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 
+import {
+  Link,
+  Navigate,
+} from "react-router-dom";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+
+import AdminLayout from "../components/AdminLayout";
+import AdminPageHero from "../components/AdminPageHero";
+import Spinner from "../components/Spinner";
+
+import {
+  deleteCar,
+  getAllCars,
+} from "../redux/actions/carsActions";
+
+const {
+  Title,
+  Text,
+} = Typography;
+
+const formatMoney = (amount) =>
+  Number(amount || 0).toLocaleString(
+    "en-IN"
+  );
+
 function AdminHome() {
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  // Only Owner / Admin
-  if (!user?.isAdmin && user?.username !== "Darshil Doshi" && user?.username !== "darshildoshi" && user?.username !== "parthpatel79_") {
-    window.location.href = "/";
-  }
-
   const dispatch = useDispatch();
 
-  const carsReducer = useSelector((state) => state.carsReducer);
+  const carsState = useSelector(
+    (state) => state.carsReducer
+  );
 
-const cars = carsReducer?.cars || [];
-  const alertsReducer = useSelector((state) => state.alertsReducer);
+  const loading = useSelector(
+    (state) =>
+      state.alertsReducer?.loading || false
+  );
 
-const loading = alertsReducer?.loading || false;
+  const cars = useMemo(
+    () =>
+      Array.isArray(carsState?.cars)
+        ? carsState.cars
+        : [],
+    [carsState?.cars]
+  );
 
-  const [totalCars, setTotalCars] = useState([]);
+  const [searchText, setSearchText] =
+    useState("");
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
+  const [fuelFilter, setFuelFilter] =
+    useState("all");
+
+  let user = null;
+
+  try {
+    user = JSON.parse(
+      localStorage.getItem("user") || "null"
+    );
+  } catch (error) {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
+
+  const loadCars = useCallback(() => {
     dispatch(getAllCars());
-  }, []);
+  }, [dispatch]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setTotalCars(cars);
+    loadCars();
+  }, [loadCars]);
+
+  const fuelOptions = useMemo(() => {
+    const fuelTypes = [
+      ...new Set(
+        cars
+          .map((car) => car.fuelType)
+          .filter(Boolean)
+      ),
+    ];
+
+    return fuelTypes.map((fuelType) => ({
+      label: fuelType,
+      value: fuelType,
+    }));
   }, [cars]);
 
-  return (
-    <DefaultLayout>
+  const filteredCars = useMemo(() => {
+    let result = [...cars];
 
+    if (searchText.trim()) {
+      const query = searchText
+        .trim()
+        .toLowerCase();
+
+      result = result.filter((car) => {
+        const name =
+          car.name?.toLowerCase() || "";
+
+        const brand =
+          car.brand?.toLowerCase() || "";
+
+        const model =
+          car.model?.toLowerCase() || "";
+
+        const fuelType =
+          car.fuelType?.toLowerCase() || "";
+
+        return (
+          name.includes(query) ||
+          brand.includes(query) ||
+          model.includes(query) ||
+          fuelType.includes(query)
+        );
+      });
+    }
+
+    if (fuelFilter !== "all") {
+      result = result.filter(
+        (car) =>
+          car.fuelType === fuelFilter
+      );
+    }
+
+    return result;
+  }, [
+    cars,
+    searchText,
+    fuelFilter,
+  ]);
+
+  const bookedCars = useMemo(
+    () =>
+      cars.filter(
+        (car) =>
+          Array.isArray(
+            car.bookedTimeSlots
+          ) &&
+          car.bookedTimeSlots.length > 0
+      ).length,
+    [cars]
+  );
+
+  const availableCars = useMemo(
+    () =>
+      Math.max(
+        cars.length - bookedCars,
+        0
+      ),
+    [cars.length, bookedCars]
+  );
+
+  const totalBookedSlots = useMemo(
+    () =>
+      cars.reduce(
+        (total, car) =>
+          total +
+          (Array.isArray(
+            car.bookedTimeSlots
+          )
+            ? car.bookedTimeSlots.length
+            : 0),
+        0
+      ),
+    [cars]
+  );
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  if (user.isAdmin !== true) {
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
+  }
+
+  const handleDelete = async (carId) => {
+    await dispatch(
+      deleteCar({
+        carid: carId,
+      })
+    );
+  };
+
+  const resetFilters = () => {
+    setSearchText("");
+    setFuelFilter("all");
+  };
+
+  const columns = [
+    {
+      title: "Vehicle",
+      key: "car",
+      width: 320,
+
+      render: (_, car) => (
+        <div className="admin-table-car">
+          <img
+            src={
+              car.image ||
+              "https://placehold.co/150x100?text=DriveEase"
+            }
+            alt={car.name || "Rental car"}
+          />
+
+          <div>
+            <strong>
+              {car.name || "Unnamed Car"}
+            </strong>
+
+            <span>
+              {car.capacity || "-"} Seats
+              {" • "}
+              {car.fuelType || "Unknown Fuel"}
+            </span>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      title: "Fuel",
+      dataIndex: "fuelType",
+      key: "fuelType",
+      width: 120,
+
+      render: (fuelType) => (
+        <Tag color="blue">
+          {fuelType || "Unknown"}
+        </Tag>
+      ),
+    },
+
+    {
+      title: "Capacity",
+      dataIndex: "capacity",
+      key: "capacity",
+      width: 120,
+
+      render: (capacity) => (
+        <span>
+          {capacity || "-"} Seats
+        </span>
+      ),
+    },
+
+    {
+      title: "Rental Price",
+      dataIndex: "rentPerHour",
+      key: "rentPerHour",
+      width: 150,
+
+      render: (rentPerHour) => (
+        <strong>
+          ₹{formatMoney(rentPerHour)}
+          /hour
+        </strong>
+      ),
+    },
+
+    {
+      title: "Booked Slots",
+      key: "bookings",
+      width: 120,
+
+      render: (_, car) => {
+        const bookingCount =
+          Array.isArray(
+            car.bookedTimeSlots
+          )
+            ? car.bookedTimeSlots.length
+            : 0;
+
+        return (
+          <Tag
+            color={
+              bookingCount > 0
+                ? "orange"
+                : "default"
+            }
+          >
+            {bookingCount}
+          </Tag>
+        );
+      },
+    },
+
+    {
+      title: "Availability",
+      key: "status",
+      width: 145,
+
+      render: (_, car) => {
+        const hasBookings =
+          Array.isArray(
+            car.bookedTimeSlots
+          ) &&
+          car.bookedTimeSlots.length > 0;
+
+        return (
+          <Tag
+            icon={
+              hasBookings ? (
+                <ClockCircleOutlined />
+              ) : (
+                <CheckCircleOutlined />
+              )
+            }
+            color={
+              hasBookings
+                ? "orange"
+                : "green"
+            }
+          >
+            {hasBookings
+              ? "Has Bookings"
+              : "Available"}
+          </Tag>
+        );
+      },
+    },
+
+    {
+      title: "Actions",
+      key: "actions",
+      width: 190,
+      fixed: "right",
+
+      render: (_, car) => (
+        <Space>
+          <Link
+            to={`/editcar/${car._id}`}
+          >
+            <Button
+              icon={<EditOutlined />}
+              className="admin-table-edit-button"
+            >
+              Edit
+            </Button>
+          </Link>
+
+          <Popconfirm
+            title="Delete this car?"
+            description="This vehicle will be permanently removed from DriveEase."
+            okText="Delete"
+            cancelText="Cancel"
+            okButtonProps={{
+              danger: true,
+            }}
+            onConfirm={() =>
+              handleDelete(car._id)
+            }
+          >
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <AdminLayout>
       {loading && <Spinner />}
 
-      {/* Top Banner */}
-
-      <div
-        style={{
-          background: "linear-gradient(135deg,#2563eb,#4f46e5)",
-          padding: "35px",
-          borderRadius: "20px",
-          color: "white",
-          marginBottom: "30px",
-        }}
-      >
-        <Row justify="space-between" align="middle">
-
-          <Col>
-
-            <h1
-              style={{
-                color: "white",
-                marginBottom: "10px",
-              }}
-            >
-              🚗 Admin Dashboard
-            </h1>
-
-            <p
-              style={{
-                color: "white",
-                opacity: ".9",
-                fontSize: "17px",
-              }}
-            >
-              Manage Cars • Edit Cars • Delete Cars
-            </p>
-
-          </Col>
-
-          <Col>
-
-            <Link to="/addcar">
-
-              <button
-                className="btn1"
-                style={{
-                  background: "white",
-                  color: "#2563eb",
-                  fontWeight: "700",
-                }}
-              >
-                <PlusCircleOutlined /> Add New Car
-              </button>
-
-            </Link>
-
-          </Col>
-
-        </Row>
-      </div>
-
-      {/* Stats */}
-
-      <Row gutter={[20, 20]} style={{ marginBottom: "30px" }}>
-
-        <Col lg={8} xs={24} style={{ display: "flex" }}>
-
-          <div
-            className="bs1"
-            style={{
-              padding: "25px",
-              textAlign: "center",
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CarOutlined
-              style={{
-                fontSize: "38px",
-                color: "#2563eb",
-                marginBottom: "8px"
-              }}
-            />
-
-            <h2 style={{ fontSize: "28px", fontWeight: "700", margin: "2px 0", color: "#0f172a" }}>
-              {totalCars.length}
-            </h2>
-
-            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Total Cars</p>
-
-          </div>
-
-        </Col>
-
-        <Col lg={8} xs={24} style={{ display: "flex" }}>
-
-          <div
-            className="bs1"
-            style={{
-              padding: "25px",
-              textAlign: "center",
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <CheckCircleOutlined
-              style={{
-                fontSize: "38px",
-                color: "#16a34a",
-                marginBottom: "8px"
-              }}
-            />
-
-            <h2 style={{ fontSize: "28px", fontWeight: "700", margin: "2px 0", color: "#16a34a" }}>
-              {totalCars.length}
-            </h2>
-
-            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Available Cars</p>
-
-          </div>
-
-        </Col>
-
-        <Col lg={8} xs={24} style={{ display: "flex" }}>
-
-          <div
-            className="bs1"
-            style={{
-              padding: "25px",
-              textAlign: "center",
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-            <UserOutlined
-              style={{
-                fontSize: "38px",
-                color: "#f97316",
-                marginBottom: "8px"
-              }}
-            />
-
-            <h2
-              style={{
-                fontSize: "20px",
-                fontWeight: "700",
-                margin: "6px 0",
-                color: "#f97316",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "100%"
-              }}
-              title={user?.username}
-            >
-              {user?.username || "Admin"}
-            </h2>
-
-            <p style={{ color: "#64748b", fontWeight: "500", fontSize: "14px" }}>Owner</p>
-
-          </div>
-
-        </Col>
-
-      </Row>
-
-      {/* Cars */}
-
-      <Row gutter={[24, 24]}>
-
-        {Array.isArray(totalCars) &&
-totalCars.map((car) => (
-
-          <Col lg={6} md={8} sm={12} xs={24} key={car._id} style={{ display: "flex" }}>
-
-            <div
-              className="bs1"
-              style={{
-                borderRadius: "18px",
-                overflow: "hidden",
-                transition: ".35s",
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                height: "100%"
-              }}
-            >
-
-              <img
-                src={car.image || "https://via.placeholder.com/400x250"}
-                alt={car.name}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                }}
-              />
-
-              <div style={{ padding: "18px", display: "flex", flexDirection: "column", flex: 1, justifyContent: "space-between" }}>
-
-                <div>
-                  <h3
-                    style={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }}
-                    title={car.name}
-                  >
-                    {car.name}
-                  </h3>
-
-                  <p>
-                    💰 ₹{car.rentPerHour} / Hour
-                  </p>
-
-                  <p>
-                    ⛽ {car.fuelType || "-"}
-                  </p>
-
-                  <p>
-                    👥 {car.capacity || "-"} Seats
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "15px",
-                  }}
+      <section className="admin-dashboard-page">
+        <AdminPageHero
+          eyebrow="FLEET MANAGEMENT"
+          title="Manage Rental Vehicles"
+          description="View, add, update and remove DriveEase rental vehicles while monitoring availability and active booking slots."
+          icon={<CarOutlined />}
+          theme="blue"
+          actions={
+            <>
+              <Link to="/admin/car-requests">
+                <Button
+                  size="large"
+                  icon={
+                    <FileProtectOutlined />
+                  }
                 >
+                  Owner Requests
+                </Button>
+              </Link>
 
-                  <Link to={`/editcar/${car._id}`}>
+              <Button
+                size="large"
+                icon={<ReloadOutlined />}
+                onClick={loadCars}
+              >
+                Refresh
+              </Button>
 
-                    <button
-                      className="btn1"
-                      style={{
-                        background: "#16a34a",
-                      }}
-                    >
-                      <EditOutlined /> Edit
-                    </button>
+              <Link to="/addcar">
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={
+                    <PlusCircleOutlined />
+                  }
+                >
+                  Add New Car
+                </Button>
+              </Link>
+            </>
+          }
+          stats={[
+            {
+              label: "Total Cars",
+              value: cars.length,
+              icon: <CarOutlined />,
+            },
+            {
+              label: "Available Cars",
+              value: availableCars,
+              icon:
+                <CheckCircleOutlined />,
+            },
+            {
+              label: "Cars With Bookings",
+              value: bookedCars,
+              icon:
+                <ClockCircleOutlined />,
+            },
+            {
+              label: "Total Booked Slots",
+              value: totalBookedSlots,
+              icon:
+                <FileProtectOutlined />,
+            },
+          ]}
+        />
 
-                  </Link>
+        <Card
+          bordered={false}
+          className="admin-table-container"
+        >
+          <div className="admin-table-toolbar">
+            <div>
+              <Title level={3}>
+                Vehicle Inventory
+              </Title>
 
-                  <Popconfirm
-                    title="Delete this Car?"
-                    okText="Delete"
-                    cancelText="Cancel"
-                    onConfirm={() =>
-                      dispatch(deleteCar({ carid: car._id }))
-                    }
-                  >
-                    <button
-                      className="btn1"
-                      style={{
-                        background: "#dc2626",
-                      }}
-                    >
-                      <DeleteOutlined /> Delete
-                    </button>
-                  </Popconfirm>
-
-                </div>
-
-              </div>
-
+              <Text type="secondary">
+                Showing{" "}
+                {filteredCars.length} of{" "}
+                {cars.length} vehicles
+              </Text>
             </div>
 
-          </Col>
+            <Space wrap>
+              <Input
+                prefix={<SearchOutlined />}
+                placeholder="Search by name, brand, model or fuel"
+                allowClear
+                value={searchText}
+                onChange={(event) =>
+                  setSearchText(
+                    event.target.value
+                  )
+                }
+                className="admin-table-search"
+              />
 
-        ))}
+              <Select
+                value={fuelFilter}
+                onChange={setFuelFilter}
+                suffixIcon={
+                  <FilterOutlined />
+                }
+                className="admin-table-filter"
+                options={[
+                  {
+                    label:
+                      "All Fuel Types",
+                    value: "all",
+                  },
+                  ...fuelOptions,
+                ]}
+              />
 
-      </Row>
+              {(searchText ||
+                fuelFilter !== "all") && (
+                <Button
+                  onClick={resetFilters}
+                >
+                  Reset
+                </Button>
+              )}
+            </Space>
+          </div>
 
-    </DefaultLayout>
+          {filteredCars.length === 0 ? (
+            <Empty
+              description={
+                cars.length === 0
+                  ? "No vehicles have been added yet"
+                  : "No vehicles match the selected filters"
+              }
+              className="admin-table-empty"
+            >
+              {cars.length === 0 ? (
+                <Link to="/addcar">
+                  <Button
+                    type="primary"
+                    icon={
+                      <PlusCircleOutlined />
+                    }
+                  >
+                    Add First Car
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  type="primary"
+                  onClick={resetFilters}
+                >
+                  Reset Filters
+                </Button>
+              )}
+            </Empty>
+          ) : (
+            <Table
+              rowKey="_id"
+              columns={columns}
+              dataSource={filteredCars}
+              loading={loading}
+              pagination={{
+                pageSize: 6,
+                showSizeChanger: false,
+                showTotal: (
+                  total,
+                  range
+                ) =>
+                  `${range[0]}-${range[1]} of ${total} vehicles`,
+              }}
+              scroll={{
+                x: 1150,
+              }}
+              className="admin-cars-table"
+            />
+          )}
+        </Card>
+      </section>
+    </AdminLayout>
   );
 }
 

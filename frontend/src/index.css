@@ -1,513 +1,139 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-/* ==========================================================================
-   DRIVEEASE DESIGN SYSTEM - RESPONSIVE & MOBILE DESIGN SYSTEM
-   ========================================================================== */
-:root {
-  /* Color Palette */
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-  --primary-gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
-  --secondary-color: #64748b;
-  
-  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  --surface-white: #ffffff;
-  --surface-muted: #f8fafc;
-  --surface-dark: #0f172a;
-  
-  /* Text Colors */
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
-  --text-inverse: #ffffff;
-  
-  /* Border & Dividers */
-  --border-light: #e2e8f0;
-  --border-radius-sm: 8px;
-  --border-radius-md: 14px;
-  --border-radius-lg: 20px;
-  --border-radius-xl: 24px;
-  
-  /* Elevation Shadows */
-  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.12);
-  --shadow-hover: 0 25px 50px rgba(37, 99, 235, 0.22);
-  
-  /* Transitions */
-  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
   scroll-behavior: smooth;
 }
 
-html, body {
-  width: 100%;
-  max-width: 100%;
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
   overflow-x: hidden;
+  color: #334155;
+  background: #f8fafc;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background: var(--bg-gradient);
+#root {
   min-height: 100vh;
-  color: var(--text-main);
-  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
 }
 
 p {
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
-  font-weight: 700;
-  color: var(--text-main);
+  font-family: "Poppins", sans-serif;
 }
 
-/* Base Card Elevation & Responsive Borders */
-.bs1 {
-  background: var(--surface-white);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  transition: var(--transition-normal);
-  border: 2px solid transparent;
-  position: relative;
-}
-
-.bs1:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--primary-color);
-}
-
-/* Auth Container Interactive Card Effects & Micro-Animations */
-.auth-container {
-  width: 100%;
-  max-width: 1100px;
-  background: #ffffff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  animation: authFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.auth-container:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 35px 70px rgba(37, 99, 235, 0.3);
-}
-
-@keyframes authFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Left Image Showcase Zoom & Gradient Overlay */
-.auth-image-box {
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  min-height: 620px;
-}
-
-.auth-image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.auth-container:hover .auth-image-box img {
-  transform: scale(1.06);
-}
-
-.auth-image-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 45px 35px;
-  color: white;
-}
-
-.auth-image-overlay h2 {
-  color: white;
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.auth-image-overlay p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 15px;
-}
-
-/* Statistics Cards Responsiveness & Micro-Animations */
-.stats-card {
-  background: var(--surface-white);
-  padding: 24px 16px;
-  border-radius: var(--border-radius-lg);
-  text-align: center;
-  box-shadow: var(--shadow-md);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid #e2e8f0;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-}
-
-.stats-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 20px 45px rgba(37, 99, 235, 0.22);
-  border-color: #2563eb;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-}
-
-.stats-card .anticon, .stats-card span[role="img"] {
-  font-size: 38px !important;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
-  display: inline-block;
-}
-
-.stats-card:hover .anticon, .stats-card:hover span[role="img"] {
-  transform: scale(1.2) rotate(6deg);
-  color: #1d4ed8 !important;
-}
-
-.stats-card h2 {
-  font-size: 30px;
-  color: #0f172a;
-  margin-top: 10px;
-  font-weight: 800;
-  transition: color 0.3s ease;
-}
-
-.stats-card:hover h2 {
-  color: #2563eb;
-}
-
-.stats-card p {
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-top: 4px;
-  font-size: 13px;
-  transition: color 0.3s ease;
-}
-
-/* Vehicle Selection Grid Card */
-.car-card {
-  background: var(--surface-white);
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid #e2e8f0;
-  box-shadow: var(--shadow-md);
-  position: relative;
-  cursor: pointer;
-  width: 100%;
-}
-
-.car-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  border-color: #2563eb;
-  box-shadow: 0 20px 45px rgba(37, 99, 235, 0.25);
-}
-
-.car-card .carimg {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.car-card:hover .carimg {
-  transform: scale(1.06);
-}
-
-.carimg2 {
-  width: 100%;
-  height: 360px;
-  object-fit: cover;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Sticky Glassmorphic Header & Navbar Navigation Link Highlighting */
-.header {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  padding: 14px 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.header h2 {
-  color: var(--text-inverse);
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.header a {
-  color: var(--text-inverse) !important;
-}
-
-/* Header Navigation Links */
-.header-nav-btn {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: #cbd5e1 !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  border-radius: 12px !important;
-  padding: 6px 16px !important;
-  height: 40px !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-.header-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  transform: translateY(-2px);
-}
-
-/* Active State Highlighting */
-.header-nav-btn.active-nav {
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  border-color: rgba(255, 255, 255, 0.35) !important;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45) !important;
-}
-
-.content {
-  padding: 30px 20px;
-  min-height: 85vh;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* Footer */
-.footer {
-  margin-top: 60px;
-  background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
-  color: var(--text-inverse);
-  padding: 40px 20px;
-  text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.footer h3 {
-  color: var(--text-inverse);
-  margin-bottom: 8px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.footer p {
-  opacity: 0.8;
-  font-size: 13px;
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 /* Spinner */
+
 .spinner {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 9999;
+  transform: translate(-50%, -50%);
 }
 
-/* Primary Button Design System */
-.btn1 {
-  background: var(--primary-gradient) !important;
-  color: var(--text-inverse) !important;
-  border: none !important;
-  padding: 12px 24px !important;
-  border-radius: var(--border-radius-md) !important;
+/* Ant Design inputs */
+
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-picker,
+.ant-select-selector {
+  border-radius: 10px !important;
+}
+
+.ant-input-affix-wrapper {
+  min-height: 46px;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  min-height: auto !important;
+}
+
+.ant-picker {
+  min-height: 46px;
+}
+
+.ant-modal-content {
+  border-radius: 18px !important;
+}
+
+/* Tables */
+
+.ant-table-wrapper {
+  overflow-x: auto;
+}
+
+.ant-table {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
   font-weight: 700 !important;
-  font-size: 15px !important;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 
-.btn1:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45);
-  background: var(--primary-gradient-hover) !important;
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.btn1:active {
-  transform: translateY(-1px);
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }
 
-/* Booking Row Layout */
-.booking-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px dashed var(--border-light);
-  font-size: 15px;
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #2563eb;
 }
 
-.booking-info span {
-  color: var(--text-muted);
-  font-weight: 500;
+::-webkit-scrollbar-thumb:hover {
+  background: #1d4ed8;
 }
 
-.booking-info b {
-  color: var(--text-main);
-  font-weight: 700;
-}
+/* Accessibility */
 
-/* Form Styles */
-.login-form, .register-form {
-  background: var(--surface-white);
-  padding: 35px 25px;
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-light);
-  width: 100%;
-}
-
-/* ==========================================================================
-   BREAKPOINT RESPONSIVE MEDIA QUERIES (MOBILE, TABLET, DESKTOP)
-   ========================================================================== */
-
-/* Tablet & Smaller Screens (max-width: 992px) */
-@media screen and (max-width: 992px) {
-  .content {
-    padding: 25px 15px;
-  }
-  
-  .header h2 {
-    font-size: 20px;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 
-  .carimg2 {
-    height: 300px;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-/* Mobile Devices (max-width: 768px) */
-@media screen and (max-width: 768px) {
-  .content {
-    padding: 20px 12px;
-  }
-
-  .header {
-    padding: 12px 15px;
-  }
-
-  .header h2 {
-    font-size: 18px;
-  }
-
-  .hero h1 {
-    font-size: 30px !important;
-  }
-
-  .hero p {
-    font-size: 15px !important;
-  }
-
-  .carimg2 {
-    height: 240px;
-  }
-
-  .stats-card {
-    padding: 20px 12px;
-  }
-
-  .stats-card h2 {
-    font-size: 26px;
-  }
-
-  .login-form, .register-form {
-    padding: 25px 18px;
-  }
-}
-
-/* Small Mobile Devices (max-width: 480px) */
-@media screen and (max-width: 480px) {
-  .header h2 {
-    font-size: 16px;
-  }
-
-  .hero h1 {
-    font-size: 24px !important;
-  }
-
-  .hero p {
-    font-size: 13px !important;
-  }
-
-  .car-card .carimg {
-    height: 170px;
-  }
-
-  .btn1 {
-    padding: 10px 18px !important;
-    font-size: 14px !important;
-  }
-
-  .booking-info {
-    font-size: 13px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-}
-
-/* ==========================================================================
-   ANT DESIGN TIME PICKER 12-HOUR SEQUENTIAL ORDER (01 to 12)
-   ========================================================================== */
-.ant-picker-time-panel-column {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.ant-picker-time-panel-column > .ant-picker-time-panel-cell {
-  order: 1;
-}
-
-/* Reorder 12-hour column so hours display sequentially from 01 to 12 */
-.ant-picker-time-panel-column:first-child > .ant-picker-time-panel-cell:first-child {
-  order: 12 !important;
 }

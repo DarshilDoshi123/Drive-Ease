@@ -1,7 +1,9 @@
 import { message } from "antd";
-import axios from "axios";
+import api from "../../services/api";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://drive-ease-fq7z.onrender.com";
+// ============================================
+// GET ALL CARS
+// ============================================
 
 export const getAllCars = () => async (dispatch) => {
   dispatch({
@@ -10,23 +12,39 @@ export const getAllCars = () => async (dispatch) => {
   });
 
   try {
-    const response = await axios.get(
-      `${API_URL}/api/cars/getallcars`
+    const response = await api.get(
+      "/api/cars/getallcars"
     );
 
-    console.log("Cars API response:", response.data);
+    const cars = Array.isArray(response.data)
+      ? response.data
+      : response.data?.data?.cars || [];
+
+    console.log("Cars received:", cars);
 
     dispatch({
       type: "GET_ALL_CARS",
-      payload: response.data,
+      payload: cars,
     });
+
+    return cars;
   } catch (error) {
     console.error(
       "Failed to load cars:",
       error.response?.data || error.message
     );
 
-    message.error("Failed to load cars");
+    dispatch({
+      type: "GET_ALL_CARS",
+      payload: [],
+    });
+
+    message.error(
+      error.response?.data?.message ||
+        "Failed to load cars"
+    );
+
+    return [];
   } finally {
     dispatch({
       type: "LOADING",
@@ -34,6 +52,10 @@ export const getAllCars = () => async (dispatch) => {
     });
   }
 };
+
+// ============================================
+// ADD CAR
+// ============================================
 
 export const addCar = (reqObj) => async (dispatch) => {
   dispatch({
@@ -42,16 +64,33 @@ export const addCar = (reqObj) => async (dispatch) => {
   });
 
   try {
-    await axios.post(`${API_URL}/api/cars/addcar`, reqObj);
+    const response = await api.post(
+      "/api/cars/addcar",
+      reqObj
+    );
 
-    message.success("New car added successfully");
+    message.success(
+      response.data?.message ||
+        "New car added successfully"
+    );
 
     setTimeout(() => {
       window.location.href = "/admin";
-    }, 500);
+    }, 600);
+
+    return response.data;
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    message.error("Failed to add car");
+    console.error(
+      "Add car error:",
+      error.response?.data || error.message
+    );
+
+    message.error(
+      error.response?.data?.message ||
+        "Failed to add car"
+    );
+
+    return null;
   } finally {
     dispatch({
       type: "LOADING",
@@ -59,6 +98,10 @@ export const addCar = (reqObj) => async (dispatch) => {
     });
   }
 };
+
+// ============================================
+// EDIT CAR
+// ============================================
 
 export const editCar = (reqObj) => async (dispatch) => {
   dispatch({
@@ -67,16 +110,33 @@ export const editCar = (reqObj) => async (dispatch) => {
   });
 
   try {
-    await axios.post(`${API_URL}/api/cars/editcar`, reqObj);
+    const response = await api.post(
+      "/api/cars/editcar",
+      reqObj
+    );
 
-    message.success("Car details updated successfully");
+    message.success(
+      response.data?.message ||
+        "Car details updated successfully"
+    );
 
     setTimeout(() => {
       window.location.href = "/admin";
-    }, 500);
+    }, 600);
+
+    return response.data;
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    message.error("Failed to edit car");
+    console.error(
+      "Edit car error:",
+      error.response?.data || error.message
+    );
+
+    message.error(
+      error.response?.data?.message ||
+        "Failed to edit car"
+    );
+
+    return null;
   } finally {
     dispatch({
       type: "LOADING",
@@ -85,6 +145,10 @@ export const editCar = (reqObj) => async (dispatch) => {
   }
 };
 
+// ============================================
+// DELETE CAR
+// ============================================
+
 export const deleteCar = (reqObj) => async (dispatch) => {
   dispatch({
     type: "LOADING",
@@ -92,16 +156,31 @@ export const deleteCar = (reqObj) => async (dispatch) => {
   });
 
   try {
-    await axios.post(`${API_URL}/api/cars/deletecar`, reqObj);
+    const response = await api.post(
+      "/api/cars/deletecar",
+      reqObj
+    );
 
-    message.success("Car deleted successfully");
+    message.success(
+      response.data?.message ||
+        "Car deleted successfully"
+    );
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
+    await dispatch(getAllCars());
+
+    return response.data;
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    message.error("Failed to delete car");
+    console.error(
+      "Delete car error:",
+      error.response?.data || error.message
+    );
+
+    message.error(
+      error.response?.data?.message ||
+        "Failed to delete car"
+    );
+
+    return null;
   } finally {
     dispatch({
       type: "LOADING",

@@ -1,73 +1,89 @@
-# Drive Ease - Car Rental Platform
+# Drive Ease - Car Rental Management System
 
-**Drive Ease** is a comprehensive MERN stack web application tailored for car rental companies. It encompasses end-to-end functionality, including user authentication, booking management, responsive modern UI, and an admin dashboard. Built using Node.js, Express.js, React.js, Redux, MongoDB, and Mongoose.
+Drive Ease is a comprehensive MERN stack web application tailored for car rental management. It encompasses end-to-end functionality including user authentication, car listings, booking management, reviews, and admin management.
 
-## Project Features
+## Live Links & Repository
 
-- User authentication (login/register) for secure access to the platform.
-- Booking management system for efficient car rental services.
-- Admin dashboard with specialized management features.
-- Clean, responsive UI with interactive navigation and stats.
+- **Frontend Application (Vercel):** [https://drive-ease-car-rental.vercel.app/](https://drive-ease-car-rental.vercel.app/)
+- **Backend API Service (Render):** [https://drive-ease-fq7z.onrender.com](https://drive-ease-fq7z.onrender.com)
+- **GitHub Repository:** [https://github.com/DarshilDoshi123/Drive-Ease](https://github.com/DarshilDoshi123/Drive-Ease)
 
-## How to Use
+## Project Architecture
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/DarshilDoshi123/Drive-Ease.git
+```
+Drive Ease/
+├── backend/
+│   ├── config/             # Database & third-party integrations (Cloudinary, etc.)
+│   ├── middleware/         # Express auth and upload middlewares
+│   ├── models/             # Mongoose schemas (Car, Booking, User, Review, Listing)
+│   ├── routes/             # Express API endpoints
+│   ├── utils/              # Helper utilities
+│   ├── .env                # Backend environment configuration
+│   ├── db.js               # MongoDB connection setup
+│   ├── netlify.toml        # Netlify deployment configuration
+│   ├── package.json        # Backend dependencies & scripts
+│   └── server.js           # Express app entry point
+└── frontend/
+    ├── public/             # Public static assets & index.html
+    ├── src/                # React components, pages, Redux store & API services
+    ├── .env                # Frontend environment configuration
+    └── package.json        # Frontend dependencies & scripts
 ```
 
-2. Navigate into project directory:
+## Quick Start
 
-```bash
-cd "Drive Ease"
-```
+### 1. Install Dependencies
 
-3. Install dependencies for all packages:
+You can install dependencies for both services from the root folder:
 
 ```bash
 npm run install:all
 ```
 
-4. Start the application (Backend & Frontend concurrently):
+Or navigate to each folder directly:
 
 ```bash
-npm run dev
+# Install backend dependencies
+cd backend && npm install
+
+# Install frontend dependencies
+cd ../frontend && npm install
 ```
 
-5. Open your browser and visit `http://localhost:3000` to start using Drive Ease.
+### 2. Configure Environment Variables
 
-## Project Structure
+Create `.env` inside the `backend/` directory:
 
-- `frontend`: Contains the React.js frontend of the project.
-- `backend`: Contains the Node.js and Express.js backend of the project.
+```env
+PORT=5000
+MONGO_URL=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+FRONTEND_URL=https://drive-ease-car-rental.vercel.app
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+```
 
-## Screenshots
+Create `.env` inside the `frontend/` directory:
 
-<img width="1440" alt="CarRental 1" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/bbe56b53-c3fa-47e7-bf97-62db012950a1">
-<br><br>
-<img width="1440" alt="CarRental 2" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/89a8c5fa-e00f-4904-80c4-33d10f554a23">
-<br><br>
-<img width="1023" alt="CarRental 3" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/f673c18a-6d47-4e9d-9176-7e76339b5044">
-<br><br>
-<img width="1024" alt="CarRental 4" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/69a685c1-0292-4ad6-822c-7f1410776e9e">
-<br><br>
-<img width="1026" alt="CarRental 5" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/b081b2d8-943f-4151-bcea-77961d3212a7">
-<br><br>
-<img width="1022" alt="CarRental 6" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/aa000364-7f97-4fcb-9486-41a14d869ec2">
-<br><br>
-<img width="1038" alt="CarRental 7" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/bf666a46-3c02-492e-9ede-7fd4a5411cd3">
-<br><br>
-<img width="1042" alt="CarRental 8" src="https://github.com/pjyotianwar/Car-Rental/assets/70092582/4b5011a5-5191-463e-99e9-9f7222363512">
+```env
+REACT_APP_API_URL=https://drive-ease-fq7z.onrender.com
+```
 
-## Contributing
+### 3. Run Development Servers
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+From the root directory:
 
-## License
+```bash
+# Start backend server (Port 5000)
+npm run dev:backend
 
-[MIT](LICENSE)
+# Start frontend application (Port 3000)
+npm run dev:frontend
+```
 
-## Acknowledgements
+Alternatively:
+- Backend: `cd backend && npm run dev`
+- Frontend: `cd frontend && npm start`
 
-- Special thanks to the developers and contributors of the libraries and technologies used in this project.
+Open [http://localhost:3000](http://localhost:3000) in your browser to start using Drive Ease.

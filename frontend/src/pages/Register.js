@@ -1,174 +1,313 @@
-import React, { useState } from "react";
-import { Form, Input, message, Spin, Row, Col } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { UserOutlined, LockOutlined, CarOutlined } from "@ant-design/icons";
+import React from "react";
+
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Typography,
+} from "antd";
+
+import {
+  ArrowRightOutlined,
+  CarOutlined,
+  CheckCircleOutlined,
+  LockOutlined,
+  SafetyCertificateOutlined,
+  ThunderboltOutlined,
+  UserAddOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+
+import {
+  Link,
+  Navigate,
+} from "react-router-dom";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+
+import { userRegister } from "../redux/actions/userActions";
+import Spinner from "../components/Spinner";
+
+import "./Auth.css";
+
+const {
+  Title,
+  Text,
+  Paragraph,
+} = Typography;
 
 function Register() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const onFinish = async (values) => {
-    try {
-      setLoading(true);
+  const loading = useSelector(
+    (state) =>
+      state.alertsReducer?.loading || false
+  );
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL || "https://drive-ease-fq7z.onrender.com"}/api/users/register`,
-        {
-          username: values.username,
-          password: values.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  const token = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
 
-      console.log("Register response:", response.data);
+  if (token && user) {
+    return <Navigate to="/" replace />;
+  }
 
-      message.success("Registration successful");
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
-    } catch (error) {
-      console.error("Registration error:", error);
-      console.error("Server response:", error.response?.data);
-
-      message.error(
-        error.response?.data?.message ||
-          "Registration failed. Check server connection."
-      );
-    } finally {
-      setLoading(false);
-    }
+  const onFinish = (values) => {
+    dispatch(
+      userRegister({
+        username: values.username.trim(),
+        password: values.password,
+      })
+    );
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-      }}
-    >
-      <Spin spinning={loading} size="large">
-        <div className="auth-container">
-          <Row>
-            {/* Left Supercar Showcase */}
-            <Col lg={12} xs={0}>
-              <div className="auth-image-box">
-                <img
-                  src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200"
-                  alt="Drive Ease Registration"
-                />
-                <div className="auth-image-overlay">
-                  <h2><CarOutlined style={{ marginRight: 10 }} /> Drive Ease</h2>
-                  <p>Join thousands of satisfied drivers. Rent your dream vehicle in seconds.</p>
+    <main className="auth-page auth-register-page">
+      {loading && <Spinner />}
+
+      <div className="auth-background-shape auth-shape-one" />
+      <div className="auth-background-shape auth-shape-two" />
+
+      <section className="auth-container">
+        <Row className="auth-row">
+          <Col
+            lg={13}
+            xs={0}
+            className="auth-visual-column"
+          >
+            <div className="auth-visual">
+              <img
+                src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600"
+                alt="Premium rental vehicle"
+              />
+
+              <div className="auth-visual-overlay" />
+
+              <div className="auth-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
+
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
                 </div>
               </div>
-            </Col>
 
-            {/* Right Form Card */}
-            <Col lg={12} xs={24}>
-              <div style={{ padding: "60px 45px" }}>
-                <h1
-                  style={{
-                    fontSize: "42px",
-                    fontWeight: "800",
-                    textAlign: "center",
-                    marginBottom: "8px",
-                    color: "#2563eb",
-                    letterSpacing: "-0.5px"
-                  }}
-                >
-                  Create Account
-                </h1>
+              <div className="auth-visual-content">
+                <div className="auth-eyebrow">
+                  <UserAddOutlined />
+                  Join the DriveEase community
+                </div>
 
-                <p
-                  style={{
-                    textAlign: "center",
-                    color: "#64748b",
-                    marginBottom: "35px",
-                    fontSize: "15px",
-                    fontWeight: "500"
-                  }}
-                >
-                  Enter your details to create your new account.
-                </p>
+                <Title>
+                  Create your account and start exploring.
+                </Title>
 
-                <Form layout="vertical" onFinish={onFinish}>
-                  <Form.Item
-                    label={<span style={{ fontWeight: 600, color: "#334155" }}>Username</span>}
-                    name="username"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your username",
-                      },
-                    ]}
-                  >
-                    <Input
-                      size="large"
-                      prefix={<UserOutlined style={{ color: "#94a3b8", marginRight: 6 }} />}
-                      placeholder="Choose a username"
-                      style={{ borderRadius: "12px", height: "48px" }}
-                    />
-                  </Form.Item>
+                <Paragraph>
+                  Book premium vehicles, manage every trip
+                  and even list your own car on the
+                  DriveEase marketplace.
+                </Paragraph>
 
-                  <Form.Item
-                    label={<span style={{ fontWeight: 600, color: "#334155" }}>Password</span>}
-                    name="password"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your password",
-                      },
-                    ]}
-                  >
-                    <Input.Password
-                      size="large"
-                      prefix={<LockOutlined style={{ color: "#94a3b8", marginRight: 6 }} />}
-                      placeholder="Create a password"
-                      style={{ borderRadius: "12px", height: "48px" }}
-                    />
-                  </Form.Item>
+                <div className="auth-feature-list">
+                  <span>
+                    <CheckCircleOutlined />
+                    Book verified rental cars
+                  </span>
 
-                  <button
-                    className="btn1"
-                    style={{
-                      width: "100%",
-                      height: "48px",
-                      marginTop: "15px",
-                      fontSize: "16px"
-                    }}
-                  >
-                    REGISTER
-                  </button>
+                  <span>
+                    <SafetyCertificateOutlined />
+                    Secure account and booking flow
+                  </span>
 
-                  <div style={{ textAlign: "center", marginTop: "25px" }}>
-                    <Link
-                      to="/login"
-                      style={{
-                        color: "#2563eb",
-                        fontWeight: "600",
-                        fontSize: "15px"
-                      }}
-                    >
-                      Already have an account? <span style={{ textDecoration: "underline" }}>Sign In</span>
-                    </Link>
-                  </div>
-                </Form>
+                  <span>
+                    <ThunderboltOutlined />
+                    Quick registration process
+                  </span>
+                </div>
               </div>
-            </Col>
-          </Row>
-        </div>
-      </Spin>
-    </div>
+
+              <div className="auth-visual-footer">
+                <span>Premium mobility</span>
+                <span>Simple account setup</span>
+              </div>
+            </div>
+          </Col>
+
+          <Col
+            lg={11}
+            xs={24}
+            className="auth-form-column"
+          >
+            <div className="auth-form-panel">
+              <div className="auth-mobile-brand">
+                <div className="auth-brand-icon">
+                  <CarOutlined />
+                </div>
+
+                <div>
+                  <strong>DriveEase</strong>
+                  <span>Premium Car Rental</span>
+                </div>
+              </div>
+
+              <div className="auth-form-heading">
+                <Text className="auth-form-label">
+                  CREATE YOUR ACCOUNT
+                </Text>
+
+                <Title>
+                  Join DriveEase today
+                </Title>
+
+                <Paragraph>
+                  Create your account and access the
+                  complete premium rental experience.
+                </Paragraph>
+              </div>
+
+              <Form
+                layout="vertical"
+                onFinish={onFinish}
+                requiredMark={false}
+                size="large"
+                className="auth-form"
+              >
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Please enter a username",
+                    },
+                    {
+                      min: 3,
+                      message:
+                        "Username must contain at least 3 characters",
+                    },
+                    {
+                      max: 30,
+                      message:
+                        "Username cannot exceed 30 characters",
+                    },
+                    {
+                      pattern: /^[a-zA-Z0-9_]+$/,
+                      message:
+                        "Use only letters, numbers and underscores",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined />}
+                    placeholder="Choose a username"
+                    autoComplete="username"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Please enter a password",
+                    },
+                    {
+                      min: 8,
+                      message:
+                        "Password must contain at least 8 characters",
+                    },
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined />}
+                    placeholder="Create a secure password"
+                    autoComplete="new-password"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  dependencies={["password"]}
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Please confirm your password",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (
+                          !value ||
+                          getFieldValue("password") ===
+                            value
+                        ) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(
+                          new Error(
+                            "Passwords do not match"
+                          )
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password
+                    prefix={<LockOutlined />}
+                    placeholder="Re-enter your password"
+                    autoComplete="new-password"
+                  />
+                </Form.Item>
+
+                <div className="auth-password-hint">
+                  <CheckCircleOutlined />
+                  Use at least 8 characters for better
+                  account security.
+                </div>
+
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  block
+                  className="auth-submit-button"
+                >
+                  <span>Create Account</span>
+                  <ArrowRightOutlined />
+                </Button>
+
+                <div className="auth-divider">
+                  <span>Already registered?</span>
+                </div>
+
+                <Link
+                  to="/login"
+                  className="auth-secondary-link"
+                >
+                  Login to your account
+                </Link>
+              </Form>
+
+              <div className="auth-form-footer">
+                Your account information is protected and
+                used only for the DriveEase platform.
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </section>
+    </main>
   );
 }
 
