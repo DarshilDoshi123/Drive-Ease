@@ -333,7 +333,7 @@ function BookingCar() {
                     <div className="booking-spec-box">
                       <TeamOutlined />
                       <div>
-                        <small>Capacity</small>
+                        <small className="label">Capacity</small>
                         <strong>
                           {car?.capacity || "-"} Seats
                         </strong>
@@ -345,7 +345,7 @@ function BookingCar() {
                     <div className="booking-spec-box">
                       <ThunderboltOutlined />
                       <div>
-                        <small>Fuel Type</small>
+                        <small className="label">Fuel Type</small>
                         <strong>
                           {car?.fuelType || "-"}
                         </strong>
@@ -357,9 +357,9 @@ function BookingCar() {
                     <div className="booking-spec-box">
                       <DollarCircleOutlined />
                       <div>
-                        <small>Rental Rate</small>
+                        <small className="label">Rental Rate</small>
                         <strong>
-                          ₹{rentPerHour}/hour
+                          ₹{rentPerHour.toLocaleString("en-IN")}/hour
                         </strong>
                       </div>
                     </div>

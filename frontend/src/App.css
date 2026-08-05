@@ -785,7 +785,7 @@ a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 15px;
+  padding: 14px 16px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: #f8fafc;
@@ -794,6 +794,44 @@ a {
 .booking-spec-box > .anticon {
   color: var(--primary);
   font-size: 23px;
+  flex-shrink: 0;
+}
+
+.booking-spec-box small,
+.booking-spec-box small.label {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 3px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.booking-spec-box strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--heading);
+  font-weight: 600;
+}
+
+.booking-benefit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 500;
+  font-size: 0.88rem;
+  transition: all 0.2s ease;
+}
+
+.booking-benefit .anticon {
+  color: var(--primary);
+  font-size: 16px;
+  flex-shrink: 0;
 }
 
 .booking-form-card .ant-card-body {
