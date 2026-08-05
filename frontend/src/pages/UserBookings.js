@@ -299,9 +299,17 @@ function UserBookings() {
 
                       <div className="detail-row">
                         <EnvironmentOutlined className="detail-icon" />
-                        <span className="detail-label">Location:</span>
+                        <span className="detail-label">Pickup Location:</span>
                         <strong className="detail-value">
                           {booking.pickupLocation || booking.car?.location || "City Center Hub"}
+                        </strong>
+                      </div>
+
+                      <div className="detail-row">
+                        <EnvironmentOutlined className="detail-icon" />
+                        <span className="detail-label">Drop-off Location:</span>
+                        <strong className="detail-value">
+                          {booking.dropoffLocation || booking.pickupLocation || booking.car?.location || "City Center Hub"}
                         </strong>
                       </div>
                     </div>

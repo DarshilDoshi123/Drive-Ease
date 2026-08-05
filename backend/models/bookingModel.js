@@ -47,6 +47,11 @@ const bookingSchema = new mongoose.Schema(
       default: "City Center Hub",
     },
 
+    dropoffLocation: {
+      type: String,
+      default: "City Center Hub",
+    },
+
     totalHours: {
       type: Number,
       required: true,

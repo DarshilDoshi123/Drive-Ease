@@ -29,6 +29,7 @@ router.post("/bookcar", protect, async (req, res) => {
       customerEmail,
       customerMobile,
       pickupLocation,
+      dropoffLocation,
     } = req.body;
 
     if (
@@ -226,6 +227,7 @@ const ownerEarning =
       customerEmail: (customerEmail && customerEmail.trim()) || req.user.email || "",
       customerMobile: (customerMobile && customerMobile.trim()) || req.user.mobile || req.user.phone || "",
       pickupLocation: (pickupLocation && pickupLocation.trim()) || selectedCar.location || "City Center Hub",
+      dropoffLocation: (dropoffLocation && dropoffLocation.trim()) || (pickupLocation && pickupLocation.trim()) || selectedCar.location || "City Center Hub",
 
       totalHours,
       rentPerHour,

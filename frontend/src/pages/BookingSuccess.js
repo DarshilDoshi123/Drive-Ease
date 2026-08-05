@@ -266,6 +266,14 @@ function BookingSuccess() {
                 </div>
 
                 <div>
+                  <EnvironmentOutlined />
+                  <span>Drop-off Location</span>
+                  <strong>
+                    {booking.dropoffLocation || booking.pickupLocation || booking.car?.location || "City Center Hub"}
+                  </strong>
+                </div>
+
+                <div>
                   <UserOutlined />
                   <span>Driver</span>
                   <strong>
