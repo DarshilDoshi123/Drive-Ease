@@ -433,16 +433,13 @@ function DefaultLayout({ children }) {
                 </h3>
 
                 <p>
-                  Built using React, Redux,
-                  Node.js, Express.js and
-                  MongoDB.
+                  Built using React, Node.js, Express.js and MongoDB.
                 </p>
 
                 <p>
                   Developed by{" "}
                   <strong>
-                    Parth Patel & Darshil
-                    Doshi
+                    Darshil Doshi
                   </strong>
                 </p>
               </Col>

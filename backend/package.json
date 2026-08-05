@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "seed": "node seed.js"
   },
-  "author": "Parth Patel",
+  "author": "Darshil Doshi",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
