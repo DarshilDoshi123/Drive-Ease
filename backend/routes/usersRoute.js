@@ -144,7 +144,9 @@ router.post(
         });
       }
 
-      const user = await User.findOne({ username }).select("+password");
+      const user = await User.findOne({
+        username: { $regex: new RegExp(`^${username.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+      }).select("+password");
 
       if (!user) {
         return res.status(401).json({
