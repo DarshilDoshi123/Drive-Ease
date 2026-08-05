@@ -2105,13 +2105,13 @@ a {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 10mm;
+    margin: 15mm 12mm 10mm 12mm; /* Top, Right, Bottom, Left */
   }
 
   html,
   body {
-    height: 100% !important;
-    overflow: hidden !important;
+    height: auto !important;
+    overflow: visible !important;
     background: #ffffff !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -2134,17 +2134,17 @@ a {
     background: #ffffff !important;
     padding: 0 !important;
     margin: 0 !important;
-    height: 100% !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   .booking-receipt-card,
   .receipt-modal-container,
   .printable-receipt {
     max-height: 100vh !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    padding: 8px 12px !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
     box-shadow: none !important;
     border: none !important;
     page-break-after: avoid !important;
@@ -2153,25 +2153,37 @@ a {
 
   .booking-receipt-card .ant-card-body {
     padding: 0 !important;
+    overflow: visible !important;
   }
 
+  /* Fix logo text alignment and clipping */
+  .receipt-header,
+  .logo-container,
   .receipt-top {
+    padding-left: 4px !important;
+    margin-left: 0 !important;
     margin-bottom: 8px !important;
+    overflow: visible !important;
   }
 
+  .receipt-header h1,
+  .receipt-header .brand-title,
   .receipt-top h2.ant-typography {
-    font-size: 20px !important;
-    margin: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 2px !important;
+    line-height: 1.2 !important;
+    font-size: 22px !important;
+    overflow: visible !important;
   }
 
   .receipt-car-image {
-    max-height: 150px !important;
-    height: 150px !important;
+    max-height: 145px !important;
+    height: 145px !important;
   }
 
   .receipt-car-image img {
-    max-height: 150px !important;
-    height: 150px !important;
+    max-height: 145px !important;
+    height: 145px !important;
     object-fit: cover !important;
   }
 
@@ -2194,12 +2206,12 @@ a {
 
   .receipt-grand-total {
     margin-top: 8px !important;
-    padding: 10px 14px !important;
+    padding: 8px 12px !important;
   }
 
   .receipt-transaction {
-    margin-top: 8px !important;
-    padding: 8px 12px !important;
+    margin-top: 6px !important;
+    padding: 6px 10px !important;
   }
 }
 
