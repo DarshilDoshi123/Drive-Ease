@@ -38,6 +38,7 @@ app.use(
 
       return callback(new Error("Origin is not allowed by CORS"));
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -67,6 +68,16 @@ app.use(
   "/api/reviews",
   require("./routes/reviewRoutes")
 );
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    message: "DriveEase API is healthy",
+  });
+});
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -124,7 +135,10 @@ const startServer = async () => {
       throw new Error("JWT_SECRET is missing");
     }
 
-    await mongoose.connect(mongoUrl);
+    await mongoose.connect(mongoUrl, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+    });
 
     console.log("MongoDB Connection Successful");
 

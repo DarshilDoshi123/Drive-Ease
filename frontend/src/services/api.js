@@ -1,9 +1,17 @@
 import axios from "axios";
 
+const getBaseURL = () => {
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:5000";
+  }
+  return "https://drive-ease-fq7z.onrender.com";
+};
+
 const api = axios.create({
-  baseURL:
-    process.env.REACT_APP_API_URL ||
-    "https://drive-ease-fq7z.onrender.com",
+  baseURL: getBaseURL(),
   headers: {
     "Content-Type": "application/json",
   },
@@ -38,6 +46,10 @@ api.interceptors.response.use(
           window.location.href = "/login";
         }
       }
+    }
+
+    if (!error.response) {
+      console.error("Network / Connection error:", error.message);
     }
 
     return Promise.reject(error);
