@@ -2103,29 +2103,103 @@ a {
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    height: 100% !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   .modern-header,
   .modern-footer,
-  .no-print {
+  .no-print,
+  .booking-success-header,
+  button,
+  navbar,
+  footer {
     display: none !important;
   }
 
   body,
   .App,
-  .main-content {
-    background: white !important;
+  .main-content,
+  .booking-success-page {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
   }
 
-  .main-content {
+  .booking-receipt-card,
+  .receipt-modal-container,
+  .printable-receipt {
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .booking-receipt-card .ant-card-body {
     padding: 0 !important;
   }
 
-  .booking-success-header {
-    display: none;
+  .receipt-top {
+    margin-bottom: 8px !important;
   }
 
-  .booking-receipt-card {
-    border: none;
-    box-shadow: none;
+  .receipt-top h2.ant-typography {
+    font-size: 20px !important;
+    margin: 0 !important;
+  }
+
+  .receipt-car-image {
+    max-height: 150px !important;
+    height: 150px !important;
+  }
+
+  .receipt-car-image img {
+    max-height: 150px !important;
+    height: 150px !important;
+    object-fit: cover !important;
+  }
+
+  .ant-divider {
+    margin: 8px 0 !important;
+  }
+
+  .receipt-details-grid {
+    gap: 6px !important;
+  }
+
+  .receipt-details-grid > div {
+    padding: 6px 10px !important;
+    min-height: auto !important;
+  }
+
+  .receipt-price-list > div {
+    padding: 4px 0 !important;
+  }
+
+  .receipt-grand-total {
+    margin-top: 8px !important;
+    padding: 10px 14px !important;
+  }
+
+  .receipt-transaction {
+    margin-top: 8px !important;
+    padding: 8px 12px !important;
   }
 }
 
