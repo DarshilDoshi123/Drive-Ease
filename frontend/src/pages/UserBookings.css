@@ -1,800 +1,397 @@
-/* ==========================================
-   PREMIUM MY TRIPS DASHBOARD
-========================================== */
+/* ============================================================
+   MY TRIPS & BOOKINGS DASHBOARD STYLES
+   ============================================================ */
 
-.trips-dashboard-page {
-  max-width: 1450px;
+.user-bookings-container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 14px 20px 55px;
+  padding: 32px 24px;
+  min-height: calc(100vh - 160px);
 }
 
-/* Hero */
+/* ------------------------------------------------------------
+   1. Header Section
+   ------------------------------------------------------------ */
 
-.trips-dashboard-hero {
-  position: relative;
-  min-height: 340px;
-  overflow: hidden;
-
-  display: flex;
-  align-items: center;
-
+.bookings-header {
   margin-bottom: 24px;
-  padding: 48px 52px;
-
-  border-radius: 28px;
-
-  color: #ffffff;
-
-  background:
-    radial-gradient(
-      circle at 88% 20%,
-      rgba(59, 130, 246, 0.35),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 12% 100%,
-      rgba(124, 58, 237, 0.26),
-      transparent 35%
-    ),
-    linear-gradient(
-      120deg,
-      #020617 0%,
-      #071a47 48%,
-      #12358f 100%
-    );
-
-  box-shadow:
-    0 28px 70px
-    rgba(15, 23, 42, 0.25);
 }
 
-.trips-dashboard-hero::before {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  pointer-events: none;
-
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.16)
-        1px,
-      transparent 1px
-    );
-
-  background-size: 28px 28px;
-  opacity: 0.1;
-}
-
-.trips-dashboard-hero::after {
-  content: "";
-
-  position: absolute;
-  right: -120px;
-  bottom: -180px;
-
-  width: 470px;
-  height: 470px;
-
-  border: 55px solid
-    rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-}
-
-.trips-hero-content {
-  position: relative;
-  z-index: 3;
-
-  width: 58%;
-  max-width: 740px;
-}
-
-.trips-hero-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  margin-bottom: 16px;
-  padding: 8px 14px;
-
-  border: 1px solid
-    rgba(147, 197, 253, 0.35);
-  border-radius: 999px;
-
-  color: #dbeafe !important;
+.section-badge {
+  display: inline-block;
   font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 1.1px;
-
-  background:
-    rgba(37, 99, 235, 0.27);
-}
-
-.trips-dashboard-hero
-h1.ant-typography {
-  margin: 0 0 13px !important;
-
-  color: #ffffff !important;
-
-  font-family:
-    "Poppins",
-    sans-serif;
-
-  font-size:
-    clamp(42px, 4vw, 58px);
-
   font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -2px;
-}
-
-.trips-dashboard-hero
-p.ant-typography {
-  max-width: 650px;
-
-  margin: 0 !important;
-
-  color: #dbeafe !important;
-  opacity: 1 !important;
-
-  font-size: 15px;
-  line-height: 1.75;
-}
-
-.trips-hero-features {
-  display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 18px;
-
-  margin-top: 30px;
-}
-
-.trips-hero-features > div {
-  min-width: 0;
-
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-}
-
-.trips-hero-features > div > span {
-  width: 45px;
-  height: 45px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 13px;
-
-  color: #ffffff;
-  font-size: 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #7c3aed
-    );
-
-  box-shadow:
-    0 12px 25px
-    rgba(2, 6, 23, 0.25);
-}
-
-.trips-hero-features strong {
-  display: block;
-
-  margin-bottom: 4px;
-
-  color: #ffffff;
-  font-size: 12px;
-}
-
-.trips-hero-features small {
-  display: block;
-
-  color: #bfdbfe;
-  font-size: 10px;
-  line-height: 1.55;
-}
-
-.trips-hero-summary {
-  position: absolute;
-  z-index: 3;
-
-  top: 105px;
-  right: 50px;
-
-  width: 32%;
-
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.trips-hero-summary > div {
-  display: grid;
-  grid-template-columns:
-    46px 1fr auto;
-
-  align-items: center;
-  gap: 13px;
-
-  padding: 15px 17px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.17);
-  border-radius: 16px;
-
-  background:
-    rgba(255, 255, 255, 0.1);
-
-  backdrop-filter: blur(14px);
-
-  box-shadow:
-    0 14px 30px
-    rgba(2, 6, 23, 0.18);
-}
-
-.trips-hero-summary .anticon {
-  width: 44px;
-  height: 44px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 13px;
-
-  color: #ffffff;
-  font-size: 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #7c3aed
-    );
-}
-
-.trips-hero-summary span {
-  color: #dbeafe;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.trips-hero-summary strong {
-  color: #ffffff;
-  font-family:
-    "Poppins",
-    sans-serif;
-  font-size: 22px;
-}
-
-.trips-refresh-button {
-  position: absolute !important;
-  z-index: 5;
-
-  top: 27px;
-  right: 28px;
-
-  height: 46px !important;
-
-  padding: 0 19px !important;
-
-  border: none !important;
-  border-radius: 12px !important;
-
-  color: #1d4ed8 !important;
-  font-weight: 700 !important;
-
-  background: #ffffff !important;
-
-  box-shadow:
-    0 13px 28px
-    rgba(15, 23, 42, 0.25);
-}
-
-/* Statistics */
-
-.trip-statistics-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
-  gap: 18px;
-
-  margin-bottom: 24px;
-}
-
-.trip-statistic-card {
-  min-height: 126px;
-
-  border: 1px solid #e5ebf3;
-  border-radius: 19px;
-
-  box-shadow:
-    0 10px 28px
-    rgba(15, 23, 42, 0.07);
-}
-
-.trip-statistic-card
-.ant-card-body {
-  height: 100%;
-
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  padding: 22px;
-}
-
-.trip-stat-icon {
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  font-size: 25px;
-}
-
-.trip-stat-icon.blue {
+  letter-spacing: 1.2px;
   color: #2563eb;
-  background: #dbeafe;
-}
-
-.trip-stat-icon.purple {
-  color: #7c3aed;
-  background: #ede9fe;
-}
-
-.trip-stat-icon.orange {
-  color: #ea580c;
-  background: #ffedd5;
-}
-
-.trip-stat-icon.green {
-  color: #16a34a;
-  background: #dcfce7;
-}
-
-.trip-statistic-card
-.ant-typography {
-  display: block;
-}
-
-.trip-statistic-card
-h2.ant-typography {
-  margin: 2px 0 4px;
-
-  color: #0f172a;
-
-  font-family:
-    "Poppins",
-    sans-serif;
-}
-
-.trip-statistic-card small {
-  color: #64748b;
-  font-size: 10px;
-}
-
-/* Filters */
-
-.trip-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-
-  margin-bottom: 24px;
-  padding: 14px;
-
-  border: 1px solid #e5ebf3;
-  border-radius: 16px;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 8px 24px
-    rgba(15, 23, 42, 0.06);
-}
-
-.trip-filters .ant-btn {
-  min-width: 110px;
-  height: 40px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  border-radius: 10px;
-
-  font-weight: 650;
-}
-
-.trip-filter-count {
-  min-width: 22px;
-  height: 22px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
+  background: #eff6ff;
+  padding: 4px 12px;
   border-radius: 999px;
-
-  font-size: 10px;
-
-  background:
-    rgba(148, 163, 184, 0.16);
+  margin-bottom: 8px;
 }
 
-.trip-filters
-.ant-btn-primary
-.trip-filter-count {
-  background:
-    rgba(255, 255, 255, 0.22);
+.page-title.ant-typography {
+  margin: 0 0 8px !important;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
 }
 
-/* Cards */
+.page-description.ant-typography {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 0 !important;
+}
 
-.trip-cards-grid {
+/* ------------------------------------------------------------
+   2. Controls & Filter Bar
+   ------------------------------------------------------------ */
+
+.bookings-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 14px 18px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.filter-tabs-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-pill-btn.ant-btn {
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  height: 38px !important;
+  padding: 0 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.25s ease !important;
+}
+
+.filter-pill-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filter-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(148, 163, 184, 0.18);
+  color: #475569;
+}
+
+.filter-pill-btn.active .filter-count-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.refresh-action-btn.ant-btn {
+  height: 38px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 0 18px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* ------------------------------------------------------------
+   3. Responsive Grid Container
+   ------------------------------------------------------------ */
+
+.bookings-grid-container {
   display: grid;
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 20px;
-  align-items: stretch;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
 }
 
-.trip-dashboard-card {
-  min-width: 0;
-  min-height: 500px;
+.empty-bookings-card {
+  border-radius: 16px !important;
+  padding: 48px 24px !important;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
 
+/* ------------------------------------------------------------
+   4. Booking Card Styling
+   ------------------------------------------------------------ */
+
+.booking-card.ant-card {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  background: #ffffff !important;
+}
+
+.booking-card.ant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Status Top Borders */
+.booking-card.upcoming {
+  border-top: 4px solid #2563eb !important;
+}
+
+.booking-card.ongoing {
+  border-top: 4px solid #d97706 !important;
+}
+
+.booking-card.completed {
+  border-top: 4px solid #16a34a !important;
+}
+
+.booking-card.cancelled {
+  border-top: 4px solid #dc2626 !important;
+  opacity: 0.9;
+}
+
+.booking-card.ant-card .ant-card-body {
+  padding: 0 !important;
   display: flex;
   flex-direction: column;
-
-  overflow: hidden;
-
-  border: 1px solid #e2e8f0;
-  border-top: 4px solid #3b82f6;
-  border-radius: 22px;
-
-  background: #ffffff;
-
-  box-shadow:
-    0 10px 30px
-    rgba(15, 23, 42, 0.08);
-
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
+  flex: 1;
 }
 
-.trip-dashboard-card:hover {
-  transform: translateY(-8px);
-
-  box-shadow:
-    0 24px 55px
-    rgba(15, 23, 42, 0.15);
-}
-
-.trip-dashboard-card.ongoing {
-  border-top-color: #f59e0b;
-}
-
-.trip-dashboard-card.completed {
-  border-top-color: #22c55e;
-}
-
-.trip-dashboard-card.cancelled {
-  border-top-color: #ef4444;
-  opacity: 0.82;
-}
-
-.trip-dashboard-image {
+/* Image Section */
+.booking-card-image-wrapper {
   position: relative;
-
+  height: 200px;
   width: 100%;
-  aspect-ratio: 16 / 9;
-
   overflow: hidden;
-
-  background: #e2e8f0;
+  background: #f1f5f9;
 }
 
-.trip-dashboard-image img {
+.booking-card-img {
+  height: 200px;
   width: 100%;
-  height: 100%;
-
-  display: block;
-
   object-fit: cover;
   object-position: center;
-
-  transition:
-    transform 0.6s ease,
-    filter 0.6s ease;
+  transition: transform 0.5s ease;
 }
 
-.trip-dashboard-card:hover
-.trip-dashboard-image img {
-  transform: scale(1.07);
-  filter: saturate(1.08);
+.booking-card:hover .booking-card-img {
+  transform: scale(1.05);
 }
 
-.trip-image-gradient {
+.image-overlay-gradient {
   position: absolute;
   inset: 0;
-
   pointer-events: none;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(2, 6, 23, 0.28),
-      transparent 48%
-    );
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.35), transparent 60%);
 }
 
-.trip-dashboard-status {
-  position: absolute;
-  z-index: 2;
-
-  top: 14px;
-  right: 14px;
-
-  margin: 0;
-  padding: 6px 12px;
-
-  border: none;
-  border-radius: 999px;
-
-  font-weight: 750;
-
-  box-shadow:
-    0 7px 18px
-    rgba(15, 23, 42, 0.18);
+.booking-status-tag {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  margin: 0 !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
 }
 
-.trip-dashboard-body {
-  flex: 1;
-
+/* Body Content */
+.booking-card-body {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  padding: 18px;
+  flex: 1;
 }
 
-.trip-dashboard-title.ant-typography {
-  min-height: 32px;
-  max-height: 58px;
-
-  display: -webkit-box;
-  overflow: hidden;
-
-  margin: 0 0 4px;
-
-  color: #0f172a;
-
-  font-family:
-    "Poppins",
-    sans-serif;
-
-  font-size: 19px;
-  line-height: 1.4;
-
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.trip-dashboard-id {
-  display: block;
-
+.booking-card-title-section {
   margin-bottom: 14px;
-
-  color: #94a3b8 !important;
-  font-size: 10px;
 }
 
-.trip-dashboard-details {
-  display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 9px;
+.booking-car-title.ant-typography {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 0 2px !important;
+  line-height: 1.3 !important;
 }
 
-.trip-dashboard-details > div {
-  min-width: 0;
-  min-height: 63px;
+.booking-id-tag {
+  font-size: 0.8rem !important;
+  color: #64748b !important;
+  font-weight: 500;
+}
 
-  display: grid;
-  grid-template-columns:
-    19px 1fr;
-
-  align-items: start;
-  gap: 2px 7px;
-
-  padding: 10px;
-
-  border: 1px solid #e8eef7;
+/* Details List */
+.booking-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: #f8fafc;
+  padding: 14px;
   border-radius: 12px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #f8fafc,
-      #ffffff
-    );
+  border: 1px solid #f1f5f9;
 }
 
-.trip-dashboard-details .anticon {
-  grid-row: 1 / 3;
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
 
-  margin-top: 3px;
-
+.detail-icon {
   color: #2563eb;
-  font-size: 15px;
+  font-size: 16px;
+  flex-shrink: 0;
 }
 
-.trip-dashboard-details span {
-  color: #94a3b8;
-  font-size: 8px;
-  text-transform: uppercase;
+.detail-label {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
-.trip-dashboard-details strong {
-  overflow: hidden;
-
-  color: #0f172a;
-  font-size: 10px;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.detail-value {
+  margin-left: auto;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
-.trip-dashboard-actions {
-  display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 9px;
-
-  margin-top: 16px;
-  padding-top: 14px;
-
-  border-top: 1px solid #edf2f7;
+.detail-value.rate-value {
+  color: #475569;
 }
 
-.trip-dashboard-actions:has(a:only-child),
-.trip-dashboard-actions:has(button:only-child) {
-  grid-template-columns: 1fr;
-}
-
-.trip-dashboard-actions a {
-  width: 100%;
-}
-
-.trip-dashboard-actions .ant-btn {
-  width: 100%;
-  min-height: 40px;
-
-  border-radius: 10px;
-
-  font-size: 12px;
+.detail-value.total-amount {
+  color: #2563eb;
+  font-size: 1.05rem;
   font-weight: 700;
 }
 
-.trips-empty-state {
-  padding: 55px 20px;
+/* ------------------------------------------------------------
+   5. Action Buttons & Grouping
+   ------------------------------------------------------------ */
 
-  border-radius: 22px;
-
-  box-shadow:
-    0 12px 30px
-    rgba(15, 23, 42, 0.08);
+.booking-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
 }
 
-/* Responsive */
-
-@media (max-width: 1100px) {
-  .trips-hero-content {
-    width: 100%;
-  }
-
-  .trips-dashboard-hero {
-    min-height: auto;
-    padding-top: 95px;
-  }
-
-  .trips-hero-summary {
-    position: relative;
-
-    top: auto;
-    right: auto;
-
-    width: 100%;
-
-    display: grid;
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
-    margin-top: 28px;
-  }
-
-  .trip-statistics-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .trip-cards-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
+.booking-card-actions:has(.full-width) {
+  grid-template-columns: 1fr;
 }
 
-@media (max-width: 720px) {
-  .trips-dashboard-page {
-    padding: 10px 14px 45px;
-  }
-
-  .trips-dashboard-hero {
-    padding:
-      92px 24px
-      30px;
-
-    border-radius: 22px;
-  }
-
-  .trips-refresh-button {
-    top: 20px;
-    left: 24px;
-    right: 24px;
-
-    width: calc(100% - 48px);
-  }
-
-  .trips-hero-features,
-  .trips-hero-summary,
-  .trip-statistics-grid,
-  .trip-cards-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .trip-filters {
-    display: grid;
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
-  .trip-filters .ant-btn {
-    width: 100%;
-  }
+.action-link-btn {
+  width: 100%;
+  display: inline-block;
+  text-decoration: none;
 }
 
-@media (max-width: 480px) {
-  .trips-dashboard-hero
-  h1.ant-typography {
-    font-size: 35px;
+.action-link-btn.full-width {
+  grid-column: 1 / -1;
+}
+
+.booking-card-actions .ant-btn {
+  height: 40px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  transition: all 0.25s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.btn-primary.ant-btn {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.btn-primary.ant-btn:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+}
+
+.btn-secondary.ant-btn {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+.btn-secondary.ant-btn:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+.btn-danger.ant-btn {
+  background: #ffffff !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+}
+
+.btn-danger.ant-btn:hover {
+  background: #fef2f2 !important;
+  border-color: #dc2626 !important;
+  color: #b91c1c !important;
+}
+
+/* ------------------------------------------------------------
+   6. Responsive Layout Breakpoints
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  .user-bookings-container {
+    padding: 20px 16px;
   }
 
-  .trip-dashboard-details,
-  .trip-dashboard-actions,
-  .trip-filters {
+  .bookings-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-tabs-group {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .refresh-action-btn.ant-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .bookings-grid-container {
     grid-template-columns: 1fr;
   }
 }
