@@ -15,7 +15,6 @@ import {
   Empty,
   Input,
   Modal,
-  Radio,
   Row,
   Space,
   Tag,
@@ -622,25 +621,25 @@ function BookingCar() {
                     Payment Method
                   </Title>
 
-                  <Radio.Group
-                    className="payment-method-group"
-                    value={paymentMethod}
-                    onChange={(event) =>
-                      setPaymentMethod(
-                        event.target.value
-                      )
-                    }
-                  >
-                    <Radio.Button value="pay_at_pickup">
+                  <div className="payment-method-container">
+                    <button
+                      type="button"
+                      className={`payment-option-btn ${paymentMethod === "pay_at_pickup" ? "active" : ""}`}
+                      onClick={() => setPaymentMethod("pay_at_pickup")}
+                    >
                       <WalletOutlined />
-                      Pay at Pickup
-                    </Radio.Button>
+                      <span>Pay at Pickup</span>
+                    </button>
 
-                    <Radio.Button value="card">
+                    <button
+                      type="button"
+                      className={`payment-option-btn ${paymentMethod === "card" ? "active" : ""}`}
+                      onClick={() => setPaymentMethod("card")}
+                    >
                       <CreditCardOutlined />
-                      Card Payment
-                    </Radio.Button>
-                  </Radio.Group>
+                      <span>Card Payment</span>
+                    </button>
+                  </div>
 
                   {paymentMethod === "pay_at_pickup" ? (
                     <Button
