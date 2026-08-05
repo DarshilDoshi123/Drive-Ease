@@ -17,13 +17,23 @@ const router = express.Router();
 router.post(
   "/single",
   protect,
-  upload.single("file"),
+  (req, res, next) => {
+    upload.single("file")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: err.message || "File upload failed",
+        });
+      }
+      next();
+    });
+  },
   async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({
           success: false,
-          message: "Please select a file",
+          message: "Please select a file to upload",
         });
       }
 
