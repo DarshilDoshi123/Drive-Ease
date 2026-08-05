@@ -98,6 +98,7 @@ function BookingCar() {
   const [customerEmail, setCustomerEmail] = useState(initialUser?.email || "");
   const [customerMobile, setCustomerMobile] = useState(initialUser?.mobile || initialUser?.phone || "");
   const [pickupLocation, setPickupLocation] = useState("City Center Hub");
+  const [customAddress, setCustomAddress] = useState("");
 
   useEffect(() => {
     if (cars.length === 0) {
@@ -229,6 +230,13 @@ function BookingCar() {
     setSelectedRange(values);
   };
 
+  const finalPickupLocation = useMemo(() => {
+    if (pickupLocation === "Doorstep Pickup & Delivery") {
+      return customAddress.trim() ? `Doorstep: ${customAddress.trim()}` : "";
+    }
+    return pickupLocation;
+  }, [pickupLocation, customAddress]);
+
   const createRequestObject = (token = null) => ({
     token,
     car: car._id,
@@ -236,7 +244,7 @@ function BookingCar() {
     paymentMethod,
     customerEmail,
     customerMobile,
-    pickupLocation,
+    pickupLocation: finalPickupLocation,
 
     bookedTimeSlots: {
       from:
@@ -266,7 +274,7 @@ function BookingCar() {
     !hasBookingConflict &&
     Boolean(customerEmail && customerEmail.trim()) &&
     Boolean(customerMobile && customerMobile.trim()) &&
-    Boolean(pickupLocation && pickupLocation.trim());
+    Boolean(finalPickupLocation && finalPickupLocation.trim());
 
   if (!car && !loading) {
     return (
@@ -606,9 +614,24 @@ function BookingCar() {
                           { label: `📍 ${car?.location || 'City Center Hub'} (Default Hub)`, value: car?.location || 'City Center Hub' },
                           { label: '📍 Airport Terminal 1 (Pickup Counter)', value: 'Airport Terminal 1' },
                           { label: '📍 Central Railway Station Hub', value: 'Central Railway Station' },
-                          { label: '📍 Hotel / Home Doorstep Delivery', value: 'Doorstep Pickup & Delivery' },
+                          { label: '📍 Hotel / Home Doorstep Delivery (Custom Address)', value: 'Doorstep Pickup & Delivery' },
                         ]}
                       />
+
+                      {pickupLocation === "Doorstep Pickup & Delivery" && (
+                        <div style={{ marginTop: 10 }}>
+                          <Text type="secondary" style={{ fontSize: 12, marginBottom: 4, display: "block" }}>
+                            Complete Street Address, Landmark, or Hotel Name *
+                          </Text>
+                          <Input
+                            prefix={<EnvironmentOutlined />}
+                            placeholder="Enter complete street address, landmark, or hotel name..."
+                            value={customAddress}
+                            onChange={(e) => setCustomAddress(e.target.value)}
+                            size="large"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
