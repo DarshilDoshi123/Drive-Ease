@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "https://drive-ease-car-rental.vercel.app",
   "https://carrentalbyparthdarshil.netlify.app",
 ];
 
@@ -70,7 +71,7 @@ app.get("/", (req, res) => {
 if (process.env.NODE_ENV === "production") {
   const path = require("path");
 
-  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
 
   app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api/")) {
@@ -78,7 +79,7 @@ if (process.env.NODE_ENV === "production") {
     }
 
     return res.sendFile(
-      path.resolve(__dirname, "client", "build", "index.html")
+      path.resolve(__dirname, "..", "frontend", "build", "index.html")
     );
   });
 }
