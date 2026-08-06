@@ -7,7 +7,7 @@ const getBaseURL = () => {
   if (process.env.NODE_ENV === "development") {
     return "http://localhost:5000";
   }
-  return "https://drive-ease-fq7z.onrender.com";
+  return "https://drive-ease-miul.onrender.com";
 };
 
 const api = axios.create({

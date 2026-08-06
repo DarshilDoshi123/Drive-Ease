@@ -5,7 +5,7 @@ Drive Ease is a comprehensive MERN stack web application tailored for car rental
 ## Live Links & Repository
 
 - **Frontend Application (Vercel):** [https://drive-ease-car-rental.vercel.app/](https://drive-ease-car-rental.vercel.app/)
-- **Backend API Service (Render):** [https://drive-ease-fq7z.onrender.com](https://drive-ease-fq7z.onrender.com)
+- **Backend API Service (Render):** [https://drive-ease-miul.onrender.com](https://drive-ease-miul.onrender.com)
 - **GitHub Repository:** [https://github.com/DarshilDoshi123/Drive-Ease](https://github.com/DarshilDoshi123/Drive-Ease)
 
 ## Project Architecture
@@ -67,7 +67,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 Create `.env` inside the `frontend/` directory:
 
 ```env
-REACT_APP_API_URL=https://drive-ease-fq7z.onrender.com
+REACT_APP_API_URL=https://drive-ease-miul.onrender.com
 ```
 
 ### 3. Run Development Servers
