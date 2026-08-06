@@ -42,6 +42,7 @@ import {
 import AdminLayout from "../components/AdminLayout";
 import AdminPageHero from "../components/AdminPageHero";
 import Spinner from "../components/Spinner";
+import FileUploader from "../components/FileUploader";
 
 import {
   editCar,
@@ -364,21 +365,38 @@ function EditCar() {
                 </Row>
 
                 <Form.Item
+                  name="description"
+                  label="Vehicle Description"
+                >
+                  <Input.TextArea
+                    rows={4}
+                    maxLength={1000}
+                    showCount
+                    placeholder="Condition, features and vehicle details..."
+                  />
+                </Form.Item>
+
+                <Form.Item
                   name="image"
-                  label="Car Image URL"
-                  extra="For now, provide a direct public image URL. Device upload will be added in the next step."
+                  label="Car Photo Upload *"
+                  extra="Upload a new vehicle photo directly from your device or provide an image URL below."
                   rules={[
                     {
                       required: true,
-                      message:
-                        "Please enter the car image URL",
-                    },
-                    {
-                      type: "url",
-                      message:
-                        "Please enter a valid image URL",
+                      message: "Please upload a photo or provide an image URL",
                     },
                   ]}
+                >
+                  <FileUploader
+                    form={form}
+                    fieldName="image"
+                    label="Vehicle Photo"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="image"
+                  label="Or Direct Image URL"
                 >
                   <Input
                     prefix={<PictureOutlined />}

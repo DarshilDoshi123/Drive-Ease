@@ -911,6 +911,26 @@ function ListYourCar() {
                     />
                   </Form.Item>
                 </Col>
+
+                <Col xs={24}>
+                  <Form.Item
+                    name="primaryImage"
+                    label="Vehicle Photo Upload *"
+                    extra="Upload a photo of your car directly from your phone or device."
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please upload a photo of your vehicle",
+                      },
+                    ]}
+                  >
+                    <FileUploader
+                      form={form}
+                      fieldName="primaryImage"
+                      label="Primary Vehicle Photo"
+                    />
+                  </Form.Item>
+                </Col>
               </Row>
             </div>
 
