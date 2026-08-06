@@ -74,6 +74,17 @@ function DefaultLayout({ children }) {
   // Mobile dropdown menu
   const mobileMenuItems = [
     {
+      key: "user-greeting",
+      disabled: true,
+      label: (
+        <div style={{ padding: "4px 4px", cursor: "default" }}>
+          <small style={{ color: "#8c8c8c", fontSize: "11px", display: "block" }}>Welcome,</small>
+          <strong style={{ color: "#1e293b", fontSize: "14px", fontWeight: 600 }}>{user?.username || user?.name || "User"}</strong>
+        </div>
+      ),
+    },
+    { type: "divider" },
+    {
       key: "home",
       icon: <HomeOutlined />,
       label: <Link to="/">Home</Link>,
@@ -267,18 +278,20 @@ function DefaultLayout({ children }) {
                   </Tag>
                 )}
 
-                <ProfileAvatar
-                  size={44}
-                  editable={true}
-                  className="user-avatar"
-                />
+                <div className="user-profile-group">
+                  <div className="user-information">
+                    <small className="welcome-label">Welcome,</small>
 
-                <div className="user-information">
-                  <small>Welcome</small>
+                    <strong className="username-display">
+                      {user?.username || user?.name || "User"}
+                    </strong>
+                  </div>
 
-                  <strong>
-                    {user?.username || "User"}
-                  </strong>
+                  <ProfileAvatar
+                    size={44}
+                    editable={true}
+                    className="user-avatar"
+                  />
                 </div>
 
                 <Button
