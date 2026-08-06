@@ -317,9 +317,22 @@ function AddCar() {
                 </Form.Item>
 
                 <Form.Item
+                  name="descriptionImage"
+                  label="Vehicle Description Photo / Document"
+                  extra="Upload a photo or document supporting your vehicle description or condition."
+                >
+                  <FileUploader
+                    form={form}
+                    fieldName="descriptionImage"
+                    label="Description Photo / Document"
+                    isDocument={true}
+                  />
+                </Form.Item>
+
+                <Form.Item
                   name="image"
-                  label="Car Photo Upload *"
-                  extra="Upload a vehicle photo directly from your device or provide an image URL below."
+                  label="Primary Car Photo Upload *"
+                  extra="Upload a primary vehicle photo directly from your device or provide an image URL below."
                   rules={[
                     {
                       required: true,
@@ -330,7 +343,7 @@ function AddCar() {
                   <FileUploader
                     form={form}
                     fieldName="image"
-                    label="Vehicle Photo"
+                    label="Primary Vehicle Photo"
                   />
                 </Form.Item>
 

@@ -109,6 +109,12 @@ const carListingRequestSchema = new mongoose.Schema(
         trim: true,
         maxlength: 1000,
       },
+
+      descriptionImage: {
+        type: String,
+        default: "",
+        trim: true,
+      },
     },
 
     carImages: {

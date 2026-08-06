@@ -73,6 +73,12 @@ const carSchema = new mongoose.Schema(
       trim: true,
     },
 
+    descriptionImage: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     bookedTimeSlots: [
       {
         from: {

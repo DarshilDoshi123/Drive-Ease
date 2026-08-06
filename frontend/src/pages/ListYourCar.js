@@ -344,6 +344,9 @@ function ListYourCar() {
 
         description:
           values.description?.trim() || "",
+
+        descriptionImage:
+          values.descriptionImage?.trim() || "",
       },
 
       carImages,
@@ -914,20 +917,15 @@ function ListYourCar() {
 
                 <Col xs={24}>
                   <Form.Item
-                    name="primaryImage"
-                    label="Vehicle Photo Upload *"
-                    extra="Upload a photo of your car directly from your phone or device."
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please upload a photo of your vehicle",
-                      },
-                    ]}
+                    name="descriptionImage"
+                    label="Vehicle Description Photo / Document"
+                    extra="Upload a photo or document supporting your vehicle description, condition report, or features."
                   >
                     <FileUploader
                       form={form}
-                      fieldName="primaryImage"
-                      label="Primary Vehicle Photo"
+                      fieldName="descriptionImage"
+                      label="Vehicle Description Photo"
+                      isDocument={true}
                     />
                   </Form.Item>
                 </Col>
