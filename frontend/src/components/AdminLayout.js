@@ -149,7 +149,7 @@ function AdminLayout({ children }) {
                 "Administrator"}
             </strong>
 
-            <span>Fleet Manager</span>
+            <span>Administrator</span>
           </div>
         )}
       </div>
