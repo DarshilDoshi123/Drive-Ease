@@ -1132,22 +1132,24 @@ function AdminCarRequests() {
                   : "Admin Remark"}
               </Text>
 
-              <TextArea
-                rows={5}
-                value={adminRemark}
-                onChange={(event) =>
-                  setAdminRemark(
-                    event.target.value
-                  )
-                }
-                placeholder={
-                  reviewAction === "approve"
-                    ? "Optional message for the car owner"
-                    : "Clearly explain rejection reason or required changes"
-                }
-                maxLength={500}
-                showCount
-              />
+              <div className="textarea-container">
+                <TextArea
+                  rows={5}
+                  value={adminRemark}
+                  onChange={(event) =>
+                    setAdminRemark(
+                      event.target.value
+                    )
+                  }
+                  placeholder={
+                    reviewAction === "approve"
+                      ? "Optional message for the car owner"
+                      : "Clearly explain rejection reason or required changes"
+                  }
+                  maxLength={500}
+                  showCount
+                />
+              </div>
             </div>
           </div>
         )}

@@ -3920,7 +3920,8 @@ h3.ant-typography {
 .review-request-modal {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+  padding-bottom: 6px;
 }
 
 .commission-input-block,
@@ -3928,6 +3929,50 @@ h3.ant-typography {
   display: flex;
   flex-direction: column;
   gap: 9px;
+}
+
+.textarea-container {
+  position: relative;
+  margin-bottom: 24px; /* Creates breathing room above footer buttons */
+}
+
+.textarea-container textarea.ant-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e2e8f0;
+  resize: vertical;
+  min-height: 120px;
+  font-size: 14px;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.textarea-container textarea.ant-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Character counter positioning fix */
+.textarea-container .ant-input-data-count,
+.textarea-container [data-count],
+.textarea-container span.ant-input-textarea-suffix {
+  position: relative;
+  margin-top: 6px;
+  margin-bottom: 0;
+  padding-right: 2px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-align: right;
+  display: block;
+}
+
+/* Modal action buttons margin */
+.review-request-modal + .ant-modal-footer,
+.ant-modal-footer {
+  margin-top: 24px !important;
+  padding-top: 16px !important;
 }
 
 .admin-request-button {
